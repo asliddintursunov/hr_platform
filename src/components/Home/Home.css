@@ -1,0 +1,43 @@
+header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  box-shadow: 1px 2px 10px rgb(37, 63, 79);
+  color: #fff;
+  background-color: rgb(181, 186, 201);
+  padding: 1rem 0;
+}
+
+nav{
+  padding: 0 1rem;
+}
+
+nav > div {
+  column-gap: 3rem;
+}
+
+.main {
+  height: 100vh;
+  background: #fff url('https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat right;
+  background-size: cover;
+
+  font-family: 'Inconsolata', monospace;
+  font-family: 'Raleway', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+}
+.link-container a{
+  padding: .2rem .6rem;
+  background-color: rgb(157, 163, 181);
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  box-shadow: 2px 1px 5px gray;
+  color: #fff;
+  text-decoration: none;
+}
+.link-container a:hover{
+  background-color: rgb(146, 152, 170);
+}

@@ -21,7 +21,7 @@ function Sign_In_Form() {
           <_Username />
           <_Password />
         </div>
-        <div style={{rowGap: '.5rem', margin: '.7rem auto'}} className='d-flex flex-column align-items-center justify-content-between'>
+        <div style={{ rowGap: '.5rem', margin: '.7rem auto' }} className='d-flex flex-column align-items-center justify-content-between'>
           <h5><b>No Account Yet?</b></h5>
           <Link className='sign-up-ahref' to='/signup'>Sign Up</Link>
         </div>
