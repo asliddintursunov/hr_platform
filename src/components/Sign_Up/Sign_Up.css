@@ -1,0 +1,98 @@
+.sign-up-addition {
+  flex: 3;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: #fff url('https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat right;
+  background-size: cover;
+  text-align: center;
+  color: #fff;
+
+  font-family: 'Inconsolata', monospace;
+  font-family: 'Raleway', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.sign-up-form-container {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Inconsolata', monospace;
+  font-family: 'Raleway', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.sign-up-form-container>form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  text-align: center;
+  padding: 5rem 3rem;
+}
+
+.sign-up-form-container .input-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+}
+
+.sign-up-form-container input[type="text"],
+.sign-up-form-container input[type="email"],
+.sign-up-form-container input[type="password"] {
+  font-size: large;
+  width: 35vh;
+  padding: 0.6rem;
+}
+
+@media (max-width: 768px) {
+  .sign-up-form-container>form {
+    padding: 2.5rem 3.5rem;
+  }
+
+  .sign-up-form-container input[type="text"],
+  .sign-up-form-container input[type="email"],
+  .sign-up-form-container input[type="password"] {
+    font-size: medium;
+    width: 25vh;
+    padding: 0.4rem;
+  }
+
+  .sign-up-form-container .input-container {
+    gap: 1.5rem;
+  }
+}
+
+.lock {
+  padding: 0.5rem 1rem;
+  font-size: 3rem;
+  color: #fff;
+  background-color: royalblue;
+  border-radius: 100%;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+}
+
+hr:nth-child(2) {
+  color: royalblue;
+}
+
+.show-password {
+  font-size: large;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  background-color: #fff;
+  padding: 0 0.35rem;
+  color: royalblue;
+}
+
+.sign-up-form-container button {
+  font-size: medium;
+}
