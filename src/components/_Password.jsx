@@ -1,27 +1,12 @@
-import { Fragment, useState } from "react"
+import { Fragment } from "react"
 import './Sign_In/Sign_In.css'
 import './Sign_Up/Sign_Up.css'
+import { usePassword } from "../hooks/usePassword" // Custon Hook
 function _Password() {
-
-  // =========== Variables for Password Input ===========
-  const [passwordValue, setPasswordValue] = useState('')
-  const [validPasswordChecker, setValidPasswordChecker] = useState('')
-  const [passwordTrue, setPasswordTrue] = useState(false)
-  const [passwordType, setPasswordType] = useState(true)
-  // ====================================================
-
-  // =========== Password Input Validation ===========
-  const passwordChecker = () => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/.test(passwordValue) ? setValidPasswordChecker('Valid Password') : setValidPasswordChecker('Invalid Password')
-  // =================================================
-
-  // =========== Password Input Style ===========
-  const passwordInputStyle = {
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/.test(passwordValue) ? 'green' : 'red',
-  }
-  // ============================================
-
+  const { passwordValue, setPasswordValue, validPasswordChecker,
+    passwordTrue, setPasswordTrue,
+    passwordType, setPasswordType, passwordChecker,
+    passwordInputStyle } = usePassword()
 
   //* ########################################################################################
   return (

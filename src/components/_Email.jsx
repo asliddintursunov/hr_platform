@@ -1,26 +1,10 @@
-import { useState, Fragment } from 'react'
+import { Fragment } from 'react'
 import './Sign_Up/Sign_Up.css'
+import { useEmail } from '../hooks/useEmail' // Custon Hook
 function _Email() {
 
-  // =========== Variables for Email Input ===========
-  const [emailValue, setEmailValue] = useState('')
-  const [validEmailChecker, setValidEmailChecker] = useState('')
-  const [emailFocus, setEmailFocus] = useState(false)
-  const [emailTrue, setEmailtrue] = useState(false)
-  // =================================================
-
-  // =========== Email Input Validation ===========
-  const emailChecker = () => /^(?!.*\s)[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,}$/i.test(emailValue) ? setValidEmailChecker('Valid Email') : setValidEmailChecker('Invalid Email')
-
-  // ==============================================
-
-  // =========== Email Input Style ===========
-  const emailInputStyle = {
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: /^(?!.*\s)[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,}$/i.test(emailValue) ? 'green' : 'red',
-  }
-  // ==========================================
+  const { emailValue, setEmailValue, validEmailChecker,
+    emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle } = useEmail()
 
   return (
     <Fragment>
