@@ -6,7 +6,6 @@ import '../Sign_Up.css'
 // Components
 import _Username from '../../_Username'
 import _Email from '../../_Email'
-import _Password from '../../_Password'
 import _ConfirmPassword from '../../_ConfirmPassword'
 
 function Sign_Up_Form() {
@@ -22,7 +21,6 @@ function Sign_Up_Form() {
         <div className='input-container'>
           <_Username />
           <_Email />
-          <_Password />
           <_ConfirmPassword />
           <div className='d-flex flex-column align-items-center justify-content-between'>
             <h6><b>Already have an account?</b></h6>

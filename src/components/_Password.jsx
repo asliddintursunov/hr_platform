@@ -11,14 +11,14 @@ function _Password() {
   // ====================================================
 
   // =========== Password Input Validation ===========
-  const passwordChecker = () => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(passwordValue) ? setValidPasswordChecker('Valid Password') : setValidPasswordChecker('Invalid Password')
+  const passwordChecker = () => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/.test(passwordValue) ? setValidPasswordChecker('Valid Password') : setValidPasswordChecker('Invalid Password')
   // =================================================
 
   // =========== Password Input Style ===========
   const passwordInputStyle = {
     borderWidth: '1px',
     borderStyle: 'solid',
-    borderColor: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(passwordValue) ? 'green' : 'red',
+    borderColor: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/.test(passwordValue) ? 'green' : 'red',
   }
   // ============================================
 

@@ -12,6 +12,7 @@ function Home() {
           <div className='d-flex align-items-center justify-content-between link-container'>
             <Link to='signup'>Sign Up</Link>
             <Link to='signin'>Sign In</Link>
+            <Link to='profile'>Profile</Link>
           </div>
         </nav>
       </header>

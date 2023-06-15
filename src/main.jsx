@@ -10,6 +10,7 @@ import SignInLayout from './layouts/SignInLayout'
 
 // Pages
 import Home from './components/Home/Home'
+import UpdateProfile from './components/User_Profile/UpdateProfile'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route index element={<Home />} />
         <Route path='/signup' element={<SignUpLayout />} />
         <Route path='/signin' element={<SignInLayout />} />
+        <Route path='/profile' element={<UpdateProfile />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
