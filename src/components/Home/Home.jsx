@@ -13,6 +13,7 @@ function Home() {
             <Link to='signup'>Sign Up</Link>
             <Link to='signin'>Sign In</Link>
             <Link to='profile'>Profile</Link>
+            <Link to='admin'>Admin</Link>
           </div>
         </nav>
       </header>

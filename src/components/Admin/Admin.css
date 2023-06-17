@@ -1,0 +1,6 @@
+a{
+  padding: 0.3rem 1rem;
+}
+a.active{
+  background-color: lightgray;
+}

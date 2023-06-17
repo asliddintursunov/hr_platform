@@ -19,11 +19,11 @@
       "id": 2
     },
     {
-      "username": "marko_bob",
+      "username": "mr_bob",
       "email": "bob@example.com",
-      "password": "password111",
+      "password": "pass432111",
       "accepted": false,
-      "full_name": "Marko Bob",
+      "full_name": "Bob Jone",
       "profile_photo": "https://example.com/profiles/jane_smith.jpg",
       "id": 3
     },
