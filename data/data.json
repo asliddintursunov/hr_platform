@@ -1,38 +1,38 @@
 {
   "users": [
     {
+      "full_name": "John Doe",
       "username": "john_doe",
       "email": "john@example.com",
       "password": "password123",
       "accepted": true,
-      "full_name": "John Doe",
       "profile_photo": "https://example.com/profiles/john_doe.jpg",
       "id": 1
     },
     {
-      "username": "jane_smith",
-      "email": "jane@example.com",
-      "password": "pass4321",
-      "accepted": false,
       "full_name": "Jane Smith",
+      "username": "JaneSmith",
+      "email": "jane@example.com",
+      "password": "myPassword123456",
+      "accepted": false,
       "profile_photo": "https://example.com/profiles/jane_smith.jpg",
       "id": 2
     },
     {
-      "username": "mr_bob",
-      "email": "bob@example.com",
-      "password": "pass432111",
+      "full_name": "Asliddin Tursunov",
+      "username": "Asliddin",
+      "email": "aslidin@example.com",
+      "password": "myPassword123456",
       "accepted": false,
-      "full_name": "Bob Jone",
       "profile_photo": "https://example.com/profiles/jane_smith.jpg",
       "id": 3
     },
     {
+      "full_name": "John Uik",
       "username": "john_uik",
       "email": "john@example.com",
       "password": "pass1234",
       "accepted": true,
-      "full_name": "John Uik",
       "profile_photo": "https://example.com/profiles/jane_smith.jpg",
       "id": 4
     }

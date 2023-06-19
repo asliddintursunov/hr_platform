@@ -9,7 +9,7 @@
 }
 
 .update-profile-form {
-  row-gap: 2.5rem;
+  row-gap: 2rem;
 }
 
 .update-profile-form>div>input,
@@ -51,4 +51,8 @@
 .add-btn{
   font-size: 1.4rem;
   width: 100%;
+}
+.btn-container > button{
+  font-size: medium;
+  padding: .5rem 1.5rem;
 }

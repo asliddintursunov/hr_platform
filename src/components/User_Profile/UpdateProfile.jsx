@@ -42,9 +42,9 @@ function UpdateProfile() {
       </div>
       <hr />
       <div className='d-flex justify-content-end gap-3'>
-        {!changeProfile && <button className='btn btn-secondary' onClick={() => setChangeProfile(true)}>Edit</button>}
-        {changeProfile && <button className='btn btn-success' onClick={() => setChangeProfile(false)}>Save</button>}
-        {changeProfile && <button className='btn btn-danger' onClick={() => setChangeProfile(false)}>Cancle</button>}
+        {!changeProfile && <button style={{padding: '0.4rem 1.5rem', fontSize: 'medium'}} className='btn btn-secondary' onClick={() => setChangeProfile(true)}>Edit</button>}
+        {changeProfile && <button style={{padding: '0.4rem 1.5rem', fontSize: 'medium'}} className='btn btn-success' onClick={() => setChangeProfile(false)}>Save</button>}
+        {changeProfile && <button style={{padding: '0.4rem 1.5rem', fontSize: 'medium'}} className='btn btn-danger' onClick={() => setChangeProfile(false)}>Cancle</button>}
       </div>
       <hr />
 
@@ -149,7 +149,9 @@ function UpdateProfile() {
         </div>
         <h1>Phone Number</h1>
         <AddPhoneNumber />
-        <button className='btn btn-dark'>Submit</button>
+        <div className="btn-container d-flex justify-content-center">
+          <button className='btn btn-dark'>Submit</button>
+        </div>
       </form>
       {/* ================================================ */}
     </div>
