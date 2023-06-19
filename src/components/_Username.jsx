@@ -1,13 +1,9 @@
-// import { Fragment, useState, useEffect, useCallback } from "react"
 import { Fragment } from 'react'
 import './Sign_In/Sign_In.css'
 import './Sign_Up/Sign_Up.css'
-import { useUsername } from "../hooks/useUsername" // Custon Hook
-function _Username() {
+function _Username({ usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
+  usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle }) {
 
-  // Custom Hook
-  const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
-    usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
 
   //* ########################################################################################
   return (

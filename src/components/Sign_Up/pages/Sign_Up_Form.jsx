@@ -14,14 +14,23 @@ import { useEmail } from '../../../hooks/useEmail'
 import { useConfirmPassword } from '../../../hooks/useConfirmPassword'
 
 function Sign_Up_Form() {
-  
+
   const URL = 'http://localhost:3000/users'
 
   // Custom Hook Values
-  const {usernameValue, setUsernameValue} = useUsername()
-  const {emailValue, setEmailValue} = useEmail()
-  const {passwordValue, setPasswordValue, setPasswordMatchValue} = useConfirmPassword()
-console.log(usernameValue);
+  const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
+    usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
+
+  const { emailValue, setEmailValue, validEmailChecker,
+    emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle } = useEmail()
+
+  const { passwordValue, setPasswordValue, validPasswordChecker,
+    passwordTrue, setPasswordTrue, passwordType, setPasswordType,
+    passwordChecker, passwordInputStyle, passwordMatchValue, setPasswordMatchValue,
+    validPasswordMatchChecker,
+    passwordMatchTrue, setPasswordMatchTrue, passwordCheckType, setPasswordCheckType,
+    passwordMatchChecker, passwordInputMatchStyle } = useConfirmPassword()
+
   const addNewUser = () => {
     axios.post(URL, {
       fullname: 'New User',
@@ -34,14 +43,15 @@ console.log(usernameValue);
     })
       .then((req) => {
         console.log(req.data)
+        alert('Succesfully Registered!')
         setUsernameValue('')
         setEmailValue('')
         setPasswordValue('')
         setPasswordMatchValue('')
       })
       .catch((err) => console.error(err))
-    }
-  
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,9 +68,18 @@ console.log(usernameValue);
         <hr style={{ width: '100%' }} />
         <br />
         <div className='input-container'>
-          <_Username />
-          <_Email />
-          <_ConfirmPassword />
+          <_Username usernameValue={usernameValue} setUsernameValue={setUsernameValue} validUsernameChecker={validUsernameChecker}
+            usernameFocus={usernameFocus} setUsernameFocus={setUsernameFocus} usernameTrue={usernameTrue} setUsernameTrue={setUsernameTrue}
+            usernameChecker={usernameChecker} usernameInputStyle={usernameInputStyle} />
+          <_Email emailValue={emailValue} setEmailValue={setEmailValue} validEmailChecker={validEmailChecker} emailFocus={emailFocus}
+            setEmailFocus={setEmailFocus} emailTrue={emailTrue} setEmailtrue={setEmailtrue} emailChecker={emailChecker} emailInputStyle={emailInputStyle} />
+          <_ConfirmPassword passwordValue={passwordValue} setPasswordValue={setPasswordValue} validPasswordChecker={validPasswordChecker}
+            passwordTrue={passwordTrue} setPasswordTrue={setPasswordTrue} passwordType={passwordType} setPasswordType={setPasswordType}
+            passwordChecker={passwordChecker} passwordInputStyle={passwordInputStyle} passwordMatchValue={passwordMatchValue}
+            setPasswordMatchValue={setPasswordMatchValue} validPasswordMatchChecker={validPasswordMatchChecker} 
+            passwordMatchTrue={passwordMatchTrue} setPasswordMatchTrue={setPasswordMatchTrue} passwordCheckType={passwordCheckType} 
+            setPasswordCheckType={setPasswordCheckType} passwordMatchChecker={passwordMatchChecker}
+            passwordInputMatchStyle={passwordInputMatchStyle} />
           <div className='d-flex flex-column align-items-center justify-content-between'>
             <h6><b>Already have an account?</b></h6>
             <Link className='sign-up-ahref' to='/signin'> Sign in</Link>

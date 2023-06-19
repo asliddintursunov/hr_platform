@@ -1,10 +1,7 @@
 import { Fragment } from 'react'
 import './Sign_Up/Sign_Up.css'
-import { useEmail } from '../hooks/useEmail' // Custon Hook
-function _Email() {
-
-  const { emailValue, setEmailValue, validEmailChecker,
-    emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle } = useEmail()
+function _Email({ emailValue, setEmailValue, validEmailChecker,
+  emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle }) {
 
   return (
     <Fragment>

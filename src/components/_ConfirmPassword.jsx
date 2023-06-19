@@ -1,14 +1,12 @@
 import { Fragment } from 'react'
 import './Sign_Up/Sign_Up.css'
-import { useConfirmPassword } from '../hooks/useConfirmPassword' // Custom Hook
-function _ConfirmPassword() {
+function _ConfirmPassword({ passwordValue, setPasswordValue, validPasswordChecker,
+  passwordTrue, setPasswordTrue, passwordType, setPasswordType,
+  passwordChecker, passwordInputStyle, passwordMatchValue, setPasswordMatchValue,
+  validPasswordMatchChecker,
+  passwordMatchTrue, setPasswordMatchTrue, passwordCheckType, setPasswordCheckType,
+  passwordMatchChecker, passwordInputMatchStyle }) {
 
-  const { passwordValue, setPasswordValue, validPasswordChecker,
-    passwordTrue, setPasswordTrue, passwordType, setPasswordType,
-    passwordChecker, passwordInputStyle, passwordMatchValue, setPasswordMatchValue,
-    validPasswordMatchChecker,
-    passwordMatchTrue, setPasswordMatchTrue, passwordCheckType, setPasswordCheckType,
-    passwordMatchChecker, passwordInputMatchStyle } = useConfirmPassword()
   //* ########################################################################################
   return (
     <Fragment>

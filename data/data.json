@@ -35,6 +35,33 @@
       "accepted": true,
       "profile_photo": "https://example.com/profiles/jane_smith.jpg",
       "id": 4
+    },
+    {
+      "fullname": "New User",
+      "username": "Asliddin",
+      "email": "a@example.com",
+      "password": "asliddinA1",
+      "accepted": false,
+      "profile_photo": "https://example.com/profiles/john_doe.jpg",
+      "id": 5
+    },
+    {
+      "fullname": "New User",
+      "username": "newUser123",
+      "email": "newuser@emai.com",
+      "password": "newUser123",
+      "accepted": false,
+      "profile_photo": "https://example.com/profiles/john_doe.jpg",
+      "id": 6
+    },
+    {
+      "fullname": "New User",
+      "username": "Farkhodovich04",
+      "email": "asliddin04@gmail.com",
+      "password": "asliddinA1",
+      "accepted": false,
+      "profile_photo": "https://example.com/profiles/john_doe.jpg",
+      "id": 7
     }
   ]
 }
