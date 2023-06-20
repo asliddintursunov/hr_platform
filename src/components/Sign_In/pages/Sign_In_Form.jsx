@@ -7,7 +7,21 @@ import '../Sign_In.css'
 import _Username from '../../_Username'
 import _Password from '../../_Password'
 
+// Custom Hooks
+import { useUsername } from '../../../hooks/useUsername'
+import { usePassword } from '../../../hooks/usePassword'
+
 function Sign_In_Form() {
+
+
+  const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
+    usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
+
+  const { passwordValue, setPasswordValue, validPasswordChecker,
+    passwordTrue, setPasswordTrue,
+    passwordType, setPasswordType, passwordChecker,
+    passwordInputStyle } = usePassword()
+
   return (
     <div className='sign-in-form-container'>
       <form className='form-control'>
@@ -18,8 +32,14 @@ function Sign_In_Form() {
         <hr style={{ width: '100%' }} />
         <br />
         <div className='input-container'>
-          <_Username />
-          <_Password />
+          <_Username usernameValue={usernameValue} setUsernameValue={setUsernameValue} validUsernameChecker={validUsernameChecker}
+            usernameFocus={usernameFocus} setUsernameFocus={setUsernameFocus} usernameTrue={usernameTrue} setUsernameTrue={setUsernameTrue}
+            usernameChecker={usernameChecker} usernameInputStyle={usernameInputStyle}
+          />
+          <_Password passwordValue={passwordValue} setPasswordValue={setPasswordValue} validPasswordChecker={validPasswordChecker}
+            passwordTrue={passwordTrue} setPasswordTrue={setPasswordTrue} passwordType={passwordType} setPasswordType={setPasswordType}
+            passwordChecker={passwordChecker} passwordInputStyle={passwordInputStyle}
+          />
         </div>
         <div style={{ rowGap: '.5rem', margin: '.7rem auto' }} className='d-flex flex-column align-items-center justify-content-between'>
           <h5><b>No Account Yet?</b></h5>

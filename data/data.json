@@ -1,39 +1,43 @@
 {
   "users": [
     {
-      "full_name": "John Doe",
+      "fullname": "John Doe",
       "username": "john_doe",
       "email": "john@example.com",
       "password": "password123",
+      "role": "user",
       "accepted": true,
-      "profile_photo": "https://example.com/profiles/john_doe.jpg",
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 1
     },
     {
-      "full_name": "Jane Smith",
+      "fullname": "Jane Smith",
       "username": "JaneSmith",
       "email": "jane@example.com",
       "password": "myPassword123456",
+      "role": "user",
       "accepted": false,
-      "profile_photo": "https://example.com/profiles/jane_smith.jpg",
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 2
     },
     {
-      "full_name": "Asliddin Tursunov",
+      "fullname": "Asliddin Tursunov",
       "username": "Asliddin",
       "email": "aslidin@example.com",
       "password": "myPassword123456",
+      "role": "user",
       "accepted": false,
-      "profile_photo": "https://example.com/profiles/jane_smith.jpg",
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 3
     },
     {
-      "full_name": "John Uik",
+      "fullname": "John Uik",
       "username": "john_uik",
       "email": "john@example.com",
       "password": "pass1234",
+      "role": "user",
       "accepted": true,
-      "profile_photo": "https://example.com/profiles/jane_smith.jpg",
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 4
     },
     {
@@ -41,8 +45,9 @@
       "username": "Asliddin",
       "email": "a@example.com",
       "password": "asliddinA1",
+      "role": "user",
       "accepted": false,
-      "profile_photo": "https://example.com/profiles/john_doe.jpg",
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 5
     },
     {
@@ -50,8 +55,9 @@
       "username": "newUser123",
       "email": "newuser@emai.com",
       "password": "newUser123",
+      "role": "user",
       "accepted": false,
-      "profile_photo": "https://example.com/profiles/john_doe.jpg",
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 6
     },
     {
@@ -59,9 +65,20 @@
       "username": "Farkhodovich04",
       "email": "asliddin04@gmail.com",
       "password": "asliddinA1",
-      "accepted": false,
-      "profile_photo": "https://example.com/profiles/john_doe.jpg",
+      "role": "user",
+      "accepted": true,
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 7
+    },
+    {
+      "fullname": "New User",
+      "username": "Asliddin",
+      "email": "farkhodovich@gmail.com",
+      "password": "password2023A",
+      "role": "user",
+      "accepted": false,
+      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
+      "id": 8
     }
   ]
 }

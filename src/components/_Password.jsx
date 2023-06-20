@@ -1,12 +1,11 @@
 import { Fragment } from "react"
 import './Sign_In/Sign_In.css'
 import './Sign_Up/Sign_Up.css'
-import { usePassword } from "../hooks/usePassword" // Custon Hook
-function _Password() {
-  const { passwordValue, setPasswordValue, validPasswordChecker,
-    passwordTrue, setPasswordTrue,
-    passwordType, setPasswordType, passwordChecker,
-    passwordInputStyle } = usePassword()
+function _Password({ passwordValue, setPasswordValue, validPasswordChecker,
+  passwordTrue, setPasswordTrue,
+  passwordType, setPasswordType, passwordChecker,
+  passwordInputStyle }) {
+
 
   //* ########################################################################################
   return (

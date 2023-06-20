@@ -1,23 +1,28 @@
-.img-container img {
+.img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-container > div > img {
   border-radius: 10rem;
   -webkit-border-radius: 10rem;
   -moz-border-radius: 10rem;
   -ms-border-radius: 10rem;
   -o-border-radius: 10rem;
   background-color: gray;
-  margin-right: 2rem;
 }
 
 .update-profile-form {
   row-gap: 2rem;
 }
 
-.update-profile-form>div>input,
-.update-profile-form>div>label {
+.input-container>input,
+.input-container>label {
+
   font-size: medium;
 }
 
-.update-profile-form>div>input {
+.input-container>input {
   padding: 0.7rem;
 }
 
@@ -48,11 +53,13 @@
   font-size: x-large;
   color: royalblue;
 }
-.add-btn{
+
+.add-btn {
   font-size: 1.4rem;
   width: 100%;
 }
-.btn-container > button{
+
+.btn-container>button {
   font-size: medium;
   padding: .5rem 1.5rem;
 }

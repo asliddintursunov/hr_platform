@@ -1,6 +1,47 @@
-a{
-  padding: 0.3rem 1rem;
+.admin-nav a{
+  margin-bottom: 1rem;
+  padding: 0.7rem 1rem;
+  min-width: 30%;
+  text-align: center;
+  border: 1px solid royalblue;
+  border-radius: 8rem;
+  -webkit-border-radius: 8rem;
+  -moz-border-radius: 8rem;
+  -ms-border-radius: 8rem;
+  -o-border-radius: 8rem;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
 }
-a.active{
-  background-color: lightgray;
+.admin-nav a:hover{
+  background-color: rgb(238, 238, 238);
+}
+.admin-nav a.active{
+  background-color: lightblue;
+}
+.user-role{
+  padding: 0;
+  width: fit-content;
+  max-width: 3rem;
+  border: 2px solid gray;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+}
+.admin-edit {
+  width: fit-content;
+  padding: 0 0.4rem;
+  font-size: medium;
+  /* background-color: rebeccapurple; */
+  cursor: pointer;
+}
+.admin-edit > i:nth-child(1){
+  margin-left: -0.6rem;
+  margin-right: 0.6rem;
 }

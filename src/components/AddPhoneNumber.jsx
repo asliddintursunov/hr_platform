@@ -6,12 +6,12 @@ import '../App.css'
 function AddPhoneNumber() {
   const [numbers, setNumbers] = useState([])
   const [newNumber, setNewNumber] = useState('998')
-  console.log(numbers);
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    setNumbers(prev => [...prev, {id: numbers.length, number: newNumber}])
+    setNumbers(prev => [...prev, {id: numbers.length + 1, number: newNumber}])
     setNewNumber('998')
+    console.log(numbers);
   }
 
   const handleDelete = (id) => {

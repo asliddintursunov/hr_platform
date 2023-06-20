@@ -16,6 +16,7 @@ import { useConfirmPassword } from '../../../hooks/useConfirmPassword'
 function Sign_Up_Form() {
 
   const URL = 'http://localhost:3000/users'
+  // const URL = 'https://192.168.3.167:1000/register'
 
   // Custom Hook Values
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
@@ -37,6 +38,7 @@ function Sign_Up_Form() {
       username: usernameValue,
       email: emailValue,
       password: passwordValue,
+      role: 'user',
       accepted: false,
       profile_photo: 'https://example.com/profiles/john_doe.jpg',
 

@@ -4,9 +4,13 @@ function Admin() {
   return (
     <div>
       <nav>
-        <h2>Hello Admin</h2>
-        <NavLink to='accepted'>Accepted</NavLink>
-        <NavLink to='waitingusers'>Waiting Users</NavLink>
+        <h1>Hello Admin</h1>
+        <hr />
+        <br />
+        <nav className='container d-flex align-items-center justify-content-around admin-nav'>
+          <NavLink to='accepted'>Accepted Users</NavLink>
+          <NavLink to='waitingusers'>Waiting Users</NavLink>
+        </nav>
       </nav>
       <Outlet />
     </div>
