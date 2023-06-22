@@ -1,15 +1,25 @@
 import './User_Profile.css'
 
 // Components
-import AddPhoneNumber from '../AddPhoneNumber'
+import Edit_FullName from './part/Edit_FullName'
+import Edit_UserName from './part/Edit_UserName'
+import Edit_Email from './part/Edit_Email'
+import Edit_Password from './part/Edit_Password'
+import Edit_Address from './part/Edit_Address'
+import Edit_DateOfBirth from './part/Edit_DateOfBirth'
+import Edit_UploadImage from './part/Edit_UploadImage'
+import AddPhoneNumber from './part/AddPhoneNumber'
+import LogOutModal from './part/LogOutModal'
 
 // Custon Hooks
 import { useUsername } from '../../hooks/useUsername'
 import { usePassword } from '../../hooks/usePassword'
 import { useEmail } from '../../hooks/useEmail'
 import { useState } from 'react'
-function UpdateProfile() {
+import axios from 'axios'
 
+
+function UpdateProfile() {
   // Custom useUsername Hook 
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
     usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
@@ -24,18 +34,53 @@ function UpdateProfile() {
   const { emailValue, setEmailValue, validEmailChecker,
     emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle } = useEmail()
 
+  // Disable && Enable inputs
   const [changeProfile, setChangeProfile] = useState(false)
 
+  // Add Phone Number 
+  const [numbers, setNumbers] = useState([])
+  const [newNumber, setNewNumber] = useState('998')
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setNumbers(prev => [...prev, { id: numbers.length + 1, number: newNumber }])
+    setNewNumber('998')
+    console.log(numbers);
+  }
+
+  const handleDelete = (id) => {
+    setNumbers(prev => {
+      return prev.filter(e => e.id !== id)
+    })
+  }
+
+  // Change Profile Image
+  const [selectedImage, setSelectedImage] = useState(null)
+
+  const handleImageChange = (file) => {
+    console.log(file);
+    setSelectedImage(file)
+  }
+
+  // Log Out
+  const [showModal, setShowModal] = useState(false)
+  const toggleModal = () => setShowModal(!showModal)
+  const logOut = () => {
+    axios.delete('http://localhost:3000/users' + `/2`)
+      .then(() => alert('Successfully logged out!'))
+      .catch(() => alert('Error occured, try later!'))
+  }
+  // ###########################################################333
   return (
     <div className='container'>
-
+      {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
+      <button className='btn btn-danger' onClick={() => toggleModal()}><i className="bi bi-box-arrow-right"></i> Log Out</button>
       {/* Header, Image ... */}
       <div className='d-flex align-items-center justify-content-between'>
         <h1>My Profile</h1>
-        <div className="d-flex align-items-center justify-content-center">
+        <div className="d-flex align-items-center justify-content-center top-right-image">
           <p style={{ marginRight: '1rem' }}>Name: </p>
-          <img style={{ width: '3rem', borderRadius: '2rem' }}
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" />
+          {selectedImage ? <img src={URL.createObjectURL(selectedImage)} /> : <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" />}
         </div>
       </div>
       <div style={{ marginTop: '1rem' }} className='d-flex justify-content-end gap-3'>
@@ -51,111 +96,50 @@ function UpdateProfile() {
         <div className="d-flex flex-column flex-sm-row row">
           <div className="col-12 col-sm-2 img-container">
             <div className='d-flex flex-column align-items-center justify-content-center gap-2'>
-              <img style={{ width: '7rem' }}
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" />
-              {/* <Link>Change image</Link> */}
-              <button type='button' disabled={!changeProfile} className='btn btn-secondary'>Change Image</button>
+
+              {/* Edit Image */}
+              <Edit_UploadImage selectedImage={selectedImage} handleImageChange={handleImageChange} changeProfile={changeProfile} />
+
             </div>
           </div>
-          {/* Full Name */}
           <div className="col-12 col-sm-10">
-            <div className='fullname-changer input-container'>
-              <label htmlFor="fullname"><b>Full Name</b></label>
-              <input
-                disabled={!changeProfile}
-                id='fullname'
-                className='form-control'
-                type='text'
-                placeholder='Full Name'
-              />
-            </div>
 
-            {/* User Name */}
-            <div className="usernamename-changer input-container">
-              <label htmlFor="username"><b>User Name</b></label>
-              <input
-                disabled={!changeProfile}
-                style={usernameValue.length >= 1 && usernameTrue ? usernameInputStyle : null} value={usernameValue} className='form-control' type="text" placeholder='Username'
-                onChange={e => setUsernameValue(e.target.value)}
-                onKeyUp={() => {
-                  usernameChecker()
-                  setUsernameTrue(true)
-                }}
-                onFocus={() => setUsernameFocus(true)}
-                onBlur={() => setUsernameFocus(false)}
-                required />
-              {/* {usernameValue.length >= 1 && usernameFocus && validUsernameChecker === 'Valid Username' && <i style={{ color: 'green' }}>{validUsernameChecker}</i>} */}
-              {usernameValue.length >= 1 && usernameFocus && validUsernameChecker === 'Invalid Username' && <i style={{ color: 'red' }}>{validUsernameChecker}</i>}
-            </div>
+            {/* Edit Full Name */}
+            <Edit_FullName changeProfile={changeProfile} />
+
+            {/* Edit User Name */}
+            <Edit_UserName usernameValue={usernameValue} setUsernameValue={setUsernameValue} validUsernameChecker={validUsernameChecker}
+              usernameFocus={usernameFocus} setUsernameFocus={setUsernameFocus} usernameTrue={usernameTrue} setUsernameTrue={setUsernameTrue}
+              usernameChecker={usernameChecker} usernameInputStyle={usernameInputStyle} changeProfile={changeProfile}
+            />
+
           </div>
         </div>
 
-        {/* Email */}
-        <div className='email-changer input-container'>
-          <label htmlFor="email"><b>Email</b></label>
-          <div>
-            <i className="bi bi-envelope-at-fill"></i>
-          </div>
-          <input
-            disabled={!changeProfile}
-            className='form-control'
-            id='email'
-            style={emailValue.length >= 1 && emailTrue ? emailInputStyle : null}
-            value={emailValue}
-            type="email"
-            placeholder='Email'
-            onChange={e => setEmailValue(e.target.value)}
-            onKeyUp={() => {
-              emailChecker()
-              setEmailtrue(true)
-            }}
-            onFocus={() => setEmailFocus(true)}
-            onBlur={() => setEmailFocus(false)}
-            required />
-          {/* {emailValue.length >= 1 && emailFocus && validEmailChecker === 'Valid Email' && <i style={{ color: 'green' }}>{validEmailChecker}</i>} */}
-          {emailValue.length >= 1 && emailFocus && validEmailChecker === 'Invalid Email' && <i style={{ color: 'red' }}>{validEmailChecker}</i>}
-        </div>
+        {/* Edit Email */}
+        <Edit_Email emailValue={emailValue} setEmailValue={setEmailValue} validEmailChecker={validEmailChecker} emailFocus={emailFocus}
+          setEmailFocus={setEmailFocus} emailTrue={emailTrue} setEmailtrue={setEmailtrue} emailChecker={emailChecker}
+          emailInputStyle={emailInputStyle} changeProfile={changeProfile}
+        />
 
-        {/* Password */}
-        <div className='password-changer input-container'>
-          <label htmlFor="password"><b>Password</b></label>
-          <div onClick={() => {
-            passwordType ? setPasswordType(false) : setPasswordType(true)
-          }}>
-            {passwordType ? <i className="bi bi-eye-fill"></i> : <i className="bi bi-eye-slash-fill"></i>}
-          </div>
-          <input
-            disabled={!changeProfile}
-            className='form-control'
-            id="password"
-            style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null}
-            value={passwordValue}
-            type={passwordType ? "password" : "text"}
-            placeholder='Password'
-            onChange={e => setPasswordValue(e.target.value)}
-            onKeyUp={() => {
-              passwordChecker()
-              setPasswordTrue(true)
-            }}
-            required
-          />
-          {/* {passwordValue.length >= 1 && validPasswordChecker === 'Valid Password' && <i style={{ color: 'green' }}>{validPasswordChecker}</i>} */}
-          {passwordValue.length >= 1 && validPasswordChecker === 'Invalid Password' && <i style={{ color: 'red' }}>{validPasswordChecker}</i>}
-        </div>
+        {/* Edit Password */}
+        <Edit_Password passwordValue={passwordValue} setPasswordValue={setPasswordValue} validPasswordChecker={validPasswordChecker}
+          passwordTrue={passwordTrue} setPasswordTrue={setPasswordTrue} passwordType={passwordType} setPasswordType={setPasswordType}
+          passwordChecker={passwordChecker} passwordInputStyle={passwordInputStyle} changeProfile={changeProfile}
+        />
 
-        {/* Address */}
-        <div className='address-changer input-container'>
-          <label htmlFor="address"><b>Address</b></label>
-          <input
-            disabled={!changeProfile}
-            className='form-control'
-            type="text"
-            id='address'
-            placeholder='Address'
-          />
-        </div>
+        {/* Edit Addres */}
+        <Edit_Address changeProfile={changeProfile} />
+
+        {/* Edit Date of Birth */}
+        <Edit_DateOfBirth changeProfile={changeProfile} />
         <h3><b>Phone Number</b></h3>
-        <AddPhoneNumber />
+
+        {/* Edit Add Phone Number */}
+        <AddPhoneNumber numbers={numbers} newNumber={newNumber} setNewNumber={setNewNumber} handleSubmit={handleSubmit}
+          handleDelete={handleDelete} changeProfile={changeProfile}
+        />
+
         <div className="btn-container d-flex justify-content-center">
           <button className='btn btn-dark'>Submit</button>
         </div>

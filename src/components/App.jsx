@@ -14,10 +14,9 @@ import SignInLayout from '../layouts/SignInLayout'
 // Pages
 import Home from './Home/Home'
 import UpdateProfile from './User_Profile/UpdateProfile'
-import AddPhoneNumber from './AddPhoneNumber'
 import Admin from './Admin/Admin'
-import _AcceptedUsers from './_AcceptedUsers'
-import _NotAcceptedUsers from './_NotAcceptedUsers'
+import _AcceptedUsers from './Admin/part/_AcceptedUsers'
+import _NotAcceptedUsers from './Admin/part/_NotAcceptedUsers'
 
 function App() {
 
@@ -28,7 +27,6 @@ function App() {
         <Route path='signup' element={<SignUpLayout />} />
         <Route path='signin' element={<SignInLayout />} />
         <Route path='profile' element={<UpdateProfile />} />
-        <Route path='number' element={<AddPhoneNumber />} />
         <Route path='admin' element={<Admin />}>
           <Route path='accepted' element={<_AcceptedUsers />} />
           <Route path='waitingusers' element={<_NotAcceptedUsers />} />

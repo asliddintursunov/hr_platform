@@ -62,23 +62,13 @@
     },
     {
       "fullname": "New User",
-      "username": "Farkhodovich04",
-      "email": "asliddin04@gmail.com",
-      "password": "asliddinA1",
-      "role": "user",
-      "accepted": true,
-      "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
-      "id": 7
-    },
-    {
-      "fullname": "New User",
-      "username": "Asliddin",
-      "email": "farkhodovich@gmail.com",
-      "password": "password2023A",
+      "username": "asliddin",
+      "email": "asliddin@mail.ru",
+      "password": "validPassword1",
       "role": "user",
       "accepted": false,
       "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
-      "id": 8
+      "id": 7
     }
   ]
 }

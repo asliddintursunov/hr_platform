@@ -1,43 +1,41 @@
 import axios from "axios"
-import './Admin/Admin.css'
+import '../Admin.css'
 import { useCallback, useEffect, useState } from "react"
 
-function _AcceptedUsers() {
-
+function _NotAcceptedUsers() {
   const url = 'http://localhost:3000/users'
 
   const [datas, setDatas] = useState('')
-  const [userRole, setUserRole] = useState('user')
 
   const fetchData = useCallback(() => {
     axios.get(url)
-      .then((req) => {
-        setDatas(req.data)
-      })
+      .then((req) => setDatas(req.data))
       .catch((err) => console.error(err))
   }, [url])
 
   useEffect(() => { fetchData() }, [fetchData])
 
-  const handleDelete = (id) => {
-
+  const AddUser = (id) => {
     setDatas(prev => {
-      return prev.filter(data => data.id !== id)
+      return prev.filter(e => e.id !== id)
+    })
+
+    axios.patch(url + `/${id}`, {
+      accepted: true,
+    })
+      .then(() => alert('New User Added!'))
+      .catch(() => alert('Error Occured On Adding New User'))
+  }
+
+  const RejectUser = (id) => {
+    setDatas(prev => {
+      return prev.filter(e => e.id !== id)
     })
 
     axios.delete(url + `/${id}`)
-      .then(() => alert('User is deleted!'))
-      .catch(() => alert('Error occured!'))
+      .then(() => alert('User Is Rejected'))
+      .catch(() => alert('Error Occured On Rejecting New User'))
   }
-
-  const handleEdit = (id) => {
-    axios.patch(url + `/${id}`, {
-      role: userRole,
-    })
-      .then(() => console.log('Changed!'))
-      .catch(() => console.log('Not Changed!'))
-  }
-
   return (
     <div className="form-control container">
       <div className="text-center d-flex align-items-center justify-content-center">
@@ -45,18 +43,17 @@ function _AcceptedUsers() {
         <div className="col-3"><h4>User</h4></div>
         <div className="col-3"><h4>Username</h4></div>
         <div className="col-3"><h4>E-mail</h4></div>
-        <div className="col-1"><h4>Role</h4></div>
-        <div className="col-1"><h4>Edit</h4></div>
+        <div className="col-2"><h4>Accepted</h4></div>
       </div>
       <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
         <hr style={{ width: '100%' }} />
         {datas && datas.map(data => {
-          return (data.accepted &&
+          return (!data.accepted &&
             <div key={data.id} className="form-control d-flex align-items-center justift-content-between gap-2">
               <div className="col-1 text-center">
                 <b>#{data.id}</b>
               </div>
-              <div className="col-3 d-flex align-items-center justify-content-center text-secondary gap-4">
+              <div className="col-3 d-flex align-items-center text-secondary gap-4 text-secondary">
                 <img src={data.profile_photo} style={{ width: '4rem' }} />
                 <p className="text-wrap">{data.fullname}</p>
               </div>
@@ -66,17 +63,10 @@ function _AcceptedUsers() {
               <div className="col-3 text-center text-secondary">
                 <p>{data.email}</p>
               </div>
-              <div className="col-1 text-center d-flex align-items-center justift-content-center text-secondary">
-                <select className="select text-center user-role" name="userRole" onChange={e => { setUserRole(e.target.value) }}>
-                  <option selected></option>
-                  <option value='user'>User</option>
-                  <option value='superuser'>Super User</option>
-                </select>
-              </div>
-              <div className="col-1 text-left admin-edit">
-                <i className="text-primary bi bi-pencil-square" onClick={() => handleEdit(data.id)}></i>
-                <i className="text-danger bi bi-trash" onClick={() => { handleDelete(data.id) }}></i>
-              </div>
+              {<div className="col-2 d-flex align-items-center justift-content-between gap-2 accept-reject">
+                {!data.accepted && <button className="btn btn-success" onClick={() => AddUser(data.id)}><i className="bi bi-check-lg"></i></button>}
+                {!data.accepted && <button className="btn btn-danger" onClick={() => RejectUser(data.id)}><i className="bi bi-x"></i></button>}
+              </div>}
             </div>
           )
         })}
@@ -85,4 +75,4 @@ function _AcceptedUsers() {
   )
 }
 
-export default _AcceptedUsers
+export default _NotAcceptedUsers

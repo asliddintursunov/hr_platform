@@ -15,8 +15,8 @@ import { useConfirmPassword } from '../../../hooks/useConfirmPassword'
 
 function Sign_Up_Form() {
 
-  const URL = 'http://localhost:3000/users'
-  // const URL = 'https://192.168.3.167:1000/register'
+  // const URL = 'http://localhost:3000/users'
+  const URL = 'http://192.168.3.167:1000/register'
 
   // Custom Hook Values
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
@@ -40,12 +40,11 @@ function Sign_Up_Form() {
       password: passwordValue,
       role: 'user',
       accepted: false,
-      profile_photo: 'https://example.com/profiles/john_doe.jpg',
+      profile_photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU',
 
     })
       .then((req) => {
-        console.log(req.data)
-        alert('Succesfully Registered!')
+        alert(req.data)
         setUsernameValue('')
         setEmailValue('')
         setPasswordValue('')

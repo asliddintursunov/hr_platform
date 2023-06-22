@@ -3,7 +3,8 @@
   align-items: center;
   justify-content: center;
 }
-.img-container > div > img {
+
+.img-container>div>img {
   border-radius: 10rem;
   -webkit-border-radius: 10rem;
   -moz-border-radius: 10rem;
@@ -18,7 +19,6 @@
 
 .input-container>input,
 .input-container>label {
-
   font-size: medium;
 }
 
@@ -54,6 +54,29 @@
   color: royalblue;
 }
 
+.profile_img img {
+  width: 7rem;
+  height: 7rem;
+  object-fit: cover;
+  border-radius: 10rem;
+  -webkit-border-radius: 10rem;
+  -moz-border-radius: 10rem;
+  -ms-border-radius: 10rem;
+  -o-border-radius: 10rem;
+  background-color: gray;
+}
+
+.top-right-image>img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+  border-radius: 2rem;
+  -webkit-border-radius: 2rem;
+  -moz-border-radius: 2rem;
+  -ms-border-radius: 2rem;
+  -o-border-radius: 2rem;
+}
+
 .add-btn {
   font-size: 1.4rem;
   width: 100%;
@@ -62,4 +85,38 @@
 .btn-container>button {
   font-size: medium;
   padding: .5rem 1.5rem;
+}
+
+.log-out-modal {
+  background-color: gray;
+
+  /* Add the blur effect */
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.la-la-la {
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/opacity/see-through */
+  color: white;
+  font-weight: bold;
+  border: 3px solid #f1f1f1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  padding: 20px;
+  text-align: center;
 }

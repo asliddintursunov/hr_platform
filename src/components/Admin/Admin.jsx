@@ -4,7 +4,7 @@ function Admin() {
   return (
     <div>
       <nav>
-        <h1>Hello Admin</h1>
+        <h1>Admin Page</h1>
         <hr />
         <br />
         <nav className='container d-flex align-items-center justify-content-around admin-nav'>
