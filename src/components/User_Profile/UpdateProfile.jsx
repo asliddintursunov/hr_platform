@@ -15,7 +15,7 @@ import LogOutModal from './part/LogOutModal'
 import { useUsername } from '../../hooks/useUsername'
 import { usePassword } from '../../hooks/usePassword'
 import { useEmail } from '../../hooks/useEmail'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -33,10 +33,10 @@ function UpdateProfile() {
   // Custom Email Hook
   const { emailValue, setEmailValue, validEmailChecker,
     emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle } = useEmail()
-    // Full Name, Address, DateOfBirth values
-    const [fullName, setFullName] = useState('')
-    const [address, setAddress] = useState('')
-    const [dateOfBirth, setDateOfBirth] = useState('')
+  // Full Name, Address, DateOfBirth values
+  const [fullName, setFullName] = useState('')
+  const [address, setAddress] = useState('')
+  const [dateOfBirth, setDateOfBirth] = useState('')
   // Disable && Enable inputs
   const [changeProfile, setChangeProfile] = useState(false)
 
@@ -44,7 +44,7 @@ function UpdateProfile() {
   const [numbers, setNumbers] = useState([])
   const [newNumber, setNewNumber] = useState('998')
 
-  const handleSubmit = (e) => {
+  const handleAddNewNumber = (e) => {
     e.preventDefault();
     setNumbers(prev => [...prev, { id: numbers.length + 1, number: newNumber }])
     setNewNumber('998')
@@ -57,7 +57,7 @@ function UpdateProfile() {
     })
   }
 
-  // Change Profile Image
+  // Change Profile Image === Working
   const [selectedImage, setSelectedImage] = useState(null)
 
   const handleImageChange = (file) => {
@@ -65,9 +65,28 @@ function UpdateProfile() {
     setSelectedImage(file)
   }
 
+  // Cancle Edition === Working
+  const CancleEdition = useCallback(() => {
+    axios.get('http://localhost:3000/users/2')
+      .then(res => {
+        console.log('Cancle Edition Worked');
+        console.log(res.data.username);
+        setFullName(res.data.fullname)
+        setUsernameValue(res.data.username)
+        setEmailValue(res.data.email)
+        setPasswordValue(res.data.password)
+        setAddress(res.data.address)
+        setDateOfBirth(res.data.dateOfBirth)
+        setSelectedImage(URL.createObjectURL(res.data.profile_photo))
+      })
+      .catch(err => console.error(err))
+  }, [setFullName, setUsernameValue, setEmailValue, setPasswordValue, setAddress, setDateOfBirth, setSelectedImage])
+  useEffect(() => { CancleEdition() }, [CancleEdition])
+
+
   // Save Edition === Working
   const saveEdition = () => {
-    axios.patch('http://localhost:3000/users' + `/2`, {
+    axios.patch('http://localhost:3000/users/2', {
       fullname: fullName,
       username: usernameValue,
       email: emailValue,
@@ -76,16 +95,18 @@ function UpdateProfile() {
       dateOfBirth: dateOfBirth,
       role: 'user',
       accepted: false,
-      profile_photo: selectedImage,
+      phone_number: numbers,
+      // profile_photo: URL.createObjectURL(selectedImage),
     })
       .then(() => console.log('Success'))
       .catch(() => console.log('Fail'))
   }
-  // Log Out
+
+  // Log Out === Working
   const logOut = () => {
-    axios.delete('http://localhost:3000/users' + `/2`)
-    .then(() => alert('Successfully logged out!'))
-    .catch(() => alert('Error occured, try later!'))
+    axios.delete('http://localhost:3000/users/2')
+      .then(() => alert('Successfully logged out!'))
+      .catch(() => alert('Error occured, try later!'))
   }
   const [showModal, setShowModal] = useState(false)
   const toggleModal = () => setShowModal(!showModal)
@@ -109,7 +130,10 @@ function UpdateProfile() {
             setChangeProfile(false)
             saveEdition()
           }}>Save</button>}
-          {changeProfile && <button style={{ padding: '0.4rem 1.5rem', fontSize: 'medium' }} className='btn btn-danger' onClick={() => setChangeProfile(false)}>Cancle</button>}
+          {changeProfile && <button style={{ padding: '0.4rem 1.5rem', fontSize: 'medium' }} className='btn btn-danger' onClick={() => {
+            setChangeProfile(false)
+            CancleEdition()
+          }}>Cancle</button>}
         </div>
         <hr />
 
@@ -159,7 +183,7 @@ function UpdateProfile() {
           <h3><b>Phone Number</b></h3>
 
           {/* Edit Add Phone Number */}
-          <AddPhoneNumber numbers={numbers} newNumber={newNumber} setNewNumber={setNewNumber} handleSubmit={handleSubmit}
+          <AddPhoneNumber numbers={numbers} newNumber={newNumber} setNewNumber={setNewNumber} handleAddNewNumber={handleAddNewNumber}
             handleDelete={handleDelete} changeProfile={changeProfile}
           />
 

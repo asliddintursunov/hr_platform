@@ -2,7 +2,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import '../../../App.css'
 // eslint-disable-next-line react/prop-types
-function AddPhoneNumber({numbers, newNumber, setNewNumber, handleSubmit, handleDelete ,changeProfile}) {
+function AddPhoneNumber({numbers, newNumber, setNewNumber, handleAddNewNumber, handleDelete ,changeProfile}) {
 
   return (
     <div className="form-control container d-flex flex-column align-items-center gap-2">
@@ -20,7 +20,7 @@ function AddPhoneNumber({numbers, newNumber, setNewNumber, handleSubmit, handleD
                 }}
                 disabled={!changeProfile}
               /></label>
-            <button disabled={!changeProfile} onClick={handleSubmit} className="btn btn-primary add-btn">Add</button>
+            <button disabled={!changeProfile} onClick={handleAddNewNumber} className="btn btn-primary add-btn">Add</button>
           </div>
         </div>
         <div className="col">

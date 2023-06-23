@@ -35,13 +35,19 @@
   -o-border-radius: 4px;
 }
 .admin-edit {
-  width: fit-content;
-  padding: 0 0.4rem;
+  display: flex;
+  justify-content: space-around;
   font-size: medium;
-  /* background-color: rebeccapurple; */
   cursor: pointer;
 }
-.admin-edit > i:nth-child(1){
-  margin-left: -0.6rem;
-  margin-right: 0.6rem;
+
+.user-image {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 9999px;
+  -webkit-border-radius: 9999px;
+  -moz-border-radius: 9999px;
+  -ms-border-radius: 9999px;
+  -o-border-radius: 9999px;
 }

@@ -26,7 +26,7 @@ function _AcceptedUsers() {
     })
 
     axios.delete(url + `/${id}`)
-      .then(() => alert('User is deleted!'))
+      .then(() => alert('User has been deleted!'))
       .catch(() => alert('Error occured!'))
   }
 
@@ -34,8 +34,8 @@ function _AcceptedUsers() {
     axios.patch(url + `/${id}`, {
       role: userRole,
     })
-      .then(() => console.log('Changed!'))
-      .catch(() => console.log('Not Changed!'))
+      .then(() => alert('User Role has been Changed!'))
+      .catch(() => alert('Somthing went wrong!'))
   }
 
   return (
@@ -43,10 +43,10 @@ function _AcceptedUsers() {
       <div className="text-center d-flex align-items-center justify-content-center">
         <div className="col-1"><h4>ID</h4></div>
         <div className="col-3"><h4>User</h4></div>
-        <div className="col-3"><h4>Username</h4></div>
+        <div className="col-2"><h4>Username</h4></div>
         <div className="col-3"><h4>E-mail</h4></div>
         <div className="col-1"><h4>Role</h4></div>
-        <div className="col-1"><h4>Edit</h4></div>
+        <div className="col-2"><h4>Edit</h4></div>
       </div>
       <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
         <hr style={{ width: '100%' }} />
@@ -57,25 +57,27 @@ function _AcceptedUsers() {
                 <b>#{data.id}</b>
               </div>
               <div className="col-3 d-flex align-items-center justify-content-center text-secondary gap-4">
-                <img src={data.profile_photo} style={{ width: '4rem' }} />
+                <img className="user-image" src={data.profile_photo} />
                 <p className="text-wrap">{data.fullname}</p>
               </div>
-              <div className="col-3 text-center text-secondary">
+              <div className="col-2 text-center text-secondary">
                 <p>{data.username}</p>
               </div>
               <div className="col-3 text-center text-secondary">
                 <p>{data.email}</p>
               </div>
-              <div className="col-1 text-center d-flex align-items-center justift-content-center text-secondary">
+              <div className="col-1 d-flex align-items-center justify-content-around">
                 <select className="form-select text-center user-role" name="userRole" onChange={e => { setUserRole(e.target.value) }}>
-                  <option selected></option>
+                  <option selected value='user'></option>
                   <option value='user'>User</option>
                   <option value='superuser'>Super User</option>
                 </select>
               </div>
               <div className="col-1 text-left admin-edit">
-                <i className="text-primary bi bi-pencil-square" onClick={() => handleEdit(data.id)}></i>
-                <i className="text-danger bi bi-trash" onClick={() => { handleDelete(data.id) }}></i>
+                <button className="btn btn-success" onClick={() => handleEdit(data.id)}>Change</button>
+              </div>
+              <div className="col-1 text-left admin-edit">
+                <button className="btn btn-danger" onClick={() => { handleDelete(data.id) }}>Delete</button>
               </div>
             </div>
           )

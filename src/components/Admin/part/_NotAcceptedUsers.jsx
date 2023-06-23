@@ -54,7 +54,7 @@ function _NotAcceptedUsers() {
                 <b>#{data.id}</b>
               </div>
               <div className="col-3 d-flex align-items-center text-secondary gap-4 text-secondary">
-                <img src={data.profile_photo} style={{ width: '4rem' }} />
+                <img className="user-image" src={data.profile_photo} />
                 <p className="text-wrap">{data.fullname}</p>
               </div>
               <div className="col-3 text-center text-secondary">
