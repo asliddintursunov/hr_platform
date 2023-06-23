@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 
 /* eslint-disable react/prop-types */
-function Edit_DateOfBirth({ changeProfile }) {
+function Edit_DateOfBirth({ changeProfile, dateOfBirth, setDateOfBirth }) {
   return (
     <Fragment>
       <div className='birth-date-changer input-container'>
@@ -12,6 +12,8 @@ function Edit_DateOfBirth({ changeProfile }) {
           type="date"
           name="dateofbirth"
           id="dateofbirth"
+          value={dateOfBirth}
+          onChange={e => setDateOfBirth(e.target.value)}
         />
       </div>
     </Fragment>

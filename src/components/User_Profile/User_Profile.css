@@ -87,36 +87,41 @@
   padding: .5rem 1.5rem;
 }
 
-.log-out-modal {
-  background-color: gray;
-
-  /* Add the blur effect */
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
-
-  /* Full height */
-  height: 100%;
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: none;
 }
 
-.la-la-la {
-  background-color: rgb(0, 0, 0);
-  /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4);
-  /* Black w/opacity/see-through */
-  color: white;
-  font-weight: bold;
-  border: 3px solid #f1f1f1;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
+.modal > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 6rem 2rem 2rem 2rem;
+  border-radius: 1rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
+}
+.modal > div > div{
   width: 80%;
-  padding: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.modal > div > div > button {
+  font-size: medium;
+  padding: 0.3rem 1.5rem;
+}
+.modal-options a{
+  color: #fff;
+  text-decoration: none;
 }

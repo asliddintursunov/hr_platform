@@ -38,6 +38,8 @@ function Sign_Up_Form() {
       username: usernameValue,
       email: emailValue,
       password: passwordValue,
+      "address": null,
+      "dateOfBirth": null,
       role: 'user',
       accepted: false,
       profile_photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU',

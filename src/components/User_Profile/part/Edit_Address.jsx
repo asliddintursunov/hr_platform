@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 
 /* eslint-disable react/prop-types */
-function Edit_Address({ changeProfile }) {
+function Edit_Address({ changeProfile, address, setAddress }) {
   return (
     <Fragment>
       <div className='address-changer input-container'>
@@ -13,6 +13,8 @@ function Edit_Address({ changeProfile }) {
           id='address'
           name='address'
           placeholder='Address'
+          value={address}
+          onChange={e => setAddress(e.target.value)}
         />
       </div>
     </Fragment>
