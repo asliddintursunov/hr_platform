@@ -7,7 +7,7 @@ function Edit_DateOfBirth({ changeProfile, dateOfBirth, setDateOfBirth }) {
       <div className='birth-date-changer input-container'>
         <label htmlFor="dateofbirth"><b>Date of Bitrh</b></label>
         <input
-          className='form-control'
+          className='form-control bg-light'
           disabled={!changeProfile}
           type="date"
           name="dateofbirth"

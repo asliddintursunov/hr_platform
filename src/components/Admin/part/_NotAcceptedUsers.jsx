@@ -49,7 +49,7 @@ function _NotAcceptedUsers() {
         <hr style={{ width: '100%' }} />
         {datas && datas.map(data => {
           return (!data.accepted &&
-            <div key={data.id} className="form-control d-flex align-items-center justift-content-between gap-2">
+            <div key={data.id} className="form-control d-flex align-items-center justift-content-between gap-2 bg-light">
               <div className="col-1 text-center">
                 <b>#{data.id}</b>
               </div>
@@ -63,9 +63,9 @@ function _NotAcceptedUsers() {
               <div className="col-3 text-center text-secondary">
                 <p>{data.email}</p>
               </div>
-              {<div className="col-2 d-flex align-items-center justift-content-between gap-2 accept-reject">
-                {!data.accepted && <button className="btn btn-success" onClick={() => AddUser(data.id)}><i className="bi bi-check-lg"></i></button>}
-                {!data.accepted && <button className="btn btn-danger" onClick={() => RejectUser(data.id)}><i className="bi bi-x"></i></button>}
+              {<div className=" col-2 d-flex align-items-center justify-content-evenly gap-2 accept-reject">
+                {!data.accepted && <button className="btn btn-success" onClick={() => AddUser(data.id)}>Accept</button>}
+                {!data.accepted && <button className="btn btn-danger" onClick={() => RejectUser(data.id)}>Reject</button>}
               </div>}
             </div>
           )

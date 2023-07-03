@@ -16,7 +16,7 @@ function Edit_Password({ passwordValue, setPasswordValue, validPasswordChecker,
           </div>
           <input
             disabled={!changeProfile}
-            className='form-control'
+            className='form-control bg-light'
             style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null}
             value={passwordValue}
             type={passwordType ? "password" : "text"}

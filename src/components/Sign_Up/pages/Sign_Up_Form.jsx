@@ -16,7 +16,7 @@ import { useConfirmPassword } from '../../../hooks/useConfirmPassword'
 function Sign_Up_Form() {
 
   // const URL = 'http://localhost:3000/users'
-  const URL = 'http://192.168.3.167:1000/register'
+  const URL = 'http://192.168.3.140:1000/register'
 
   // Custom Hook Values
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
@@ -34,16 +34,15 @@ function Sign_Up_Form() {
 
   const addNewUser = () => {
     axios.post(URL, {
-      fullname: 'New User',
+      // fullname: 'New User',
       username: usernameValue,
       email: emailValue,
       password: passwordValue,
-      "address": null,
-      "dateOfBirth": null,
-      role: 'user',
-      accepted: false,
-      profile_photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU',
-
+      // "address": null,
+      // "dateOfBirth": null,
+      // role: 'user',
+      // accepted: false,
+      // profile_photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU',
     })
       .then((req) => {
         alert(req.data)

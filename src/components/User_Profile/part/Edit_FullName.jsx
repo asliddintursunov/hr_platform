@@ -8,7 +8,7 @@ function Edit_FullName({ changeProfile, fullName, setFullName }) {
         <label htmlFor="fullname"><b>Full Name</b></label>
         <input
           disabled={!changeProfile}
-          className='form-control'
+          className='form-control bg-light'
           type='text'
           id='fullname'
           name='fullname'

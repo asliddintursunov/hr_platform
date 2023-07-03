@@ -3,7 +3,7 @@ import './Admin.css'
 function Admin() {
   return (
     <div>
-      <nav>
+      <nav className='container'>
         <h1>Admin Page</h1>
         <hr />
         <br />

@@ -69,8 +69,6 @@ function UpdateProfile() {
   const CancleEdition = useCallback(() => {
     axios.get('http://localhost:3000/users/2')
       .then(res => {
-        console.log('Cancle Edition Worked');
-        console.log(res.data.username);
         setFullName(res.data.fullname)
         setUsernameValue(res.data.username)
         setEmailValue(res.data.email)
@@ -119,7 +117,7 @@ function UpdateProfile() {
         <div className='d-flex align-items-center justify-content-between'>
           <h1>My Profile</h1>
           <div className="d-flex align-items-center justify-content-center top-right-image">
-            <p style={{ marginRight: '1rem' }}>Name: </p>
+            <p style={{ marginRight: '1rem' }}>{fullName}</p>
             {selectedImage ? <img src={URL.createObjectURL(selectedImage)} /> : <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" />}
           </div>
         </div>
@@ -139,7 +137,7 @@ function UpdateProfile() {
 
         {/* ============ Update Profile Form ============ */}
         <br />
-        <form onSubmit={(e) => e.preventDefault()} className='form-control d-flex flex-column update-profile-form'>
+        <form onSubmit={(e) => e.preventDefault()} className='form-control d-flex flex-column update-profile-form' style={{backgroundColor: '#F0F0F0'}}>
           <div className="d-flex flex-column flex-sm-row row">
             <div className="col-12 col-sm-2 img-container">
               <div className='d-flex flex-column align-items-center justify-content-center gap-2'>
@@ -186,10 +184,6 @@ function UpdateProfile() {
           <AddPhoneNumber numbers={numbers} newNumber={newNumber} setNewNumber={setNewNumber} handleAddNewNumber={handleAddNewNumber}
             handleDelete={handleDelete} changeProfile={changeProfile}
           />
-
-          <div className="btn-container d-flex justify-content-center">
-            <button className='btn btn-dark'>Submit</button>
-          </div>
         </form>
         {/* ================================================ */}
       </div>

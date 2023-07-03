@@ -12,7 +12,7 @@ function Edit_Email({ emailValue, setEmailValue, validEmailChecker,
         </div>
         <input
           disabled={!changeProfile}
-          className='form-control'
+          className='form-control bg-light'
           style={emailValue.length >= 1 && emailTrue ? emailInputStyle : null}
           value={emailValue}
           type="email"

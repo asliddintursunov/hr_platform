@@ -52,7 +52,7 @@ function _AcceptedUsers() {
         <hr style={{ width: '100%' }} />
         {datas && datas.map(data => {
           return (data.accepted &&
-            <div key={data.id} className="form-control d-flex align-items-center justift-content-between gap-2">
+            <div key={data.id} className="form-control d-flex align-items-center justift-content-between gap-2 bg-light">
               <div className="col-1 text-center">
                 <b>#{data.id}</b>
               </div>
@@ -67,16 +67,13 @@ function _AcceptedUsers() {
                 <p>{data.email}</p>
               </div>
               <div className="col-1 d-flex align-items-center justify-content-around">
-                <select className="form-select text-center user-role" name="userRole" onChange={e => { setUserRole(e.target.value) }}>
-                  <option selected value='user'></option>
-                  <option value='user'>User</option>
-                  <option value='superuser'>Super User</option>
+                <select className="form-select text-center" name="userRole" onChange={e => { setUserRole(e.target.value) }}>
+                  <option selected={data.role === 'user' && true} value='user'>User</option>
+                  <option selected={data.role === 'moderator' && true} value='moderator'>Moderator</option>
                 </select>
               </div>
-              <div className="col-1 text-left admin-edit">
-                <button className="btn btn-success" onClick={() => handleEdit(data.id)}>Change</button>
-              </div>
-              <div className="col-1 text-left admin-edit">
+              <div className="col-2 d-flex flex-column flex-sm-row align-items-center justify-content-center gap-sm-4 gap-2">
+                <button className="btn btn-success" onClick={() => { handleEdit(data.id) }}>Change</button>
                 <button className="btn btn-danger" onClick={() => { handleDelete(data.id) }}>Delete</button>
               </div>
             </div>

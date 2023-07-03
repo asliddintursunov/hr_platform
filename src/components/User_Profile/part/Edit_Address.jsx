@@ -8,7 +8,7 @@ function Edit_Address({ changeProfile, address, setAddress }) {
         <label htmlFor="address"><b>Address</b></label>
         <input
           disabled={!changeProfile}
-          className='form-control'
+          className='form-control bg-light'
           type="text"
           id='address'
           name='address'

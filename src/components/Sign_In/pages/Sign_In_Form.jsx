@@ -10,9 +10,11 @@ import _Password from '../../_Password'
 // Custom Hooks
 import { useUsername } from '../../../hooks/useUsername'
 import { usePassword } from '../../../hooks/usePassword'
+import axios from 'axios'
 
 function Sign_In_Form() {
 
+  const URL = 'http://192.168.3.140:1000/register'
 
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
     usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
@@ -22,9 +24,26 @@ function Sign_In_Form() {
     passwordType, setPasswordType, passwordChecker,
     passwordInputStyle } = usePassword()
 
+  const logInToProfile = () => {
+    axios.post(URL, {
+      'username': usernameValue,
+      'password': passwordValue,
+    })
+      .then(res => {
+        localStorage.setItem('userId', res.data.id)
+        localStorage.setItem('userRole', res.data.role)
+        alert(res.data.message)
+      })
+      .catch(err => alert(err.response.data))
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    logInToProfile()
+  }
+
   return (
     <div className='sign-in-form-container'>
-      <form className='form-control'>
+      <form onSubmit={handleSubmit} className='form-control'>
         <div>
           <h2><i className="bi bi-key-fill key"></i></h2>
           <h2>Sign In</h2>

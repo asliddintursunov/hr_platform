@@ -5,7 +5,7 @@ import '../../../App.css'
 function AddPhoneNumber({numbers, newNumber, setNewNumber, handleAddNewNumber, handleDelete ,changeProfile}) {
 
   return (
-    <div className="form-control container d-flex flex-column align-items-center gap-2">
+    <div className="form-control container d-flex flex-column align-items-center gap-2 bg-light">
       <h3>Add Number</h3>
       <div className="row d-flex align-items-start justify-content-around">
         <div className="col">

@@ -17,6 +17,7 @@ import UpdateProfile from './User_Profile/UpdateProfile'
 import Admin from './Admin/Admin'
 import _AcceptedUsers from './Admin/part/_AcceptedUsers'
 import _NotAcceptedUsers from './Admin/part/_NotAcceptedUsers'
+import Moderator from './Admin/Moderator'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
           <Route path='accepted' element={<_AcceptedUsers />} />
           <Route path='waitingusers' element={<_NotAcceptedUsers />} />
         </Route>
+        <Route path='moderator' element={<Moderator />} />
       </Route>
     )
   )
