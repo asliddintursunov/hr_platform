@@ -14,7 +14,8 @@ import axios from 'axios'
 
 function Sign_In_Form() {
 
-  const URL = 'http://192.168.3.140:1000/register'
+  const URL = 'http://192.168.3.140:1000/login'
+  // const URL = 'http://localhost:3000/users'
 
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
     usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
@@ -32,10 +33,13 @@ function Sign_In_Form() {
       .then(res => {
         localStorage.setItem('userId', res.data.id)
         localStorage.setItem('userRole', res.data.role)
-        alert(res.data.message)
+        // console.log(res.data.message);
+        alert(res.data.message);
+        window.location.assign('/landing')
       })
       .catch(err => alert(err.response.data))
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     logInToProfile()

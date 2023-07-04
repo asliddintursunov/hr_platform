@@ -3,7 +3,7 @@ import '../Admin.css'
 import { useCallback, useEffect, useState } from "react"
 
 function _NotAcceptedUsers() {
-  const url = 'http://localhost:3000/users'
+  const url = 'http://192.168.3.140:1000/users'
 
   const [datas, setDatas] = useState('')
 

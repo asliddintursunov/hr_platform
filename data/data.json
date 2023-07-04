@@ -8,7 +8,7 @@
       "address": "Chicago",
       "dateOfBirth": "2001-03-04",
       "phone_number": [],
-      "role": "user",
+      "role": "admin",
       "accepted": true,
       "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 1
@@ -35,7 +35,7 @@
       "dateOfBirth": "2004-03-03",
       "phone_number": [],
       "role": "user",
-      "accepted": false,
+      "accepted": true,
       "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 3
     },
@@ -47,7 +47,7 @@
       "address": "Amsterdam",
       "dateOfBirth": "1988-7-13",
       "phone_number": [],
-      "role": "user",
+      "role": "moderator",
       "accepted": true,
       "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 4

@@ -18,6 +18,7 @@ import Admin from './Admin/Admin'
 import _AcceptedUsers from './Admin/part/_AcceptedUsers'
 import _NotAcceptedUsers from './Admin/part/_NotAcceptedUsers'
 import Moderator from './Admin/Moderator'
+import _LandingPage from './_LandingPage'
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
           <Route path='waitingusers' element={<_NotAcceptedUsers />} />
         </Route>
         <Route path='moderator' element={<Moderator />} />
+        <Route path='landing' element={<_LandingPage />} />
       </Route>
     )
   )
