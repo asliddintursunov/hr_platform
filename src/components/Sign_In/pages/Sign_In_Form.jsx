@@ -33,9 +33,22 @@ function Sign_In_Form() {
       .then(res => {
         localStorage.setItem('userId', res.data.id)
         localStorage.setItem('userRole', res.data.role)
-        // console.log(res.data.message);
-        alert(res.data.message);
-        window.location.assign('/landing')
+        if (res.data.accepted === true) {
+          if (res.data == 'Invalid username or password') {
+            alert(res.data)
+            setUsernameValue('')
+            setPasswordValue('')
+          }
+          if (res.data.message == 'Login successful') {
+            alert(res.data.message)
+            window.location.assign('/landing')
+          }
+        }
+        else if (res.data.accepted === false) {
+          alert(res.data.message)
+          setUsernameValue('')
+          setPasswordValue('')
+        }
       })
       .catch(err => alert(err.response.data))
   }

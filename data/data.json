@@ -22,7 +22,7 @@
       "dateOfBirth": "2004-03-03",
       "phone_number": [],
       "role": "user",
-      "accepted": false,
+      "accepted": true,
       "profile_photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU",
       "id": 2
     },

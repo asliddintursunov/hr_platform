@@ -23,8 +23,8 @@ function _NotAcceptedUsers() {
     axios.patch(url + `/${id}`, {
       accepted: true,
     })
-      .then(() => alert('New User Added!'))
-      .catch(() => alert('Error Occured On Adding New User'))
+      .then((res) => alert(res.data))
+      .catch(() => alert('Something went Wrong!'))
   }
 
   const RejectUser = (id) => {
@@ -33,8 +33,9 @@ function _NotAcceptedUsers() {
     })
 
     axios.delete(url + `/${id}`)
-      .then(() => alert('User Is Rejected'))
-      .catch(() => alert('Error Occured On Rejecting New User'))
+      .then((res) => alert(res.data))
+      .catch(() => console.error('Something went Wrong'))
+
   }
   return (
     <div className="form-control container">

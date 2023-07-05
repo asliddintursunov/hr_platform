@@ -41,7 +41,7 @@ function Sign_Up_Form() {
       // "address": null,
       // "dateOfBirth": null,
       // role: 'user',
-      // accepted: false,
+      accepted: false,
       // profile_photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU',
     })
       .then((req) => {
@@ -50,6 +50,7 @@ function Sign_Up_Form() {
         setEmailValue('')
         setPasswordValue('')
         setPasswordMatchValue('')
+        console.log(req.data);
       })
       .catch((err) => console.error(err))
   }

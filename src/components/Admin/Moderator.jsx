@@ -4,7 +4,7 @@ import { Fragment, useCallback, useEffect, useState } from "react"
 
 function Moderator() {
 
-  const url = 'http://localhost:3000/users'
+  const url = 'http://192.168.3.140:1000/users'
 
   const [datas, setDatas] = useState('')
 
@@ -25,7 +25,7 @@ function Moderator() {
     })
 
     axios.delete(url + `/${id}`)
-      .then(() => alert('User has been deleted!'))
+      .then((res) => alert(res.data))
       .catch(() => alert('Error occured!'))
   }
 

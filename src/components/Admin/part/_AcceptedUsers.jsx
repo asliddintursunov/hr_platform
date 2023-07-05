@@ -26,7 +26,7 @@ function _AcceptedUsers() {
     })
 
     axios.delete(url + `/${id}`)
-      .then(() => alert('User has been deleted!'))
+      .then((res) => alert(res.data))
       .catch(() => alert('Error occured!'))
   }
 
@@ -34,7 +34,7 @@ function _AcceptedUsers() {
     axios.patch(url + `/${id}`, {
       role: userRole,
     })
-      .then(() => alert('User Role has been Changed!'))
+      .then((res) => alert(res.data))
       .catch(() => alert('Somthing went wrong!'))
   }
 
