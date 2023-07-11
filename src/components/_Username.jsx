@@ -8,7 +8,7 @@ function _Username({ usernameValue, setUsernameValue, validUsernameChecker, user
   //* ########################################################################################
   return (
     <Fragment>
-      <label>
+      <label style={{ maxWidth: 'min-content', lineHeight: '1.2rem' }}>
         <input style={usernameValue.length >= 1 && usernameTrue ? usernameInputStyle : null} value={usernameValue} className='form-control' type="text" placeholder='Username'
           onChange={e => setUsernameValue(e.target.value)}
           onKeyUp={() => {
@@ -18,8 +18,8 @@ function _Username({ usernameValue, setUsernameValue, validUsernameChecker, user
           onFocus={() => setUsernameFocus(true)}
           onBlur={() => setUsernameFocus(false)}
           required />
-        {usernameValue.length >= 1 && usernameFocus && validUsernameChecker === 'Valid Username' && <i style={{ color: 'green' }}>{validUsernameChecker}</i>}
-        {usernameValue.length >= 1 && usernameFocus && validUsernameChecker === 'Invalid Username' && <i style={{ color: 'red' }}>{validUsernameChecker}</i>}
+        {usernameValue.length >= 1 && usernameFocus && validUsernameChecker === 'Valid Username' && <i style={{ color: 'green', fontSize: '1rem' }}>{validUsernameChecker}</i>}
+        {usernameValue.length >= 1 && usernameFocus && validUsernameChecker !== 'Valid Username' && <i style={{ color: 'red', fontSize: '1rem' }}>{validUsernameChecker}</i>}
       </label>
     </Fragment>
   )

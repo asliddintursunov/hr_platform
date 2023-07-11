@@ -10,7 +10,7 @@ function _Password({ passwordValue, setPasswordValue, validPasswordChecker,
   //* ########################################################################################
   return (
     <Fragment>
-      <label style={{ position: 'relative' }}>
+      <label style={{ position: 'relative',  maxWidth: 'min-content', lineHeight: '1.2rem' }}>
         <input style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null} value={passwordValue} className='form-control' type={passwordType ? "password" : "text"} placeholder='Password'
           onChange={e => setPasswordValue(e.target.value)}
           onKeyUp={() => {
@@ -27,8 +27,8 @@ function _Password({ passwordValue, setPasswordValue, validPasswordChecker,
         {/* ==================================== */}
 
         {/* ====== Password Validation Starts ====== */}
-        {passwordValue.length >= 1 && validPasswordChecker === 'Valid Password' && <i style={{ color: 'green' }}>{validPasswordChecker}</i>}
-        {passwordValue.length >= 1 && validPasswordChecker === 'Invalid Password' && <i style={{ color: 'red' }}>{validPasswordChecker}</i>}
+        {passwordValue.length >= 1 && validPasswordChecker === 'Valid Password' && <i style={{ color: 'green', fontSize: '1rem' }}>{validPasswordChecker}</i>}
+        {passwordValue.length >= 1 && validPasswordChecker !== 'Valid Password' && <i style={{ color: 'red', fontSize: '1rem' }}>{validPasswordChecker}</i>}
         {/* ==================================== */}
       </label>
     </Fragment>

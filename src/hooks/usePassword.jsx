@@ -9,7 +9,9 @@ export function usePassword() {
   // ====================================================
 
   // =========== Password Input Validation ===========
-  const passwordChecker = () => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/.test(passwordValue) ? setValidPasswordChecker('Valid Password') : setValidPasswordChecker('Invalid Password')
+  const passwordChecker = () => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,}$/.test(passwordValue) ? 
+  setValidPasswordChecker('Valid Password') : 
+  setValidPasswordChecker('Parol kamida bittadan [a-zA-Z0-9] qabul qilishi va uzunligi 8 belgidan ko\'p bo\'lishi kerak')
   // =================================================
 
   // =========== Password Input Style ===========

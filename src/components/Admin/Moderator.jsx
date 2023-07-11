@@ -50,7 +50,7 @@ function Moderator() {
           <hr style={{ width: '100%' }} />
           {datas && datas.map(data => {
             return (data.accepted &&
-              <div key={data.id} className="form-control d-flex align-items-center justift-content-between gap-2 bg-light">
+              <div key={data.id} className="form-control d-flex align-items-center justif-content-between gap-2 bg-light">
                 <div className="col-1 text-center">
                   <b>#{data.id}</b>
                 </div>

@@ -9,7 +9,9 @@ export function useEmail() {
   // =================================================
 
   // =========== Email Input Validation ===========
-  const emailChecker = () => /^(?!.*\s)[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,}$/i.test(emailValue) ? setValidEmailChecker('Valid Email') : setValidEmailChecker('Invalid Email')
+  const emailChecker = () => /^(?!.*\s)[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,}$/i.test(emailValue) ? 
+  setValidEmailChecker('Valid Email') : 
+  setValidEmailChecker('Invalid Email format')
 
   // ==============================================
 

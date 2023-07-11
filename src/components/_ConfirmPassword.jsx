@@ -10,7 +10,7 @@ function _ConfirmPassword({ passwordValue, setPasswordValue, validPasswordChecke
   //* ########################################################################################
   return (
     <Fragment>
-      <label style={{ position: 'relative' }}>
+      <label style={{ position: 'relative', maxWidth: 'min-content', lineHeight: '1.2rem'}}>
         <input style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null} value={passwordValue} className='form-control' type={passwordType ? "password" : "text"} placeholder='Password'
           onChange={e => setPasswordValue(e.target.value)}
           onKeyUp={() => {
@@ -27,11 +27,11 @@ function _ConfirmPassword({ passwordValue, setPasswordValue, validPasswordChecke
         {/* ==================================== */}
 
         {/* ====== Password Validation Starts ====== */}
-        {passwordValue.length >= 1 && validPasswordChecker === 'Valid Password' && <i style={{ color: 'green' }}>{validPasswordChecker}</i>}
-        {passwordValue.length >= 1 && validPasswordChecker === 'Invalid Password' && <i style={{ color: 'red' }}>{validPasswordChecker}</i>}
+        {passwordValue.length >= 1 && validPasswordChecker === 'Valid Password' && <i style={{ color: 'green', fontSize: '1rem' }}>{validPasswordChecker}</i>}
+        {passwordValue.length >= 1 && validPasswordChecker !== 'Valid Password' && <i style={{ color: 'red', fontSize: '1rem' }}>{validPasswordChecker}</i>}
         {/* ==================================== */}
       </label>
-      <label style={{ position: 'relative' }}>
+      <label style={{ position: 'relative', maxWidth: 'min-content', lineHeight: '1.2rem' }}>
         <input style={passwordMatchValue.length >= 1 && passwordMatchTrue ? passwordInputMatchStyle : null} value={passwordMatchValue} className='form-control' type={passwordCheckType ? "password" : "text"} placeholder='Confirm Password'
           onChange={e => setPasswordMatchValue(e.target.value)}
           onKeyUp={() => {
@@ -49,8 +49,8 @@ function _ConfirmPassword({ passwordValue, setPasswordValue, validPasswordChecke
         {/* ======================== */}
 
         {/* ====== Password Chekcer Validation Starts ====== */}
-        {passwordMatchValue.length >= 1 && validPasswordMatchChecker === 'Password Matches' && <i style={{ color: 'green' }}>{validPasswordMatchChecker}</i>}
-        {passwordMatchValue.length >= 1 && validPasswordMatchChecker === 'Password does not Match' && <i style={{ color: 'red' }}>{validPasswordMatchChecker}</i>}
+        {passwordMatchValue.length >= 1 && validPasswordMatchChecker === 'Password Matches' && <i style={{ color: 'green', fontSize: '1rem' }}>{validPasswordMatchChecker}</i>}
+        {passwordMatchValue.length >= 1 && validPasswordMatchChecker !== 'Password Matches' && <i style={{ color: 'red', fontSize: '1rem' }}>{validPasswordMatchChecker}</i>}
         {/* ==================================== */}
       </label>
     </Fragment>

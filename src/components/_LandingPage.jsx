@@ -11,10 +11,19 @@ function _LandingPage() {
     'text-decoration': 'none',
     'color': '#000',
   }
+  const birthdayBtn = {
+    'padding': '.4rem 1.8rem',
+    'background-color': 'royalblue',
+    'border': '1px solid #fff',
+    'border-radius': '4px',
+    'text-decoration': 'none',
+    'color': '#000',
+  }
   return (
     <div className="d-flex flex-column align-items-center justify-content-center landing-page">
       <header>
         <nav className="w-full d-flex flex-column flex-sm-row align-items-end align-items-sm-center justify-content-end gap-2">
+          <Link style={birthdayBtn} to='/birthdays' className='text-light'>Birthdays <i className="bi bi-bookmark-star-fill"></i></Link>
           {userRole === 'moderator' && <Link style={linkStyle} to='/moderator'>Moderator Page <i className="bi bi-alexa"></i></Link>}
           {userRole === 'admin' && <Link style={linkStyle} to='/admin'>Admin Page <i className="bi bi-shield-shaded"></i></Link>}
           <Link style={linkStyle} to='/profile' className='text-primary'>Profile <i className="bi bi-person-circle"></i></Link>

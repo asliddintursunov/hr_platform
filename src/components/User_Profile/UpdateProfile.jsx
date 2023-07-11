@@ -44,30 +44,22 @@ function UpdateProfile() {
   const [numbers, setNumbers] = useState([])
   const [newNumber, setNewNumber] = useState('998')
 
-  // User's Birth Month/Day
-  const userBirthMonth = useRef(null)
-  const userBirthDay = useRef(null)
 
-  // Current Month and Day
-  const currentMonth = new Date().getMonth()
-  const currentDay = new Date().getDate()
 
-  // From User Date to Day
-  const userDateInDay = useRef(0)
-  // From Current Date to Day
-  const currentDateInDay = useRef(0)
-
-  // Difference between Current Day and User's Birthday
-  const DifferenceOfDays = useRef(null)
-
-  // User ID
-  // const userID = localStorage.getItem('userId')
-
+  var phoneNumbersArray = null
+  var numToString = null
   const handleAddNewNumber = (e) => {
     e.preventDefault();
     setNumbers(prev => [...prev, { id: numbers.length + 1, number: newNumber }])
+
+    phoneNumbersArray = numbers.map(function (phoneNumber) {
+      return phoneNumber.number
+    })
+    numToString = phoneNumbersArray.toString()
+    console.log(numToString);
+
     setNewNumber('998')
-    console.log(numbers);
+    // console.log(numbers);
   }
 
   const handleDelete = (id) => {
@@ -87,12 +79,14 @@ function UpdateProfile() {
   const CancleEdition = useCallback(() => {
     axios.get(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`)
       .then(res => {
+        // console.log(res);
+        // User Data for input field
         setFullName(res.data.fullname)
         setUsernameValue(res.data.username)
         setEmailValue(res.data.email)
         // setPasswordValue(res.data.password)
         setAddress(res.data.address)
-        setDateOfBirth(res.data.dateOfBirth)
+        setDateOfBirth(res.data.birth_date)
         // setSelectedImage(URL.createObjectURL(res.data.profile_photo))
       })
       .catch(err => console.error(err))
@@ -102,20 +96,39 @@ function UpdateProfile() {
 
   // Save Edition === Working
   const saveEdition = () => {
-    axios.patch(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`, {
-      fullname: fullName,
-      username: usernameValue,
-      email: emailValue,
-      // password: passwordValue,
-      address: address,
-      dateOfBirth: dateOfBirth,
-      accepted: true,
-      phone_number: numbers,
-      // profile_photo: URL.createObjectURL(selectedImage),
-    })
-      .then(() => console.log('Success'))
-      .catch(() => console.log('Fail'))
+
+    if (passwordValue.length >= 1) {
+      axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
+        fullname: fullName,
+        username: usernameValue,
+        email: emailValue,
+        password: passwordValue,
+        address: address,
+        date_birth: dateOfBirth,
+        // phone_number: numbers,
+        phone_number: numToString,
+        // profile_photo: URL.createObjectURL(selectedImage),
+      })
+        .then((res) => (res.data))
+        .catch((err) => alert(err.response.data))
+    }
+    if (passwordValue.length == 0) {
+      axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
+        fullname: fullName,
+        username: usernameValue,
+        email: emailValue,
+        // password: passwordValue,
+        address: address,
+        date_birth: dateOfBirth,
+        // phone_number: numbers,
+        phone_number: numToString,
+        // profile_photo: URL.createObjectURL(selectedImage),
+      })
+        .then((res) => alert(res.data))
+        .catch((err) => alert(err.response.data))
+    }
   }
+  // console.log(URL.createObjectURL(selectedImage));
 
   // Log Out === Working
   const logOut = () => {
@@ -126,53 +139,8 @@ function UpdateProfile() {
   const [showModal, setShowModal] = useState(false)
   const toggleModal = () => setShowModal(!showModal)
 
-  // Day Left until BirthDay
-  const dayTillBirthday = () => {
-    userBirthMonth.current = Number(dateOfBirth.split('').slice(5, 7).join(''))
-    userBirthDay.current = Number(dateOfBirth.split('').slice(8).join(''))
 
-    // Getting Current Date as Day
-    for (let i = 0; i < currentMonth; i++) {
-      if (currentMonth == 1 || currentMonth == 3 || currentMonth == 5 || currentMonth == 7 || currentMonth == 8 || currentMonth == 10 || currentMonth == 12) {
-        currentDateInDay.current += 31
-      } else if (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11) {
-        currentDateInDay.current += 30
-      } else {
-        if (new Date().getFullYear % 4 == 0) {
-          currentDateInDay.current += 29
-        }
-        else {
-          currentDateInDay.current += 28
-        }
-      }
-    }
-    currentDateInDay.current += currentDay
 
-    // Getting Current Date as Day
-    for (let i = 0; i < userBirthMonth.current; i++) {
-      if (userBirthMonth.current == 1 || userBirthMonth.current == 3 || userBirthMonth.current == 5 || userBirthMonth.current == 7 || userBirthMonth.current == 8 || userBirthMonth.current == 10 || userBirthMonth.current == 12) {
-        userDateInDay.current += 31
-      } else if (userBirthMonth.current == 4 || userBirthMonth.current == 6 || userBirthMonth.current == 9 || userBirthMonth.current == 11) {
-        userDateInDay.current += 30
-      } else {
-        if (new Date().getFullYear % 4 == 0) {
-          userDateInDay.current += 29
-        }
-        else {
-          userDateInDay.current += 28
-        }
-      }
-    }
-    userDateInDay.current += userBirthDay.current
-
-    DifferenceOfDays.current = userDateInDay.current - currentDateInDay.current
-    console.log('Current Day', currentDateInDay.current);
-    console.log('User BirthDay', userDateInDay.current);
-    console.log('Difference', userDateInDay.current - currentDateInDay.current);
-
-    userDateInDay.current = 0
-    currentDateInDay.current = 0
-  }
   // dayTillBirthday()
 
   // ###########################################################333
@@ -198,7 +166,7 @@ function UpdateProfile() {
           {changeProfile && <button style={{ padding: '0.4rem 1.5rem', fontSize: 'medium' }} className='btn btn-danger' onClick={() => {
             setChangeProfile(false)
             CancleEdition()
-          }}>Cancle</button>}
+          }}>Cancel</button>}
         </div>
         <hr />
 

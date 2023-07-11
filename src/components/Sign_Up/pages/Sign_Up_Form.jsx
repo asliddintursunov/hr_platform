@@ -34,27 +34,28 @@ function Sign_Up_Form() {
 
   const addNewUser = () => {
     axios.post(URL, {
-      // fullname: 'New User',
       username: usernameValue,
       email: emailValue,
       password: passwordValue,
-      // "address": null,
-      // "dateOfBirth": null,
-      // role: 'user',
-      accepted: false,
-      // profile_photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU',
+      confirm_password: passwordMatchValue,
     })
       .then((req) => {
+        console.log(req);
         alert(req.data)
         setUsernameValue('')
         setEmailValue('')
         setPasswordValue('')
         setPasswordMatchValue('')
-        console.log(req.data);
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        if (typeof err.response.data == 'object') {
+          alert(err.response.data.error);
+        } else {
+          console.error(err);
+          alert(err.response.data);
+        }
+      })
   }
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,8 +80,8 @@ function Sign_Up_Form() {
           <_ConfirmPassword passwordValue={passwordValue} setPasswordValue={setPasswordValue} validPasswordChecker={validPasswordChecker}
             passwordTrue={passwordTrue} setPasswordTrue={setPasswordTrue} passwordType={passwordType} setPasswordType={setPasswordType}
             passwordChecker={passwordChecker} passwordInputStyle={passwordInputStyle} passwordMatchValue={passwordMatchValue}
-            setPasswordMatchValue={setPasswordMatchValue} validPasswordMatchChecker={validPasswordMatchChecker} 
-            passwordMatchTrue={passwordMatchTrue} setPasswordMatchTrue={setPasswordMatchTrue} passwordCheckType={passwordCheckType} 
+            setPasswordMatchValue={setPasswordMatchValue} validPasswordMatchChecker={validPasswordMatchChecker}
+            passwordMatchTrue={passwordMatchTrue} setPasswordMatchTrue={setPasswordMatchTrue} passwordCheckType={passwordCheckType}
             setPasswordCheckType={setPasswordCheckType} passwordMatchChecker={passwordMatchChecker}
             passwordInputMatchStyle={passwordInputMatchStyle} />
           <div className='d-flex flex-column align-items-center justify-content-between'>

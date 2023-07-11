@@ -21,7 +21,7 @@ export function useUsername() {
   useEffect(() => {
     usernameValidation()
   }, [usernameValidation])
-  const usernameChecker = () => !/^[0-9]/.test(usernameValue.split('')[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1 ? setValidUsernameChecker('Valid Username') : setValidUsernameChecker('Invalid Username')
+  const usernameChecker = () => !/^[0-9]/.test(usernameValue.split('')[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1 ? setValidUsernameChecker('Valid Username') : setValidUsernameChecker('Birinchi belgi harfdan iborat bo\'lishi va faqat harf va raqamlar qatnashishi kerak')
   // =================================================
 
   // =========== Username Input Style ===========

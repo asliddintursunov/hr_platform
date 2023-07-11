@@ -19,6 +19,7 @@ import _AcceptedUsers from './Admin/part/_AcceptedUsers'
 import _NotAcceptedUsers from './Admin/part/_NotAcceptedUsers'
 import Moderator from './Admin/Moderator'
 import _LandingPage from './_LandingPage'
+import _Birthdays from './_Birthdays'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
         </Route>
         <Route path='moderator' element={<Moderator />} />
         <Route path='landing' element={<_LandingPage />} />
+        <Route path='birthdays' element={<_Birthdays />} />
       </Route>
     )
   )
