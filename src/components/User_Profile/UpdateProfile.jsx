@@ -15,7 +15,7 @@ import LogOutModal from './part/LogOutModal'
 import { useUsername } from '../../hooks/useUsername'
 import { usePassword } from '../../hooks/usePassword'
 import { useEmail } from '../../hooks/useEmail'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -59,7 +59,6 @@ function UpdateProfile() {
     console.log(numToString);
 
     setNewNumber('998')
-    // console.log(numbers);
   }
 
   const handleDelete = (id) => {
@@ -71,15 +70,24 @@ function UpdateProfile() {
   // Change Profile Image === Working
   const [selectedImage, setSelectedImage] = useState(null)
 
-  const handleImageChange = (file) => {
-    console.log(file);
-    setSelectedImage(file)
+  const handleImageChange = (event) => {
+    const file = event.target.files[0]
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      const base64String = reader.result
+      setSelectedImage(base64String)
+      console.log(base64String);
+    }
+    if (file) {
+      reader.readAsDataURL(file)
+    }
   }
+
   // Cancle Edition === Working
   const CancleEdition = useCallback(() => {
     axios.get(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`)
       .then(res => {
-        // console.log(res);
         // User Data for input field
         setFullName(res.data.fullname)
         setUsernameValue(res.data.username)
@@ -87,7 +95,7 @@ function UpdateProfile() {
         // setPasswordValue(res.data.password)
         setAddress(res.data.address)
         setDateOfBirth(res.data.birth_date)
-        // setSelectedImage(URL.createObjectURL(res.data.profile_photo))
+        setSelectedImage(res.data.profile_photo)
       })
       .catch(err => console.error(err))
   }, [setFullName, setUsernameValue, setEmailValue, setAddress, setDateOfBirth])
@@ -95,7 +103,9 @@ function UpdateProfile() {
 
 
   // Save Edition === Working
-  const saveEdition = () => {
+  const saveEdition = useCallback(() => {
+
+
 
     if (passwordValue.length >= 1) {
       axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
@@ -107,28 +117,34 @@ function UpdateProfile() {
         date_birth: dateOfBirth,
         // phone_number: numbers,
         phone_number: numToString,
-        // profile_photo: URL.createObjectURL(selectedImage),
+        profile_photo: selectedImage
       })
         .then((res) => (res.data))
-        .catch((err) => alert(err.response.data))
+        .catch((err) => {
+          alert(err.response.data)
+          console.log(err);
+        })
     }
+
     if (passwordValue.length == 0) {
       axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
         fullname: fullName,
         username: usernameValue,
         email: emailValue,
-        // password: passwordValue,
         address: address,
         date_birth: dateOfBirth,
         // phone_number: numbers,
         phone_number: numToString,
-        // profile_photo: URL.createObjectURL(selectedImage),
+        profile_photo: selectedImage
       })
         .then((res) => alert(res.data))
-        .catch((err) => alert(err.response.data))
+        .catch((err) => {
+          alert(err.response.data)
+          console.log(err);
+        })
     }
-  }
-  // console.log(URL.createObjectURL(selectedImage));
+
+  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, numToString, selectedImage])
 
   // Log Out === Working
   const logOut = () => {
@@ -138,10 +154,6 @@ function UpdateProfile() {
   }
   const [showModal, setShowModal] = useState(false)
   const toggleModal = () => setShowModal(!showModal)
-
-
-
-  // dayTillBirthday()
 
   // ###########################################################333
   return (
@@ -153,7 +165,7 @@ function UpdateProfile() {
           <h1>My Profile</h1>
           <div className="d-flex align-items-center justify-content-center top-right-image">
             <p style={{ marginRight: '1rem' }}>{fullName}</p>
-            {selectedImage ? <img src={URL.createObjectURL(selectedImage)} /> : <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" />}
+            {selectedImage ? <img src={selectedImage} /> : <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" />}
           </div>
         </div>
         <div style={{ marginTop: '1rem' }} className='d-flex justify-content-end gap-3'>
@@ -172,7 +184,12 @@ function UpdateProfile() {
 
         {/* ============ Update Profile Form ============ */}
         <br />
-        <form onSubmit={(e) => e.preventDefault()} className='form-control d-flex flex-column update-profile-form' style={{ backgroundColor: '#F0F0F0' }}>
+        <form
+          // action={`/update_profile/${localStorage.getItem('userId')}`}
+          action='/update_profile/'
+          method='post'
+          encType='multipart/form-data'
+          onSubmit={(e) => e.preventDefault()} className='form-control d-flex flex-column update-profile-form' style={{ backgroundColor: '#F0F0F0' }}>
           <div className="d-flex flex-column flex-sm-row row">
             <div className="col-12 col-sm-2 img-container">
               <div className='d-flex flex-column align-items-center justify-content-center gap-2'>

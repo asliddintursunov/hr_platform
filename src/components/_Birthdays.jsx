@@ -4,80 +4,71 @@ import '../components/Admin/Admin.css'
 
 function _Birthdays() {
 
-  const [userBday, setUserBday] = useState(null)
-
-  //#region 
-  // User's Birth Month/Day
-  const userBirthMonth = useRef(null)
-  const userBirthDay = useRef(null)
-
-  // Current Month and Day
+  const [userBday, setUserBday] = useState([]) // Shows User's B-day in table
+  var setUserBdayToDays = [] // Users' B-day in days in array
+  var leftDays = [] // Left Days
   const currentMonth = new Date().getMonth()
   const currentDay = new Date().getDate()
-
-  // From User Date to Day
-  const userDateInDay = useRef(0)
-  // From Current Date to Day
   const currentDateInDay = useRef(0)
-
-  // Difference between Current Day and User's Birthday
-  const DifferenceOfDays = useRef(null)
-  //#endregion
+  const userBdayInDate = useRef(0)
+  const [usersLength, setUsersLength] = useState(null) // Numbers of Users
 
   const getBday = useCallback(() => {
     axios.get('http://192.168.3.140:1000/users')
-      .then(res => setUserBday(res.data))
+      .then(res => {
+        setUserBday(res.data)
+        setUsersLength(res.data.length)
+      })
       .catch(err => console.error(err))
   }, [])
+
   useEffect(() => { getBday() }, [getBday])
 
-  // Day Left until BirthDay
   const dayTillBirthday = () => {
-    userBirthMonth.current = Number(dateOfBirth.split('').slice(5, 7).join(''))
-    userBirthDay.current = Number(dateOfBirth.split('').slice(8).join(''))
+    currentDateInDay.current = 0
 
-    // Getting Current Date as Day
+    // Calculating Current Day of Year
     for (let i = 0; i < currentMonth; i++) {
-      if (currentMonth == 1 || currentMonth == 3 || currentMonth == 5 || currentMonth == 7 || currentMonth == 8 || currentMonth == 10 || currentMonth == 12) {
+      if (currentMonth == 1 || currentMonth == 3 || currentMonth == 5 || currentMonth == 7 || currentMonth == 8 || currentMonth == 10 || currentMonth == 12)
         currentDateInDay.current += 31
-      } else if (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11) {
+      else if (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11)
         currentDateInDay.current += 30
-      } else {
-        if (new Date().getFullYear % 4 == 0) {
+      else {
+        if (new Date().getFullYear % 4 == 0)
           currentDateInDay.current += 29
-        }
-        else {
+        else
           currentDateInDay.current += 28
-        }
       }
     }
     currentDateInDay.current += currentDay
 
-    // Getting Current Date as Day
-    for (let i = 0; i < userBirthMonth.current; i++) {
-      if (userBirthMonth.current == 1 || userBirthMonth.current == 3 || userBirthMonth.current == 5 || userBirthMonth.current == 7 || userBirthMonth.current == 8 || userBirthMonth.current == 10 || userBirthMonth.current == 12) {
-        userDateInDay.current += 31
-      } else if (userBirthMonth.current == 4 || userBirthMonth.current == 6 || userBirthMonth.current == 9 || userBirthMonth.current == 11) {
-        userDateInDay.current += 30
+    for (let i = 0; i < usersLength; i++) {
+      userBdayInDate.current = 0
+      if (userBday[i].birth_date === null) {
+        userBdayInDate.current = 30
       } else {
-        if (new Date().getFullYear % 4 == 0) {
-          userDateInDay.current += 29
+        for (let j = 0; j < Number(userBday[i].birth_date.split('').slice(5, 7).join('')); j++) {
+          if (Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 1 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 3 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 5 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 7 ||
+            Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 8 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 10 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 12) {
+            userBdayInDate.current += 31
+          } else if (Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 4 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 6 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 9 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 11) {
+            userBdayInDate.current += 30
+          } else {
+            if (new Date().getFullYear % 4 == 0)
+              userBdayInDate.current += 29
+            else
+              userBdayInDate.current += 28
+          }
         }
-        else {
-          userDateInDay.current += 28
-        }
+        userBdayInDate.current += Number(userBday[i].birth_date.split('').slice(8).join(''))
       }
+
+      setUserBdayToDays.push(userBdayInDate.current - 30)
+
+      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current + 8))
     }
-    userDateInDay.current += userBirthDay.current
-
-    DifferenceOfDays.current = userDateInDay.current - currentDateInDay.current
-    console.log('Current Day', currentDateInDay.current);
-    console.log('User BirthDay', userDateInDay.current);
-    console.log('Difference', userDateInDay.current - currentDateInDay.current);
-
-    userDateInDay.current = 0
-    currentDateInDay.current = 0
   }
+  dayTillBirthday()
 
   return (
     <div className="container">
@@ -93,7 +84,7 @@ function _Birthdays() {
         </div>
         <div className="row-7 d-flex flex-column align-items-center justift-content-between gap-3 mb-4">
           <hr style={{ width: '100%' }} />
-          {userBday && userBday.map(user => {
+          {userBday && userBday.map((user, index) => {
             return <div key={user.id} className="form-control d-flex align-items-center justify-content-between gap-2 bg-light">
               <div className="col-2 text-center text-secondary">
                 <img className="user-image" src={user.profile_photo} />
@@ -101,9 +92,9 @@ function _Birthdays() {
               <div className="col-2 text-center text-secondary">{user.username}</div>
               <div className="col-2 text-center text-secondary">{user.birth_date}</div>
               <div className="col-2 text-center">
-                <h5>Birthday!</h5>
-                <h5 className="text-success">Day Left</h5>
-              </div>
+                <h5 className="text-primary">Birthday!</h5>
+                {leftDays[index] <= 30 && leftDays[index] >= 0 ? (<h5 className="text-success">{leftDays[index]} left</h5>) : (<h5 className="text-warning">long days</h5>)}
+                </div>
             </div>
           })}
         </div>
@@ -111,5 +102,4 @@ function _Birthdays() {
     </div>
   )
 }
-
 export default _Birthdays
