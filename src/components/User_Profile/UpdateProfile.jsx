@@ -40,30 +40,24 @@ function UpdateProfile() {
   // Disable && Enable inputs
   const [changeProfile, setChangeProfile] = useState(false)
 
-  // Add Phone Number 
+  // Add Phone Number
   const [numbers, setNumbers] = useState([])
   const [newNumber, setNewNumber] = useState('998')
 
+  // Loader
+  const [isPending, setIsPending] = useState(false)
 
 
-  var phoneNumbersArray = null
-  var numToString = null
   const handleAddNewNumber = (e) => {
     e.preventDefault();
-    setNumbers(prev => [...prev, { id: numbers.length + 1, number: newNumber }])
-
-    phoneNumbersArray = numbers.map(function (phoneNumber) {
-      return phoneNumber.number
-    })
-    numToString = phoneNumbersArray.toString()
-    console.log(numToString);
+    setNumbers(prev => [...prev, Number(newNumber)])
 
     setNewNumber('998')
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = (number) => {
     setNumbers(prev => {
-      return prev.filter(e => e.id !== id)
+      return prev.filter(num => num !== number)
     })
   }
 
@@ -86,6 +80,7 @@ function UpdateProfile() {
 
   // Cancle Edition === Working
   const CancleEdition = useCallback(() => {
+    setIsPending(true)
     axios.get(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`)
       .then(res => {
         // User Data for input field
@@ -96,17 +91,20 @@ function UpdateProfile() {
         setAddress(res.data.address)
         setDateOfBirth(res.data.birth_date)
         setSelectedImage(res.data.profile_photo)
-      })
-      .catch(err => console.error(err))
-  }, [setFullName, setUsernameValue, setEmailValue, setAddress, setDateOfBirth])
-  useEffect(() => { CancleEdition() }, [CancleEdition])
+        setNumbers(res.data.phone)
 
+        setIsPending(false)
+      })
+      .catch(err => {
+        console.error(err)
+        setIsPending(false)
+      })
+  }, [setFullName, setUsernameValue, setEmailValue, setAddress, setDateOfBirth, setSelectedImage])
+  useEffect(() => { CancleEdition() }, [CancleEdition])
 
   // Save Edition === Working
   const saveEdition = useCallback(() => {
-
-
-
+    setIsPending(true)
     if (passwordValue.length >= 1) {
       axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
         fullname: fullName,
@@ -115,42 +113,55 @@ function UpdateProfile() {
         password: passwordValue,
         address: address,
         date_birth: dateOfBirth,
-        // phone_number: numbers,
-        phone_number: numToString,
+        phone_number: numbers,
         profile_photo: selectedImage
       })
-        .then((res) => (res.data))
+        .then((res) => {
+          (res.data)
+          setIsPending(false)
+        })
         .catch((err) => {
           alert(err.response.data)
+          setIsPending(false)
           console.log(err);
-        })
-    }
+        })}
 
     if (passwordValue.length == 0) {
+      setIsPending(true)
       axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
         fullname: fullName,
         username: usernameValue,
         email: emailValue,
         address: address,
         date_birth: dateOfBirth,
-        // phone_number: numbers,
-        phone_number: numToString,
+        phone_number: numbers,
         profile_photo: selectedImage
       })
-        .then((res) => alert(res.data))
+        .then((res) => {
+          alert(res.data)
+          setIsPending(false)
+        })
         .catch((err) => {
           alert(err.response.data)
+          setIsPending(false)
           console.log(err);
         })
-    }
+        console.log(numbers);}
 
-  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, numToString, selectedImage])
+  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers])
 
   // Log Out === Working
   const logOut = () => {
-    axios.delete(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`)
-      .then(() => alert('Successfully logged out!'))
-      .catch(() => alert('Error occured, try later!'))
+    setIsPending(true)
+    axios.get(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`)
+      .then((data) => {
+        setIsPending(false)
+        console.log(data)
+      })
+      .catch((err) => {
+        setIsPending(false)
+        console.error(err)
+      })
   }
   const [showModal, setShowModal] = useState(false)
   const toggleModal = () => setShowModal(!showModal)
@@ -159,7 +170,8 @@ function UpdateProfile() {
   return (
     <div className='container'>
       {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
-      <div style={{ filter: showModal ? 'blur(4px)' : 'blur(0)' }}>
+      {isPending && <div className='loader'></div>}
+      {!isPending && <div style={{ filter: showModal ? 'blur(4px)' : 'blur(0)' }}>
         {/* Header, Image ... */}
         <div className='d-flex align-items-center justify-content-between'>
           <h1>My Profile</h1>
@@ -238,9 +250,8 @@ function UpdateProfile() {
           />
         </form>
         {/* ================================================ */}
-      </div>
+      </div>}
     </div>
   )
 }
-
 export default UpdateProfile

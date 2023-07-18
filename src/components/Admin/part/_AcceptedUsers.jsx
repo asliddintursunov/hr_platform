@@ -8,34 +8,53 @@ function _AcceptedUsers() {
 
   const [datas, setDatas] = useState(null)
   const [userRole, setUserRole] = useState('user')
+  const [isPending, setIsPending] = useState(false)
 
   const fetchData = useCallback(() => {
+    setIsPending(true)
     axios.get(url)
       .then((req) => {
+        setIsPending(false)
         setDatas(req.data)
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        setIsPending(false)
+        console.error(err)
+      })
   }, [url])
 
   useEffect(() => { fetchData() }, [fetchData])
 
   const handleDelete = (id) => {
-
+    setIsPending(true)
     setDatas(prev => {
       return prev.filter(data => data.id !== id)
     })
 
     axios.delete(url + `/${id}`)
-      .then((res) => alert(res.data))
-      .catch(() => alert('Error occured!'))
+      .then((res) => {
+        setIsPending(false)
+        alert(res.data)
+      })
+      .catch(() => {
+        setIsPending(false)
+        alert('Error occured!')
+      })
   }
 
   const handleEdit = (id) => {
+    setIsPending(true)
     axios.patch(url + `/${id}`, {
       role: userRole,
     })
-      .then((res) => alert(res.data))
-      .catch(() => alert('Somthing went wrong!'))
+      .then((res) => {
+        alert(res.data)
+      })
+      .catch(() => {
+        setIsPending(false)
+        alert('Somthing went wrong!')
+      })
+      setIsPending(false)
   }
 
   return (
@@ -48,7 +67,8 @@ function _AcceptedUsers() {
         <div className="col-2"><h4>Role</h4></div>
         <div className="col-2"><h4>Edit</h4></div>
       </div>
-      <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
+      {isPending && <div className="loader"></div>}
+      {!isPending && <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
         <hr style={{ width: '100%' }} />
         {datas && datas.map(data => {
           return (
@@ -80,7 +100,7 @@ function _AcceptedUsers() {
             </div>
           )
         })}
-      </div>
+      </div>}
     </div >
   )
 }

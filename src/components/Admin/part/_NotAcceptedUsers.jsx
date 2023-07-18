@@ -6,11 +6,19 @@ function _NotAcceptedUsers() {
   const url = 'http://192.168.3.140:1000/users'
 
   const [datas, setDatas] = useState('')
+  const [isPending, setIsPending] = useState(false)
 
   const fetchData = useCallback(() => {
+    setIsPending(true)
     axios.get(url)
-      .then((req) => setDatas(req.data))
-      .catch((err) => console.error(err))
+      .then((req) => {
+        setDatas(req.data)
+        setIsPending(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setIsPending(false)
+      })
   }, [url])
 
   useEffect(() => { fetchData() }, [fetchData])
@@ -46,7 +54,8 @@ function _NotAcceptedUsers() {
         <div className="col-3"><h4>E-mail</h4></div>
         <div className="col-2"><h4>Accepted</h4></div>
       </div>
-      <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
+      {isPending && <div className="loader"></div>}
+      {!isPending && <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
         <hr style={{ width: '100%' }} />
         {datas && datas.map(data => {
           return (!data.accepted &&
@@ -71,7 +80,7 @@ function _NotAcceptedUsers() {
             </div>
           )
         })}
-      </div>
+      </div>}
     </div>
   )
 }

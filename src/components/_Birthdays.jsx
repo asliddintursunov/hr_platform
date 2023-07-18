@@ -12,62 +12,78 @@ function _Birthdays() {
   const currentDateInDay = useRef(0)
   const userBdayInDate = useRef(0)
   const [usersLength, setUsersLength] = useState(null) // Numbers of Users
+  const [isPending, setIsPending] = useState(false) // Loader
 
   const getBday = useCallback(() => {
+    setIsPending(true)
     axios.get('http://192.168.3.140:1000/users')
       .then(res => {
+        setIsPending(false)
         setUserBday(res.data)
         setUsersLength(res.data.length)
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        setIsPending(false)
+        console.error(err)
+      })
   }, [])
 
   useEffect(() => { getBday() }, [getBday])
 
   const dayTillBirthday = () => {
-    currentDateInDay.current = 0
+    currentDateInDay.current = 0;
+
+    const daysInMonth = [
+      31, // January
+      28, // February (non-leap year)
+      31, // March
+      30, // April
+      31, // May
+      30, // June
+      31, // July
+      31, // August
+      30, // September
+      31, // October
+      30, // November
+      31, // December
+    ];
+
+    // Check if the current year is a leap year
+    const currentYear = new Date().getFullYear();
+    const isLeapYear = currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0);
+
+    // Adjust the number of days in February for leap years
+    if (isLeapYear) {
+      daysInMonth[1] = 29;
+    }
 
     // Calculating Current Day of Year
-    for (let i = 0; i < currentMonth; i++) {
-      if (currentMonth == 1 || currentMonth == 3 || currentMonth == 5 || currentMonth == 7 || currentMonth == 8 || currentMonth == 10 || currentMonth == 12)
-        currentDateInDay.current += 31
-      else if (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11)
-        currentDateInDay.current += 30
-      else {
-        if (new Date().getFullYear % 4 == 0)
-          currentDateInDay.current += 29
-        else
-          currentDateInDay.current += 28
-      }
+    for (let i = 0; i < currentMonth - 1; i++) {
+      currentDateInDay.current += daysInMonth[i];
     }
-    currentDateInDay.current += currentDay
+    currentDateInDay.current += currentDay;
 
     for (let i = 0; i < usersLength; i++) {
-      userBdayInDate.current = 0
+      userBdayInDate.current = 0;
+
       if (userBday[i].birth_date === null) {
-        userBdayInDate.current = 30
+        userBdayInDate.current = 30;
       } else {
-        for (let j = 0; j < Number(userBday[i].birth_date.split('').slice(5, 7).join('')); j++) {
-          if (Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 1 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 3 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 5 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 7 ||
-            Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 8 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 10 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 12) {
-            userBdayInDate.current += 31
-          } else if (Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 4 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 6 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 9 || Number(userBday[i].birth_date.split('').slice(5, 7).join('')) == 11) {
-            userBdayInDate.current += 30
-          } else {
-            if (new Date().getFullYear % 4 == 0)
-              userBdayInDate.current += 29
-            else
-              userBdayInDate.current += 28
-          }
+        const birthMonth = Number(userBday[i].birth_date.split('-')[1]);
+        const birthDay = Number(userBday[i].birth_date.split('-')[2]);
+
+        for (let j = 0; j < birthMonth - 1; j++) {
+          userBdayInDate.current += daysInMonth[j];
         }
-        userBdayInDate.current += Number(userBday[i].birth_date.split('').slice(8).join(''))
+        userBdayInDate.current += birthDay;
       }
 
-      setUserBdayToDays.push(userBdayInDate.current - 30)
-
-      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current + 8))
+      setUserBdayToDays.push(userBdayInDate.current - 30);
+      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current));
     }
-  }
+  };
+
+
   dayTillBirthday()
 
   return (
@@ -75,7 +91,8 @@ function _Birthdays() {
       <h1>Users&#39; Birthday</h1>
       <hr />
       <br />
-      <div className="form-control container">
+      {isPending && <div className="loader"></div>}
+      {!isPending && <div className="form-control container">
         <div className="text-center d-flex align-items-center justify-content-between">
           <div className="col-2"><h4>Image</h4></div>
           <div className="col-2"><h4>Username</h4></div>
@@ -94,11 +111,11 @@ function _Birthdays() {
               <div className="col-2 text-center">
                 <h5 className="text-primary">Birthday!</h5>
                 {leftDays[index] <= 30 && leftDays[index] >= 0 ? (<h5 className="text-success">{leftDays[index]} left</h5>) : (<h5 className="text-warning">long days</h5>)}
-                </div>
+              </div>
             </div>
           })}
         </div>
-      </div>
+      </div>}
     </div>
   )
 }

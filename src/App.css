@@ -3,3 +3,55 @@
   background: #fff url('https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat right;
   background-size: cover;
 }
+.user-phone-number{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+.user-phone-number-list{
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.user-phone-number-list-item{
+  max-width: 20rem;
+  margin: 0.2rem;
+}
+@media (max-width: 768px) {
+  .user-phone-number{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+}
+.add-btn{
+  max-width: 10rem;
+}
+.delete-btn{
+  margin: 0;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+  border: 1px solid red;
+  color: red;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  cursor: pointer;
+  transition: .25s;
+  -webkit-transition: .25s;
+  -moz-transition: .25s;
+  -ms-transition: .25s;
+  -o-transition: .25s;
+}
+.delete-btn:hover{
+  background-color: rgb(230, 13, 13);
+  color: #fff;
+}
