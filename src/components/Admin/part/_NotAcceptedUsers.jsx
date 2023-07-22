@@ -1,16 +1,25 @@
 import axios from "axios"
 import '../Admin.css'
 import { useCallback, useEffect, useState } from "react"
+import _PopUp from "../../_PopUp"
 
 function _NotAcceptedUsers() {
-  const url = 'http://192.168.3.140:1000/users'
+  const users_data = 'http://192.168.3.140:1000/users'
+  const defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU'
+
+  const user_data = 'http://192.168.3.140:1000/user'
 
   const [datas, setDatas] = useState('')
   const [isPending, setIsPending] = useState(false)
 
+  // Pop Up States
+  const [isOpen, setIsOpen] = useState(false);
+  const [popupInfo, setPopupInfo] = useState('')
+  const [errorOccured, setErrorOccured] = useState('')
+
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(url)
+    axios.get(users_data)
       .then((req) => {
         setDatas(req.data)
         setIsPending(false)
@@ -19,20 +28,29 @@ function _NotAcceptedUsers() {
         console.error(err)
         setIsPending(false)
       })
-  }, [url])
+  }, [users_data])
 
   useEffect(() => { fetchData() }, [fetchData])
 
   const AddUser = (id) => {
+    
     setDatas(prev => {
       return prev.filter(e => e.id !== id)
     })
 
-    axios.patch(url + `/${id}`, {
+    axios.patch(user_data + `/${id}`, {
       accepted: true,
     })
-      .then((res) => alert(res.data))
-      .catch(() => alert('Something went Wrong!'))
+      .then((res) => {
+        setPopupInfo(res.data)
+        setErrorOccured(false)
+        setIsOpen(true)
+      })
+      .catch(() => {
+        setPopupInfo('Qandaydir xatolik ro\'y berdi!')
+        setErrorOccured(true)
+        setIsOpen(true)
+      })
   }
 
   const RejectUser = (id) => {
@@ -40,9 +58,17 @@ function _NotAcceptedUsers() {
       return prev.filter(e => e.id !== id)
     })
 
-    axios.delete(url + `/${id}`)
-      .then((res) => alert(res.data))
-      .catch(() => console.error('Something went Wrong'))
+    axios.delete(user_data + `/${id}`)
+      .then((res) => {
+        setPopupInfo(res.data)
+        setErrorOccured(false)
+        setIsOpen(true)
+      })
+      .catch(() => {
+        setPopupInfo('Qandaydir xatolik ro\'y berdi!')
+        setErrorOccured(true)
+        setIsOpen(true)
+      })
 
   }
   return (
@@ -55,6 +81,7 @@ function _NotAcceptedUsers() {
         <div className="col-2"><h4>Accepted</h4></div>
       </div>
       {isPending && <div className="loader"></div>}
+      {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {!isPending && <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
         <hr style={{ width: '100%' }} />
         {datas && datas.map(data => {
@@ -64,7 +91,7 @@ function _NotAcceptedUsers() {
                 <b>#{data.id}</b>
               </div>
               <div className="col-3 d-flex align-items-center text-secondary gap-4 text-secondary">
-                <img className="user-image" src={data.profile_photo} />
+                {data.profile_photo ? <img className="user-image" src={data.profile_photo} /> : <img className="user-image" src={defaultImage} />}
                 <p className="text-wrap">{data.fullname}</p>
               </div>
               <div className="col-3 text-center text-secondary">

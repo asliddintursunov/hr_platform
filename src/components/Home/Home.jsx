@@ -10,11 +10,11 @@ function Home() {
             <h1>Choices</h1>
           </div>
           <div className='d-flex align-items-center justify-content-between link-container'>
-            <Link to='birthdays'>Birthdays</Link>
+            {/* <Link to='birthdays'>Birthdays</Link> */}
             <Link to='signup'>Sign Up</Link>
             <Link to='signin'>Sign In</Link>
-            <Link to='profile'>Profile</Link>
-            <Link to='admin'>Admin</Link>
+            {/* <Link to='profile'>Profile</Link> */}
+            {/* <Link to='admin'>Admin</Link> */}
           </div>
         </nav>
       </header>

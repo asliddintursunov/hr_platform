@@ -4,6 +4,7 @@ import '../components/Admin/Admin.css'
 
 function _Birthdays() {
 
+  const users_data = 'http://192.168.3.140:1000/users'
   const [userBday, setUserBday] = useState([]) // Shows User's B-day in table
   var setUserBdayToDays = [] // Users' B-day in days in array
   var leftDays = [] // Left Days
@@ -16,7 +17,7 @@ function _Birthdays() {
 
   const getBday = useCallback(() => {
     setIsPending(true)
-    axios.get('http://192.168.3.140:1000/users')
+    axios.get(users_data)
       .then(res => {
         setIsPending(false)
         setUserBday(res.data)
@@ -27,7 +28,7 @@ function _Birthdays() {
         console.error(err)
       })
   }, [])
-
+  console.log(userBday);
   useEffect(() => { getBday() }, [getBday])
 
   const dayTillBirthday = () => {
@@ -66,11 +67,11 @@ function _Birthdays() {
     for (let i = 0; i < usersLength; i++) {
       userBdayInDate.current = 0;
 
-      if (userBday[i].birth_date === null) {
+      if (userBday[i].date_birth === null || userBday[i].date_birth === undefined) {
         userBdayInDate.current = 30;
       } else {
-        const birthMonth = Number(userBday[i].birth_date.split('-')[1]);
-        const birthDay = Number(userBday[i].birth_date.split('-')[2]);
+        const birthMonth = Number(userBday[i].date_birth.split('-')[1]);
+        const birthDay = Number(userBday[i].date_birth.split('-')[2]);
 
         for (let j = 0; j < birthMonth - 1; j++) {
           userBdayInDate.current += daysInMonth[j];
@@ -102,7 +103,7 @@ function _Birthdays() {
         <div className="row-7 d-flex flex-column align-items-center justift-content-between gap-3 mb-4">
           <hr style={{ width: '100%' }} />
           {userBday && userBday.map((user, index) => {
-            return <div key={user.id} className="form-control d-flex align-items-center justify-content-between gap-2 bg-light">
+            return user.accepted && <div key={user.id} className="form-control d-flex align-items-center justify-content-between gap-2 bg-light">
               <div className="col-2 text-center text-secondary">
                 <img className="user-image" src={user.profile_photo} />
               </div>

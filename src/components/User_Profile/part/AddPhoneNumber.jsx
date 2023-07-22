@@ -1,7 +1,6 @@
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import '../../../App.css'
-import PropTypes from 'prop-types';
 // eslint-disable-next-line react/prop-types
 function AddPhoneNumber({numbers, newNumber, setNewNumber, handleAddNewNumber, handleDelete ,changeProfile}) {
   return (
@@ -26,7 +25,7 @@ function AddPhoneNumber({numbers, newNumber, setNewNumber, handleAddNewNumber, h
            {/* eslint-disable-next-line react/prop-types */}
           {numbers && numbers.map(number => {
             return (
-              <div className="form-control d-flex justify-content-between gap-2 mt-2 user-phone-number-list-item" key={number.number}>
+              <div className="form-control d-flex justify-content-between gap-2 mt-2 user-phone-number-list-item" key={number}>
                 <h3>{number}</h3>
                 <button  className="delete-btn" disabled={!changeProfile} onClick={() => handleDelete(number)}><i className="bi bi-trash-fill" ></i></button>
               </div>
@@ -37,7 +36,4 @@ function AddPhoneNumber({numbers, newNumber, setNewNumber, handleAddNewNumber, h
     </div>
   )
 }
-AddPhoneNumber.propTypes = {
-  numbers: PropTypes.string.isRequired, // or PropTypes.arrayOf(PropTypes.number).isRequired
-};
 export default AddPhoneNumber

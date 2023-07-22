@@ -1,0 +1,103 @@
+/* Styles for the popup container */
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 0.25s, opacity 0.25s;
+  z-index: 999;
+  -webkit-transition: visibility 0s linear 0.25s, opacity 0.25s;
+  -moz-transition: visibility 0s linear 0.25s, opacity 0.25s;
+  -ms-transition: visibility 0s linear 0.25s, opacity 0.25s;
+  -o-transition: visibility 0s linear 0.25s, opacity 0.25s;
+}
+
+/* Styles for the popup */
+.popup {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px 30px 25px 30px;
+  
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Make the popup visible when the container is active */
+.popup-container.open {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s, 0s;
+}
+
+/* Slide the popup down into view */
+.popup.open {
+  transform: translateY(0);
+  animation-name: popupAnimation;
+  animation-duration: 0.2s;
+  /* animation-delay: 0.4s; */
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -o-transform: translateY(0);
+}
+
+@keyframes popupAnimation {
+  from {
+    transform: scale(0.2);
+    -webkit-transform: scale(0.2);
+    -moz-transform: scale(0.2);
+    -ms-transform: scale(0.2);
+    -o-transform: scale(0.2);
+    opacity: 0;
+}
+to{
+  transform: scale(1);
+  opacity: 1;
+}
+}
+
+/* Optional: Styles for the popup content */
+.popup-content {
+  text-align: center;
+}
+
+/* Optional: Style the OK button */
+.popup button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 4px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+}
+ .reject{
+  padding: 0;
+  margin: 0;
+  font-size: xx-large;
+  color: red;
+ }
+ .confirm{
+  padding: 0;
+  margin: 0;
+  font-size: xx-large;
+  color: green;
+ }

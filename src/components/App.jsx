@@ -2,7 +2,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-  Route
+  Route,
 } from 'react-router-dom'
 import '../App.css'
 
@@ -20,7 +20,6 @@ import _NotAcceptedUsers from './Admin/part/_NotAcceptedUsers'
 import Moderator from './Admin/Moderator'
 import _LandingPage from './_LandingPage'
 import _Birthdays from './_Birthdays'
-
 function App() {
 
   const routest = createBrowserRouter(

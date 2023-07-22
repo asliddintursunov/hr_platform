@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useState } from 'react'
+
 // Css
 import '../Sign_Up.css'
 
@@ -7,6 +9,7 @@ import '../Sign_Up.css'
 import _Username from '../../_Username'
 import _Email from '../../_Email'
 import _ConfirmPassword from '../../_ConfirmPassword'
+import _PopUp from '../../_PopUp'
 
 // Custom Hooks
 import { useUsername } from '../../../hooks/useUsername'
@@ -17,6 +20,11 @@ function Sign_Up_Form() {
 
   // const URL = 'http://localhost:3000/users'
   const URL = 'http://192.168.3.140:1000/register'
+  
+  // Pop Up States
+  const [isOpen, setIsOpen] = useState(false);
+  const [popupInfo, setPopupInfo] = useState('')
+  const [errorOccured, setErrorOccured] = useState('')
 
   // Custom Hook Values
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
@@ -32,29 +40,44 @@ function Sign_Up_Form() {
     passwordMatchTrue, setPasswordMatchTrue, passwordCheckType, setPasswordCheckType,
     passwordMatchChecker, passwordInputMatchStyle } = useConfirmPassword()
 
+    // Redirecting uset to another page
+    const navigate = useNavigate()
+
   const addNewUser = () => {
-    axios.post(URL, {
-      username: usernameValue,
-      email: emailValue,
-      password: passwordValue,
-      confirm_password: passwordMatchValue,
-    })
-      .then((req) => {
-        console.log(req);
-        alert(req.data)
-        setUsernameValue('')
-        setEmailValue('')
-        setPasswordValue('')
-        setPasswordMatchValue('')
+    setIsOpen(true)
+    if (passwordValue == passwordMatchValue) {
+      axios.post(URL, {
+        username: usernameValue,
+        email: emailValue,
+        password: passwordValue,
+        confirm_password: passwordMatchValue,
       })
-      .catch((err) => {
-        if (typeof err.response.data == 'object') {
-          alert(err.response.data.error);
-        } else {
-          console.error(err);
-          alert(err.response.data);
-        }
-      })
+        .then((req) => {
+          setPopupInfo(req.data)
+          setErrorOccured(false)
+          
+          setTimeout(() => {
+            navigate('/signin')
+          }, 1500);
+
+          setUsernameValue('')
+          setEmailValue('')
+          setPasswordValue('')
+          setPasswordMatchValue('')
+        })
+        .catch((err) => {
+          setErrorOccured(true)
+          console.log(err);
+          if (typeof err.response.data !== 'object') {
+            setPopupInfo(err.response.data)
+          } else {
+            setPopupInfo(err.response.data.error)
+          }
+        })
+    } else {
+      setErrorOccured(true)
+      setPopupInfo('Password does not match!')
+    }
   }
 
   const handleSubmit = (e) => {
@@ -64,6 +87,7 @@ function Sign_Up_Form() {
 
   return (
     <div className='sign-up-form-container'>
+      {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <form onSubmit={handleSubmit} className='form-control sign-up-form'>
         <div>
           <h2><i className="bi bi-lock lock"></i></h2>

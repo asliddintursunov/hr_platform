@@ -1,4 +1,6 @@
 import './User_Profile.css'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 // Components
 import Edit_FullName from './part/Edit_FullName'
@@ -10,16 +12,19 @@ import Edit_DateOfBirth from './part/Edit_DateOfBirth'
 import Edit_UploadImage from './part/Edit_UploadImage'
 import AddPhoneNumber from './part/AddPhoneNumber'
 import LogOutModal from './part/LogOutModal'
+import _PopUp from '../_PopUp'
 
 // Custon Hooks
 import { useUsername } from '../../hooks/useUsername'
 import { usePassword } from '../../hooks/usePassword'
 import { useEmail } from '../../hooks/useEmail'
 import { useCallback, useEffect, useState } from 'react'
-import axios from 'axios'
+
 
 
 function UpdateProfile() {
+
+
   // Custom useUsername Hook 
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
     usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
@@ -34,9 +39,10 @@ function UpdateProfile() {
   const { emailValue, setEmailValue, validEmailChecker,
     emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle } = useEmail()
   // Full Name, Address, DateOfBirth values
-  const [fullName, setFullName] = useState('')
-  const [address, setAddress] = useState('')
-  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [fullName, setFullName] = useState("")
+  const [address, setAddress] = useState("")
+  const [dateOfBirth, setDateOfBirth] = useState("")
+  const [data, set_data] = useState({})
   // Disable && Enable inputs
   const [changeProfile, setChangeProfile] = useState(false)
 
@@ -47,7 +53,13 @@ function UpdateProfile() {
   // Loader
   const [isPending, setIsPending] = useState(false)
 
+  // Pop Up States
+  const [isOpen, setIsOpen] = useState(false);
+  const [popupInfo, setPopupInfo] = useState('')
+  const [errorOccured, setErrorOccured] = useState('')
 
+  // Redirect user to another page
+  const navigate = useNavigate()
   const handleAddNewNumber = (e) => {
     e.preventDefault();
     setNumbers(prev => [...prev, Number(newNumber)])
@@ -80,19 +92,21 @@ function UpdateProfile() {
 
   // Cancle Edition === Working
   const CancleEdition = useCallback(() => {
+
     setIsPending(true)
-    axios.get(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`)
+    axios.get(`http://192.168.3.140:1000/user/${localStorage.getItem('userId')}`)
       .then(res => {
+        console.log(res);
         // User Data for input field
+        set_data(res.data)
         setFullName(res.data.fullname)
         setUsernameValue(res.data.username)
         setEmailValue(res.data.email)
         // setPasswordValue(res.data.password)
         setAddress(res.data.address)
-        setDateOfBirth(res.data.birth_date)
+        setDateOfBirth(res.data.date_birth)
         setSelectedImage(res.data.profile_photo)
-        setNumbers(res.data.phone)
-
+        setNumbers(res.data.phone_number)
         setIsPending(false)
       })
       .catch(err => {
@@ -100,67 +114,62 @@ function UpdateProfile() {
         setIsPending(false)
       })
   }, [setFullName, setUsernameValue, setEmailValue, setAddress, setDateOfBirth, setSelectedImage])
-  useEffect(() => { CancleEdition() }, [CancleEdition])
+
+  useEffect(() => {
+    CancleEdition()
+  }, [CancleEdition])
 
   // Save Edition === Working
   const saveEdition = useCallback(() => {
-    setIsPending(true)
-    if (passwordValue.length >= 1) {
-      axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
-        fullname: fullName,
-        username: usernameValue,
-        email: emailValue,
-        password: passwordValue,
-        address: address,
-        date_birth: dateOfBirth,
-        phone_number: numbers,
-        profile_photo: selectedImage
-      })
-        .then((res) => {
-          (res.data)
-          setIsPending(false)
-        })
-        .catch((err) => {
-          alert(err.response.data)
-          setIsPending(false)
-          console.log(err);
-        })}
+    setIsOpen(true)
+    // setIsPending(true)
 
-    if (passwordValue.length == 0) {
-      setIsPending(true)
-      axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
-        fullname: fullName,
-        username: usernameValue,
-        email: emailValue,
-        address: address,
-        date_birth: dateOfBirth,
-        phone_number: numbers,
-        profile_photo: selectedImage
+    axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
+      fullname: data.fullname !== fullName ? fullName : undefined,
+      username: data.username !== usernameValue ? usernameValue : undefined,
+      email: data.email !== emailValue ? emailValue : undefined,
+      password: passwordValue !== "" ? passwordValue : undefined,
+      address: data.address !== address ? address : undefined,
+      date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
+      phone_number: data.phone_number !== numbers ? numbers : undefined,
+      profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined
+    })
+      .then((res) => {
+        // console.log(res.data);
+        setPopupInfo(res.data)
+        setErrorOccured(false)
+        // setIsPending(false)
       })
-        .then((res) => {
-          alert(res.data)
-          setIsPending(false)
-        })
-        .catch((err) => {
-          alert(err.response.data)
-          setIsPending(false)
-          console.log(err);
-        })
-        console.log(numbers);}
+      .catch((err) => {
+        // console.log(err.response.data);
+        setPopupInfo(err.response.data)
+        setErrorOccured(true)
+        // alert(err.response.data)
+        // setIsPending(false)
+      })
 
-  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers])
+  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data])
 
   // Log Out === Working
   const logOut = () => {
-    setIsPending(true)
-    axios.get(`http://192.168.3.140:1000/users/${localStorage.getItem('userId')}`)
+
+    // setIsPending(true)
+    setIsOpen(true)
+    axios.get(`http://192.168.3.140:1000/logout/${localStorage.getItem('userId')}`)
       .then((data) => {
-        setIsPending(false)
-        console.log(data)
+        // setIsPending(false)
+        setErrorOccured(false)
+        setPopupInfo(data.data)
+
+        setTimeout(() => {
+          navigate('/signin')
+        }, 1500);
+        
       })
-      .catch((err) => {
-        setIsPending(false)
-        console.error(err)
+      .catch(() => {
+        setErrorOccured(true)
+        // setIsPending(false)
+        setPopupInfo('Tizimdan chiqishda qandaydir xatolik ro\'y berdi!');
       })
   }
   const [showModal, setShowModal] = useState(false)
@@ -169,6 +178,7 @@ function UpdateProfile() {
   // ###########################################################333
   return (
     <div className='container'>
+      {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
       {isPending && <div className='loader'></div>}
       {!isPending && <div style={{ filter: showModal ? 'blur(4px)' : 'blur(0)' }}>
