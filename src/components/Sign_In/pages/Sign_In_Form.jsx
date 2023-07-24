@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 
@@ -19,6 +19,7 @@ function Sign_In_Form() {
   const URL = 'http://192.168.3.140:1000/login'
   // const URL = 'http://localhost:3000/users'
 
+
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
     usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
 
@@ -31,28 +32,30 @@ function Sign_In_Form() {
   const [isOpen, setIsOpen] = useState(false);
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
-    
-  // Redirecting uset to another page
-  const navigate = useNavigate()
-    
+
+
   const logInToProfile = () => {
-    setIsOpen(true)
     axios.post(URL, {
       'username': usernameValue,
       'password': passwordValue,
-    })
+    },)
       .then(res => {
+        setIsOpen(true)
+        localStorage.setItem('token', res.data.token)
         localStorage.setItem('userId', res.data.id)
         localStorage.setItem('userRole', res.data.role)
         setPopupInfo(res.data.message)
         setErrorOccured(false)
 
         setTimeout(() => {
-          navigate('/landing')
+          
+          // Redirecting uset to another page
+          window.location.assign('/landing')
         }, 1500);
-        
+
       })
       .catch(err => {
+        setIsOpen(true)
         setErrorOccured(true)
         console.log(err);
         setPopupInfo(err.response.data.message);

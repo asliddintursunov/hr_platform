@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import './Admin.css'
 function Admin() {
+
   return (
     <div>
       <nav className='container'>

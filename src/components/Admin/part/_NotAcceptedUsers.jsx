@@ -2,8 +2,11 @@ import axios from "axios"
 import '../Admin.css'
 import { useCallback, useEffect, useState } from "react"
 import _PopUp from "../../_PopUp"
-
+import { useNavigate } from "react-router-dom"
 function _NotAcceptedUsers() {
+
+  const navigate = useNavigate()
+
   const users_data = 'http://192.168.3.140:1000/users'
   const defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU'
 
@@ -17,6 +20,25 @@ function _NotAcceptedUsers() {
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
 
+  // Add a request interceptor
+  axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('token')
+    config.headers.Authorization = 'Bearer ' + token;
+
+    return config;
+  });
+
+  // Token Expired Validation
+  const tokenExpired = useCallback((info) => {
+    setIsOpen(true)
+    setErrorOccured(true)
+    setPopupInfo(info)
+    setTimeout(() => {
+      localStorage.removeItem('token')
+      navigate('/signin')
+    }, 1500);
+  }, [navigate])
+
   const fetchData = useCallback(() => {
     setIsPending(true)
     axios.get(users_data)
@@ -25,15 +47,17 @@ function _NotAcceptedUsers() {
         setIsPending(false)
       })
       .catch((err) => {
-        console.error(err)
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
         setIsPending(false)
       })
-  }, [users_data])
+  }, [users_data, tokenExpired])
 
   useEffect(() => { fetchData() }, [fetchData])
 
   const AddUser = (id) => {
-    
+
     setDatas(prev => {
       return prev.filter(e => e.id !== id)
     })
@@ -46,7 +70,10 @@ function _NotAcceptedUsers() {
         setErrorOccured(false)
         setIsOpen(true)
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
         setPopupInfo('Qandaydir xatolik ro\'y berdi!')
         setErrorOccured(true)
         setIsOpen(true)
@@ -64,7 +91,10 @@ function _NotAcceptedUsers() {
         setErrorOccured(false)
         setIsOpen(true)
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
         setPopupInfo('Qandaydir xatolik ro\'y berdi!')
         setErrorOccured(true)
         setIsOpen(true)
@@ -90,7 +120,7 @@ function _NotAcceptedUsers() {
               <div className="col-1 text-center">
                 <b>#{data.id}</b>
               </div>
-              <div className="col-3 d-flex align-items-center text-secondary gap-4 text-secondary">
+              <div className="col-3 d-flex align-items-center justify-content-center text-secondary gap-4 text-secondary">
                 {data.profile_photo ? <img className="user-image" src={data.profile_photo} /> : <img className="user-image" src={defaultImage} />}
                 <p className="text-wrap">{data.fullname}</p>
               </div>

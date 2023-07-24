@@ -1,8 +1,10 @@
 import axios from "axios"
 import { useCallback, useEffect, useState, useRef } from "react"
-import '../components/Admin/Admin.css'
-
+import { useNavigate } from "react-router-dom"
+import _PopUp from "./_PopUp"
 function _Birthdays() {
+
+  const navigate = useNavigate()
 
   const users_data = 'http://192.168.3.140:1000/users'
   const [userBday, setUserBday] = useState([]) // Shows User's B-day in table
@@ -15,6 +17,31 @@ function _Birthdays() {
   const [usersLength, setUsersLength] = useState(null) // Numbers of Users
   const [isPending, setIsPending] = useState(false) // Loader
 
+  // Pop Up States
+  const [isOpen, setIsOpen] = useState(false);
+  const [popupInfo, setPopupInfo] = useState('')
+  const [errorOccured, setErrorOccured] = useState('')
+
+  // Add a request interceptor
+  axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('token')
+    config.headers.Authorization = 'Bearer ' + token;
+
+    return config;
+  });
+
+  // Token Expired Validation
+  const tokenExpired = useCallback((info) => {
+    setIsOpen(true)
+    setErrorOccured(true)
+    setPopupInfo(info)
+    setTimeout(() => {
+      localStorage.removeItem('token')
+      navigate('/signin')
+    }, 1500);
+  }, [navigate])
+
+
   const getBday = useCallback(() => {
     setIsPending(true)
     axios.get(users_data)
@@ -24,11 +51,13 @@ function _Birthdays() {
         setUsersLength(res.data.length)
       })
       .catch(err => {
+        console.log(err);
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
         setIsPending(false)
-        console.error(err)
       })
-  }, [])
-  console.log(userBday);
+  }, [tokenExpired])
   useEffect(() => { getBday() }, [getBday])
 
   const dayTillBirthday = () => {
@@ -84,7 +113,6 @@ function _Birthdays() {
     }
   };
 
-
   dayTillBirthday()
 
   return (
@@ -94,6 +122,7 @@ function _Birthdays() {
       <br />
       {isPending && <div className="loader"></div>}
       {!isPending && <div className="form-control container">
+        {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
         <div className="text-center d-flex align-items-center justify-content-between">
           <div className="col-2"><h4>Image</h4></div>
           <div className="col-2"><h4>Username</h4></div>
@@ -105,13 +134,14 @@ function _Birthdays() {
           {userBday && userBday.map((user, index) => {
             return user.accepted && <div key={user.id} className="form-control d-flex align-items-center justify-content-between gap-2 bg-light">
               <div className="col-2 text-center text-secondary">
-                <img className="user-image" src={user.profile_photo} />
+                {user.profile_photo ? <img className="user-image" src={user.profile_photo} /> : <img className="user-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" alt="Selected" />}
               </div>
               <div className="col-2 text-center text-secondary">{user.username}</div>
-              <div className="col-2 text-center text-secondary">{user.birth_date}</div>
+              <div className="col-2 text-center text-secondary">{user.date_birth}</div>
               <div className="col-2 text-center">
                 <h5 className="text-primary">Birthday!</h5>
-                {leftDays[index] <= 30 && leftDays[index] >= 0 ? (<h5 className="text-success">{leftDays[index]} left</h5>) : (<h5 className="text-warning">long days</h5>)}
+                {leftDays[index] <= 30 && leftDays[index] >= 1 ? <h5 className="text-success">{leftDays[index]} left</h5> :
+                  leftDays[index] == 0 ? <h5 className="text-light today-b-day">Happy Birthday 🎉</h5> : <h5 className="text-warning">long days</h5>}
               </div>
             </div>
           })}

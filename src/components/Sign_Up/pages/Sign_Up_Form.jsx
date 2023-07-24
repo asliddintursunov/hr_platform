@@ -44,7 +44,6 @@ function Sign_Up_Form() {
     const navigate = useNavigate()
 
   const addNewUser = () => {
-    setIsOpen(true)
     if (passwordValue == passwordMatchValue) {
       axios.post(URL, {
         username: usernameValue,
@@ -53,9 +52,10 @@ function Sign_Up_Form() {
         confirm_password: passwordMatchValue,
       })
         .then((req) => {
+          setIsOpen(true)
+
           setPopupInfo(req.data)
           setErrorOccured(false)
-          
           setTimeout(() => {
             navigate('/signin')
           }, 1500);
@@ -66,6 +66,8 @@ function Sign_Up_Form() {
           setPasswordMatchValue('')
         })
         .catch((err) => {
+          setIsOpen(true)
+
           setErrorOccured(true)
           console.log(err);
           if (typeof err.response.data !== 'object') {
@@ -75,11 +77,11 @@ function Sign_Up_Form() {
           }
         })
     } else {
+      setIsOpen(true)
       setErrorOccured(true)
       setPopupInfo('Password does not match!')
     }
   }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     addNewUser()

@@ -1,8 +1,11 @@
 import axios from "axios"
 import '../Admin.css'
 import { useCallback, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import _PopUp from "../../_PopUp"
 function _AcceptedUsers() {
+
+  const navigate = useNavigate()
 
   const defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU'
   const users_data = 'http://192.168.3.140:1000/users'
@@ -17,6 +20,25 @@ function _AcceptedUsers() {
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
 
+  // Add a request interceptor
+  axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('token')
+    config.headers.Authorization = 'Bearer ' + token;
+
+    return config;
+  });
+
+  // Token Expired Validation
+  const tokenExpired = useCallback((info) => {
+    setIsOpen(true)
+    setErrorOccured(true)
+    setPopupInfo(info)
+    setTimeout(() => {
+      localStorage.removeItem('token')
+      navigate('/signin')
+    }, 1500);
+  }, [navigate])
+
   const fetchData = useCallback(() => {
     setIsPending(true)
     axios.get(users_data)
@@ -25,10 +47,12 @@ function _AcceptedUsers() {
         setDatas(req.data)
       })
       .catch((err) => {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
         setIsPending(false)
-        console.error(err)
       })
-  }, [users_data])
+  }, [users_data, tokenExpired])
 
   useEffect(() => { fetchData() }, [fetchData])
 
@@ -43,7 +67,11 @@ function _AcceptedUsers() {
         setPopupInfo(res.data)
         setIsOpen(true)
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        setIsPending(false)
         setErrorOccured(true)
         setPopupInfo('Qandaydir xatolik ro\'y berdi!')
         setIsOpen(true)
@@ -59,7 +87,10 @@ function _AcceptedUsers() {
         setPopupInfo(res.data)
         setIsOpen(true)
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
         setErrorOccured(true)
         setPopupInfo('Qandaydir xatolik ro\'y berdi!')
         setIsOpen(true)

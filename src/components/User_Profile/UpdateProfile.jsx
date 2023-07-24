@@ -23,7 +23,8 @@ import { useCallback, useEffect, useState } from 'react'
 
 
 function UpdateProfile() {
-
+  // Redirect user to another page
+  const navigate = useNavigate()
 
   // Custom useUsername Hook 
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
@@ -58,8 +59,25 @@ function UpdateProfile() {
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
 
-  // Redirect user to another page
-  const navigate = useNavigate()
+  // Add a request interceptor
+  axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('token')
+    config.headers.Authorization = 'Bearer ' + token;
+
+    return config;
+  });
+
+  // Token Expired Validation
+  const tokenExpired = useCallback((info) => {
+    setIsOpen(true)
+    setErrorOccured(true)
+    setPopupInfo(info)
+    setTimeout(() => {
+      localStorage.removeItem('token')
+      navigate('/signin')
+    }, 1500);
+  }, [navigate])
+
   const handleAddNewNumber = (e) => {
     e.preventDefault();
     setNumbers(prev => [...prev, Number(newNumber)])
@@ -83,7 +101,6 @@ function UpdateProfile() {
     reader.onload = () => {
       const base64String = reader.result
       setSelectedImage(base64String)
-      console.log(base64String);
     }
     if (file) {
       reader.readAsDataURL(file)
@@ -96,8 +113,8 @@ function UpdateProfile() {
     setIsPending(true)
     axios.get(`http://192.168.3.140:1000/user/${localStorage.getItem('userId')}`)
       .then(res => {
-        console.log(res);
         // User Data for input field
+        console.log(res.data);
         set_data(res.data)
         setFullName(res.data.fullname)
         setUsernameValue(res.data.username)
@@ -110,10 +127,12 @@ function UpdateProfile() {
         setIsPending(false)
       })
       .catch(err => {
-        console.error(err)
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
         setIsPending(false)
       })
-  }, [setFullName, setUsernameValue, setEmailValue, setAddress, setDateOfBirth, setSelectedImage])
+  }, [setFullName, setUsernameValue, setEmailValue, setAddress, setDateOfBirth, setSelectedImage, tokenExpired])
 
   useEffect(() => {
     CancleEdition()
@@ -121,9 +140,6 @@ function UpdateProfile() {
 
   // Save Edition === Working
   const saveEdition = useCallback(() => {
-    setIsOpen(true)
-    // setIsPending(true)
-
     axios.patch(`http://192.168.3.140:1000/update_profile/${localStorage.getItem('userId')}`, {
       fullname: data.fullname !== fullName ? fullName : undefined,
       username: data.username !== usernameValue ? usernameValue : undefined,
@@ -135,41 +151,45 @@ function UpdateProfile() {
       profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined
     })
       .then((res) => {
-        // console.log(res.data);
+        setIsOpen(true)
+        console.log(res);
         setPopupInfo(res.data)
         setErrorOccured(false)
-        // setIsPending(false)
       })
       .catch((err) => {
-        // console.log(err.response.data);
-        setPopupInfo(err.response.data)
-        setErrorOccured(true)
-        // alert(err.response.data)
-        // setIsPending(false)
+        console.log(err);
+        setIsOpen(true)
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        } else{
+          setErrorOccured(true)
+          setPopupInfo(err.response.data)
+        }
       })
 
-  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data])
+  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, tokenExpired])
 
   // Log Out === Working
   const logOut = () => {
 
-    // setIsPending(true)
-    setIsOpen(true)
     axios.get(`http://192.168.3.140:1000/logout/${localStorage.getItem('userId')}`)
       .then((data) => {
-        // setIsPending(false)
+        setIsOpen(true)
+
+        localStorage.removeItem('token')
         setErrorOccured(false)
         setPopupInfo(data.data)
 
         setTimeout(() => {
           navigate('/signin')
         }, 1500);
-        
+
       })
-      .catch(() => {
-        setErrorOccured(true)
-        // setIsPending(false)
-        setPopupInfo('Tizimdan chiqishda qandaydir xatolik ro\'y berdi!');
+      .catch((err) => {
+        setIsOpen(true)
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
       })
   }
   const [showModal, setShowModal] = useState(false)
