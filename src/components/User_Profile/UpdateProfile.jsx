@@ -176,13 +176,15 @@ function UpdateProfile() {
       .then((data) => {
         setIsOpen(true)
 
-        localStorage.removeItem('token')
         setErrorOccured(false)
         setPopupInfo(data.data)
-
+        
         setTimeout(() => {
           navigate('/signin')
         }, 1500);
+        localStorage.removeItem('token')
+        localStorage.removeItem('userRole')
+        localStorage.removeItem('userId')
 
       })
       .catch((err) => {
