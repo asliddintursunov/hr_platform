@@ -2,7 +2,7 @@ import '../Sign_In.css'
 function Sign_In_Addition() {
   return (
     <div className='sign-in-addition'>
-      <h1>
+      <h1 className='text-light'>
         <hr />
         Welcome Back,
         <br />

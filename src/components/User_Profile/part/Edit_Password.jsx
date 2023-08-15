@@ -1,5 +1,5 @@
 import { Fragment } from "react"
-
+import styles from '../../../css/EditProfile.module.css'
 /* eslint-disable react/prop-types */
 function Edit_Password({ passwordValue, setPasswordValue, validPasswordChecker,
   passwordTrue, setPasswordTrue,
@@ -7,7 +7,7 @@ function Edit_Password({ passwordValue, setPasswordValue, validPasswordChecker,
   passwordInputStyle }) {
   return (
     <Fragment>
-      <div className='password-changer input-container'>
+      <div className={`${styles.passwordChanger} ${styles.inputContainer}`}>
           <label htmlFor="password"><b>Password</b></label>
           <div onClick={() => {
             passwordType ? setPasswordType(false) : setPasswordType(true)
@@ -16,7 +16,7 @@ function Edit_Password({ passwordValue, setPasswordValue, validPasswordChecker,
           </div>
           <input
             disabled={!changeProfile}
-            className='form-control bg-light'
+            className='form-control'
             style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null}
             value={passwordValue}
             type={passwordType ? "password" : "text"}
@@ -29,6 +29,7 @@ function Edit_Password({ passwordValue, setPasswordValue, validPasswordChecker,
             id="password"
             name='password'
             required
+            
           />
           {passwordValue.length >= 1 && validPasswordChecker === 'Valid Password' && <i style={{ color: 'green' }}>{validPasswordChecker}</i>}
           {passwordValue.length >= 1 && validPasswordChecker === 'Invalid Password' && <i style={{ color: 'red' }}>{validPasswordChecker}</i>}

@@ -1,18 +1,18 @@
 import { Fragment } from "react"
-
+import styles from '../../../css/EditProfile.module.css'
 /* eslint-disable react/prop-types */
 function Edit_Email({ emailValue, setEmailValue, validEmailChecker,
   emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle, changeProfile }) {
   return (
     <Fragment>
-      <div className='email-changer input-container'>
+      <div className={`${styles.emailChanger} ${styles.inputContainer}`}>
         <label htmlFor="email"><b>Email</b></label>
         <div>
           <i className="bi bi-envelope-at-fill"></i>
         </div>
         <input
           disabled={!changeProfile}
-          className='form-control bg-light'
+          className='form-control'
           style={emailValue.length >= 1 && emailTrue ? emailInputStyle : null}
           value={emailValue}
           type="email"

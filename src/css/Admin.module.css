@@ -1,0 +1,137 @@
+/* ========== Admin Layout ========== */
+.adminContainer {
+  width: 96%;
+  height: 100%;
+  color: var(--dark);
+}
+
+.adminNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.adminNav a {
+  color: var(--dark);
+  margin-bottom: 1rem;
+  padding: 0.7rem 1rem;
+  min-width: 35%;
+  text-align: center;
+  border: 1px solid var(--evenUserGray);
+  border-radius: 8rem;
+  -webkit-border-radius: 8rem;
+  -moz-border-radius: 8rem;
+  -ms-border-radius: 8rem;
+  -o-border-radius: 8rem;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.adminNav a:hover {
+  background-color: var(--dark);
+  color: var(--white);
+}
+
+/* .adminNav a.active {
+  background-color: red;
+} */
+
+.userDataContainerDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  row-gap: 2rem;
+  color: var(--white);
+  font-size: 1.1rem;
+}
+
+.userDataContainerDiv:nth-child(even) {
+  color: var(--dark);
+  /* background-color: var(--white); */
+  background-color: var(--oddUserGray);
+}
+
+.userDataContainerDiv:nth-child(odd) {
+  /* color: #fff; */
+  color: var(--dark);
+  /* background-color: var(--dark); */
+  /* background-color: var(--evenUserGray); */
+}
+
+/* ========== Accepted/Waiting Users ========== */
+.acceptedUsersContainer {
+
+}
+
+.userImgName {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 0.5rem;
+}
+
+.changeRoleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.changeDeleteBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .changeDeleteBtn {
+    flex-direction: column;
+  }
+}
+
+.selectRole {
+  width: 90%;
+  text-align: center;
+  font-size: 1.2rem;
+  /* background-color: lightgray; */
+  cursor: pointer;
+}
+
+.selectRole option {
+  font-size: 1.2rem;
+}
+
+.adminNavAnimation {
+  animation: topapper 0.3s 1;
+  -webkit-animation: topapper 0.3s 1;
+}
+
+@keyframes topapper {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+    -webkit-transform: translateX(30px);
+    -moz-transform: translateX(30px);
+    -ms-transform: translateX(30px);
+    -o-transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0);
+    -webkit-transform: translate(0);
+    -moz-transform: translate(0);
+    -ms-transform: translate(0);
+    -o-transform: translate(0);
+  }
+}
+
+/* d-flex align-items-center justify-content-between gap-2 bg-light */

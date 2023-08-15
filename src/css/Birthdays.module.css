@@ -1,0 +1,48 @@
+/* ========== Birthdays ========== */
+.birthdaysContainer {
+  width: 96%;
+  color: var(--dark);
+}
+
+.userCardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  /* color: var(--white); */
+  font-size: 1.1rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.userCard {
+  /* color: var(--white); */
+  text-align: center;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userCard:nth-child(even){
+  color: var(--dark);
+  background-color: var(--oddUserGray);
+}
+.userCard:nth-child(odd){
+  color: var(--dark);
+}
+.bDayInfoContainer h5:nth-child(odd){
+  color: var(--dark);
+}
+.TodayBirthDay{
+  /* background-color: rgb(23, 172, 23); */
+  padding: 0.5rem 0;
+  background-color: var(--white);
+  color: limegreen;
+  border-radius: 2rem;
+  -webkit-border-radius: 2rem;
+  -moz-border-radius: 2rem;
+  -ms-border-radius: 2rem;
+  -o-border-radius: 2rem;
+  /* background: linear-gradient(135deg,yellowgreen, lime, green); */
+}

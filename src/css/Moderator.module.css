@@ -1,0 +1,43 @@
+.ModeratorContainer {
+  width: 96%;
+  height: 100%;
+  padding-top: 2rem;
+  color: var(--dark);
+}
+.userDataContainerDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  row-gap: 2rem;
+  color: var(--dark);
+  font-size: 1.1rem;
+}
+
+.userDataContainerDiv:nth-child(even) {
+  background-color: var(--oddUserGray);
+}
+
+.userDataContainerDiv:nth-child(odd) {
+  /* background-color: var(--evenUserGray); */
+}
+.userImgName{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 0.5rem;
+}
+.changeDeleteBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .changeDeleteBtn {
+    flex-direction: column;
+  }
+}

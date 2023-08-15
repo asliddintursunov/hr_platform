@@ -2,11 +2,14 @@ import axios from "axios"
 import { useCallback, useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import _PopUp from "./_PopUp"
+import useURL from "../hooks/useURL"
+import styles from '../css/Birthdays.module.css'
 function _Birthdays() {
 
   const navigate = useNavigate()
 
-  const users_data = 'http://192.168.3.140:1000/users'
+  const { BirthDayURL } = useURL()
+
   const [userBday, setUserBday] = useState([]) // Shows User's B-day in table
   var setUserBdayToDays = [] // Users' B-day in days in array
   var leftDays = [] // Left Days
@@ -44,7 +47,7 @@ function _Birthdays() {
 
   const getBday = useCallback(() => {
     setIsPending(true)
-    axios.get(users_data)
+    axios.get(BirthDayURL)
       .then(res => {
         setIsPending(false)
         setUserBday(res.data)
@@ -57,7 +60,7 @@ function _Birthdays() {
         }
         setIsPending(false)
       })
-  }, [tokenExpired])
+  }, [tokenExpired, BirthDayURL])
   useEffect(() => { getBday() }, [getBday])
 
   const dayTillBirthday = () => {
@@ -109,44 +112,53 @@ function _Birthdays() {
       }
 
       setUserBdayToDays.push(userBdayInDate.current - 30);
-      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current));
+      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current) - 1);
     }
   };
 
   dayTillBirthday()
 
+  const greenBackground = {
+    // backgroundColor: 'rgb(23, 172, 23)',
+  background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
+    // backgroundColor: 'lime',
+    color: 'var(--white)',
+  }
+  
   return (
-    <div className="container">
-      <h1>Users&#39; Birthday</h1>
-      <hr />
+    <div className={`container pageAnimation`}>
       <br />
-      {isPending && <div className="loader"></div>}
-      {!isPending && <div className="form-control container">
-        {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-        <div className="text-center d-flex align-items-center justify-content-between">
-          <div className="col-2"><h4>Image</h4></div>
-          <div className="col-2"><h4>Username</h4></div>
-          <div className="col-2"><h4>Date Of Birth</h4></div>
-          <div className="col-2"><h4>Day Left</h4></div>
-        </div>
-        <div className="row-7 d-flex flex-column align-items-center justift-content-between gap-3 mb-4">
-          <hr style={{ width: '100%' }} />
-          {userBday && userBday.map((user, index) => {
-            return user.accepted && <div key={user.id} className="form-control d-flex align-items-center justify-content-between gap-2 bg-light">
-              <div className="col-2 text-center text-secondary">
-                {user.profile_photo ? <img className="user-image" src={user.profile_photo} /> : <img className="user-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" alt="Selected" />}
-              </div>
-              <div className="col-2 text-center text-secondary">{user.username}</div>
-              <div className="col-2 text-center text-secondary">{user.date_birth}</div>
-              <div className="col-2 text-center">
-                <h5 className="text-primary">Birthday!</h5>
-                {leftDays[index] <= 30 && leftDays[index] >= 1 ? <h5 className="text-success">{leftDays[index]} left</h5> :
-                  leftDays[index] == 0 ? <h5 className="text-light today-b-day">Happy Birthday 🎉</h5> : <h5 className="text-warning">long days</h5>}
-              </div>
-            </div>
-          })}
-        </div>
-      </div>}
+      <h1 className="display-3 text-center">Birthdays</h1>
+      <br />
+      {isPending && <div className="loaderr"></div>}
+      {!isPending &&
+        <div className={`form-control container ${styles.birthdaysContainer}`} >
+          {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
+          <div className="text-center d-flex align-items-center justify-content-between">
+            <div className="col-2"><h4>Image</h4></div>
+            <div className="col-2"><h4>Username</h4></div>
+            <div className="col-2"><h4>Date Of Birth</h4></div>
+            <div className="col-2"><h4>Day Left</h4></div>
+          </div>
+          <div className={`row-7 ${styles.userCardContainer}`}>
+            <hr style={{ width: '100%' }} />
+            {userBday && userBday.map((user, index) => {
+              return user.accepted &&
+                <div key={user.id} className={`form-control ${styles.userCard}`} style={leftDays[index] == 0 ? greenBackground : null}>
+                  <div className="col-2">
+                    {user.profile_photo ? <img className="user-image" src={user.profile_photo} /> : <img className="user-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" alt="Selected" />}
+                  </div>
+                  <div className="col-2">{user.username}</div>
+                  <div className="col-2">{user.date_birth}</div>
+                  <div className={`col-2 ${styles.bDayInfoContainer}`}>
+                    <h5>Birthday!</h5>
+                    {leftDays[index] <= 30 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
+                      leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay}`}>Happy Birthday 🎉</h5> : <h5 className="text-warning">long days</h5>}
+                  </div>
+                </div>
+            })}
+          </div>
+        </div>}
     </div>
   )
 }

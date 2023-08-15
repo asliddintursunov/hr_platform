@@ -1,36 +1,30 @@
-import { Link } from 'react-router-dom'
-import '../App.css'
-function _LandingPage() {
+import { NavLink, Outlet } from 'react-router-dom'
+import styles from '../css/Landing.module.css'
 
+function _LandingPage() {
   const userRole = localStorage.getItem('userRole')
-  const linkStyle = {
-    'padding': '.4rem 1.8rem',
-    'background-color': 'lightgray',
-    'border': '1px solid gray',
-    'border-radius': '4px',
-    'text-decoration': 'none',
-    'color': '#000',
-  }
-  const birthdayBtn = {
-    'padding': '.4rem 1.8rem',
-    'background-color': 'royalblue',
-    'border': '1px solid #fff',
-    'border-radius': '4px',
-    'text-decoration': 'none',
-    'color': '#000',
-  }
+  
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center landing-page">
-      <header>
-        <nav className="w-full d-flex flex-column flex-sm-row align-items-end align-items-sm-center justify-content-end gap-2">
-          <Link style={birthdayBtn} to='/birthdays' className='text-light'>Birthdays <i className="bi bi-bookmark-star-fill"></i></Link>
-          {userRole === 'moderator' && <Link style={linkStyle} to='/moderator'>Moderator Page <i className="bi bi-alexa"></i></Link>}
-          {userRole === 'admin' && <Link style={linkStyle} to='/admin'>Admin Page <i className="bi bi-shield-shaded"></i></Link>}
-          <Link style={linkStyle} to='/profile' className='text-primary'>Profile <i className="bi bi-person-circle"></i></Link>
-        </nav>
-      </header>
-      <main className='landing-body text-light'>
-        <h1 className='display-1'>Hello My Friend!</h1>
+    <div className={styles.landingContainer}>
+      <div className={styles.sidebarContainer}>
+        <aside className={styles.sidebar} >
+          <nav>
+            <div className={styles.navbarOptions}>
+              <NavLink to='./'><i className="bi bi-house-door-fill"></i> &#160; About</NavLink>
+              {userRole === 'moderator' && <NavLink to='moderator'> <i className="bi bi-alexa"></i> &#160; Moderator</NavLink>}
+              {userRole === 'admin' && <NavLink to='admin'><i className="bi bi-shield-shaded"></i> &#160; Admin Page </NavLink>}
+              <NavLink to='birthdays'><i className="bi bi-bookmark-star-fill"></i> &#160; Birthdays </NavLink>
+              <NavLink to='profile'><i className="bi bi-person-circle"></i> &#160; Profile </NavLink>
+              <NavLink to='resumes'><i className="bi bi-file-person"></i> &#160; Resumes </NavLink>
+            </div>
+            <div className={styles.logout}>
+              <button className='btn btn-dark'>HR Platform <i className="bi bi-file-person"></i></button>
+            </div>
+          </nav>
+        </aside>
+      </div>
+      <main className={styles.landingMain}>
+        <Outlet />
       </main>
     </div>
   )

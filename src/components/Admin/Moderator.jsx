@@ -1,17 +1,15 @@
 import axios from "axios"
 import './Admin.css'
-import { Fragment, useCallback, useEffect, useState } from "react"
+import styles from '../../css/Moderator.module.css'
+import { useCallback, useEffect, useState } from "react"
 import _PopUp from "../_PopUp"
 import { useNavigate } from "react-router-dom"
-
+import useURL from "../../hooks/useURL"
 function Moderator() {
 
   const navigate = useNavigate()
 
-  const defaultImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU'
-  const users_data = 'http://192.168.3.140:1000/users'
-  const user_data = 'http://192.168.3.140:1000/user'
-
+  const {defaultImage, AllUsersData, OneUserData} = useURL()
   const [datas, setDatas] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -40,7 +38,7 @@ function Moderator() {
 
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(users_data)
+    axios.get(AllUsersData)
       .then((req) => {
         setIsPending(false)
         setDatas(req.data)
@@ -52,7 +50,7 @@ function Moderator() {
         setIsPending(false)
 
       })
-  }, [users_data, tokenExpired])
+  }, [AllUsersData, tokenExpired])
 
   useEffect(() => { fetchData() }, [fetchData])
   
@@ -61,7 +59,7 @@ function Moderator() {
       return prev.filter(data => data.id !== id)
     })
 
-    axios.delete(user_data + `/${id}`)
+    axios.delete(OneUserData + `/${id}`)
       .then((res) => {
         setErrorOccured(false)
         setPopupInfo(res.data)
@@ -79,13 +77,13 @@ function Moderator() {
 
 
   return (
-    <Fragment>
-      <div className="container">
-        <h1>Moderator Page</h1>
+    <div className={`container pageAnimation`}>
+      <div className="text-center">
+        <h1 className="display-3">Moderator Page</h1>
         <hr />
         <br />
       </div>
-      <div className="form-control container">
+      <div className={`container form-control ${styles.ModeratorContainer}`}>
         <div className="text-center d-flex align-items-center justify-content-center">
           <div className="col-2"><h4>ID</h4></div>
           <div className="col-2"><h4>User</h4></div>
@@ -94,38 +92,38 @@ function Moderator() {
           <div className="col-2"><h4>Role</h4></div>
           <div className="col-2"><h4>Delete</h4></div>
         </div>
-        {isPending && <div className="loader"></div>}
+        {isPending && <div className="loaderr"></div>}
         {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
         {!isPending && <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
           <hr style={{ width: '100%' }} />
           {datas && datas.map(data => {
             return (data.accepted &&
-              <div key={data.id} className="form-control d-flex align-items-center justify-content-between gap-2 bg-light">
+              <div key={data.id} className={`form-control ${styles.userDataContainerDiv}`}>
                 <div className="col-2 text-center">
-                  <b>#{data.id}</b>
+                  <p>#{data.id}</p>
                 </div>
-                <div className="col-2 d-flex align-items-center justify-content-start text-secondary gap-4">
+                <div className={`col-2 ${styles.userImgName}`}>
                   {data.profile_photo ? <img className="user-image" src={data.profile_photo} /> : <img className="user-image" src={defaultImage} />}
-                  <b className="text-wrap">{data.fullname}</b>
+                  <p className="text-wrap">{data.fullname}</p>
                 </div>
-                <div className="col-2 text-center text-secondary">
-                  <b>{data.username}</b>
+                <div className="col-2 text-center">
+                  <p>{data.username}</p>
                 </div>
-                <div className="col-2 text-center text-secondary">
-                  <b>{data.email}</b>
+                <div className="col-2 text-center">
+                  <p>{data.email}</p>
                 </div>
                 <div className="col-2 d-flex align-items-center justify-content-around">
-                  <b>{data.role}</b>
+                  <p>{data.role}</p>
                 </div>
-                <div className="col-2 d-flex flex-column flex-sm-row align-items-center justify-content-center gap-sm-4 gap-2">
-                  {data.role === 'user' && <button className="btn btn-danger" onClick={() => { handleDelete(data.id) }}>Delete</button>}
+                <div className={`col-2 ${styles.changeDeleteBtn}`}>
+                  {data.role === 'user' && <button className="btn btn-outline-danger" onClick={() => { handleDelete(data.id) }}><i className="bi bi-trash3-fill"></i></button>}
                 </div>
               </div>
             )
           })}
         </div>}
       </div>
-    </Fragment>
+    </div>
   )
 }
 

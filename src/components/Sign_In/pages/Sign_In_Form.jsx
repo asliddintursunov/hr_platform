@@ -9,16 +9,16 @@ import '../Sign_In.css'
 import _Username from '../../_Username'
 import _Password from '../../_Password'
 import _PopUp from '../../_PopUp'
+import GoogleAUTH from '../../../GoogleAUTH'
 
 // Custom Hooks
 import { useUsername } from '../../../hooks/useUsername'
 import { usePassword } from '../../../hooks/usePassword'
+import useURL from '../../../hooks/useURL'
 
 function Sign_In_Form() {
 
-  const URL = 'http://192.168.3.140:1000/login'
-  // const URL = 'http://localhost:3000/users'
-
+  const {LoginUrl} = useURL()
 
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
     usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
@@ -35,7 +35,7 @@ function Sign_In_Form() {
 
 
   const logInToProfile = () => {
-    axios.post(URL, {
+    axios.post(LoginUrl, {
       'username': usernameValue,
       'password': passwordValue,
     },)
@@ -48,7 +48,6 @@ function Sign_In_Form() {
         setErrorOccured(false)
 
         setTimeout(() => {
-          
           // Redirecting uset to another page
           window.location.assign('/landing')
         }, 1500);
@@ -75,6 +74,7 @@ function Sign_In_Form() {
           <h2><i className="bi bi-key-fill key"></i></h2>
           <h2>Sign In</h2>
         </div>
+        <GoogleAUTH page={'/landing'} number={2}/>
         <hr style={{ width: '100%' }} />
         <br />
         <div className='input-container'>

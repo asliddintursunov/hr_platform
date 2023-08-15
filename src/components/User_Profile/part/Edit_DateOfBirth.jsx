@@ -1,13 +1,13 @@
 import { Fragment } from "react"
-
+import styles from '../../../css/EditProfile.module.css'
 /* eslint-disable react/prop-types */
 function Edit_DateOfBirth({ changeProfile, dateOfBirth, setDateOfBirth }) {
   return (
     <Fragment>
-      <div className='birth-date-changer input-container'>
+      <div className={styles.inputContainer}>
         <label htmlFor="dateofbirth"><b>Date of Bitrh</b></label>
         <input
-          className='form-control bg-light'
+          className='form-control'
           disabled={!changeProfile}
           type="date"
           name="dateofbirth"
