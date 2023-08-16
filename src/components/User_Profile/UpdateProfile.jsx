@@ -139,6 +139,9 @@ function UpdateProfile() {
         setDateOfBirth(res.data.date_birth)
         setSelectedImage(res.data.profile_photo)
         setNumbers(res.data.phone_number)
+        setMajor(res.data.major)
+        setExperience(res.data.experience)
+        setSkills(res.data.skills)
         setIsPending(false)
       })
       .catch(err => {
@@ -163,7 +166,10 @@ function UpdateProfile() {
       address: data.address !== address ? address : undefined,
       date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
       phone_number: data.phone_number !== numbers ? numbers : undefined,
-      profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined
+      profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
+      major: data.major !== major ? major : undefined,
+      experience: data.experience !== experience ? experience : undefined,
+      skills: data.skills !== skills ? skills : undefined,
     })
       .then((res) => {
         setIsOpen(true)
@@ -182,7 +188,9 @@ function UpdateProfile() {
         }
       })
 
-  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, tokenExpired, ProfileUpdate])
+  }, [fullName, usernameValue, emailValue, passwordValue, address,
+    dateOfBirth, selectedImage, numbers, data, tokenExpired,
+    ProfileUpdate, major, experience, skills])
 
   // Log Out === Working
   const logOut = () => {
@@ -227,6 +235,16 @@ function UpdateProfile() {
     }, [skills]
   )
 
+  // For Major
+  const seeMajor = (value) => {
+    setMajor(value)
+  }
+
+  // For Experience
+  const seeExperience = (value) => {
+    setExperience(value)
+  }
+
   // ###########################################################333
   return (
     <div className={`container ${styles.userProfileContainer} pageAnimation`}>
@@ -266,12 +284,12 @@ function UpdateProfile() {
                 <div className={styles.additionalInfo}>
                   <Edit_Major
                     major={major}
-                    setMajor={setMajor}
+                    seeMajor={seeMajor}
                     changeProfile={changeProfile}
                   />
                   <Edit_Experience
                     experience={experience}
-                    setExperience={setExperience}
+                    seeExperience={seeExperience}
                     changeProfile={changeProfile}
                   />
                 </div>

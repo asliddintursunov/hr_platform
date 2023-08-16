@@ -18,7 +18,7 @@ function _LandingPage() {
               <NavLink to='resumes'><i className="bi bi-file-person"></i> &#160; Resumes </NavLink>
             </div>
             <div className={styles.logout}>
-              <button className='btn btn-dark'>HR Platform <i className="bi bi-file-person"></i></button>
+              <button className='btn btn-dark'>HR Platform</button>
             </div>
           </nav>
         </aside>

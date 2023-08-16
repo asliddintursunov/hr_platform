@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import styles from '../../../css/Additional.module.css'
 function Edit_Skills({ changeProfile, skills, seeSkills }) {
-
+  
   const frontend = [
     'typesctipt', 'javascript', 'react', 'vue', 'angular'
   ]
