@@ -8,7 +8,7 @@ function _Resumes() {
     'Fulltime', 'Parttime', 'To-be-discussed'
   ]
   const WorkExperience = [
-    'All', 'No-experience', 'From-1-to-3-years', 'From-3-to-6-years', 'Over-6-years'
+    '1-3', '3-6', '6+'
   ]
   const Specializations = [
     'Website-developer', 'Frontend-developer', 'Backend-developer', 'Mobile-developer', 'Desktop-developer', 'Design-UI/UX'
@@ -20,7 +20,6 @@ function _Resumes() {
     } else {
       setWorkHours(prev => [...prev, value])
     }
-
   }
 
   const ExperienceYears = (value) => {
@@ -89,11 +88,11 @@ function _Resumes() {
                       <input
                         type="radio"
                         name="workexperience"
-                        value={type.split('-').join('').toLocaleLowerCase()}
+                        value={type}
                         onChange={(e) => ExperienceYears(e.target.value)}
                       />
                       <span className={`${styles.radioCheckmark}`}></span>
-                      {type.split('-').join(' ')}
+                      {type} years
                     </label>
                   </div>
                 )
@@ -107,7 +106,7 @@ function _Resumes() {
                     <label>
                       <input
                         type="checkbox"
-                        value={type.split('-')[0].toLocaleLowerCase()}
+                        value={type.split('-')[0]}
                         onChange={(e) => MainPosition(e.target.value)}
                       />
                       {type.split('-').join(' ')}

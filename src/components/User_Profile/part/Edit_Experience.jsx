@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import styles from '../../../css/Additional.module.css'
 // eslint-disable-next-line react/prop-types
 function Edit_Experience({ changeProfile, experience, seeExperience }) {
@@ -6,7 +5,6 @@ function Edit_Experience({ changeProfile, experience, seeExperience }) {
     '1-3', '3-6', '6+'
   ]
 
-  useEffect(() => { console.log(experience); }, [experience])
   return (
     <div className={`form-control ${styles.experienceContainer}`}>
       <h3>Expericence</h3>

@@ -17,6 +17,7 @@ import Edit_Major from './part/Edit_Major'
 import Edit_Skills from './part/Edit_Skills'
 import Edit_Experience from './part/Edit_Experience'
 
+
 // Custon Hooks
 import { useUsername } from '../../hooks/useUsername'
 import { usePassword } from '../../hooks/usePassword'
@@ -128,8 +129,15 @@ function UpdateProfile() {
     setIsPending(true)
     axios.get(OneUserData + `/${localStorage.getItem('userId')}`)
       .then(res => {
-        // User Data for input field
-        console.log(res.data);
+
+        // Doing smth even I don't know :|
+        var phoneNumbers = res.data.phone_number.slice(1, -1).split(',')
+        if (phoneNumbers[0] === '') {
+          phoneNumbers = []
+        } else {
+          phoneNumbers = phoneNumbers.map(number => Number(number.trim()))
+        }
+
         set_data(res.data)
         setFullName(res.data.fullname)
         setUsernameValue(res.data.username)
@@ -138,7 +146,8 @@ function UpdateProfile() {
         setAddress(res.data.address)
         setDateOfBirth(res.data.date_birth)
         setSelectedImage(res.data.profile_photo)
-        setNumbers(res.data.phone_number)
+        // setNumbers(res.data.phone_number)
+        setNumbers(phoneNumbers)
         setMajor(res.data.major)
         setExperience(res.data.experience)
         setSkills(res.data.skills)
@@ -229,11 +238,6 @@ function UpdateProfile() {
       setSkills(prev => [...prev, value]);
     }
   };
-  useEffect(
-    () => {
-      console.log(skills);
-    }, [skills]
-  )
 
   // For Major
   const seeMajor = (value) => {

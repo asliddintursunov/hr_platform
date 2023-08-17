@@ -220,6 +220,7 @@
 .radioButton input[type="radio"]:checked~.radioCheckmark:before {
   transform: translate(-50%, -50%) scale(1);
 }
+
 .radioButton input[type="radio"]:checked:disabled~.radioCheckmark:before {
   transform: translate(-50%, -50%) scale(1);
   background-color: darkgray;
