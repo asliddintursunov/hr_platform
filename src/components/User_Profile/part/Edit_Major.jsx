@@ -2,7 +2,7 @@ import styles from '../../../css/Additional.module.css'
 // eslint-disable-next-line react/prop-types
 function Edit_Major({ changeProfile, major, seeMajor }) {
   const majorValues = [
-    'Frontend', 'Backend', 'Mobile', 'Desktop', 'Design'
+    'Frontend', 'Backend', 'FullStack', 'Mobile', 'Desktop', 'Design'
   ]
 
   return (
