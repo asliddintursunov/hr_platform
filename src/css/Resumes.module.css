@@ -166,7 +166,7 @@
 
 
 /** ================== Employment Type / Specializations ================== */
-.filterWrapper:nth-child(even)>div>label {
+.filterWrapper:last-child>div>label {
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -175,7 +175,7 @@
   margin: 0.2rem auto;
 }
 
-.filterWrapper:nth-child(even)>div>label input {
+.filterWrapper:last-child>div>label input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -196,12 +196,12 @@
   -o-border-radius: 3px;
 }
 
-.filterWrapper:nth-child(even)>div>label input:checked~.checkboxSpan {
+.filterWrapper:last-child>div>label input:checked~.checkboxSpan {
   background-color: royalblue;
   border-color: royalblue;
 }
 
-.filterWrapper:nth-child(even)>div>label input:checked~.checkboxSpan:after {
+.filterWrapper:last-child>div>label input:checked~.checkboxSpan:after {
   content: '\2713';
   position: absolute;
   top: 0;
@@ -213,23 +213,31 @@
 /** ==================================== */
 
 
-/** ================= Experience =================== */
-.filterWrapper:nth-child(3)>div>label {
+/** ================= Experience =================== */ /* === AND === */ /** ================== Employment Type / Specializations ================== */
+.filterWrapper:nth-child(3)>div>label,
+.filterWrapper:nth-child(2)>div>label {
   display: flex;
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
 }
 
-.filterWrapper:nth-child(3)>div>label:hover {
+.filterWrapper:nth-child(3)>div>label:hover,
+.filterWrapper:nth-child(2)>div>label:hover {
   transform: translateY(-2px);
 }
 
-.filterWrapper:nth-child(3)>div>label input[type="radio"] {
+.filterWrapper:nth-child(3)>div>label input[type="radio"],
+.filterWrapper:nth-child(2)>div>label input[type="radio"] {
   display: none;
 }
 
-.filterWrapper:nth-child(3)>div>label input[type="radio"]:checked~.radioCheckmark:before {
+.filterWrapper:nth-child(3)>div>label input[type="radio"]:checked~.radioCheckmark:before,
+.filterWrapper:nth-child(2)>div>label input[type="radio"]:checked~.radioCheckmark:before {
   transform: translate(-50%, -50%) scale(1);
 }
 

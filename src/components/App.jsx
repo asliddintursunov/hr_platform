@@ -43,7 +43,7 @@ function App() {
           </Route>}
 
           {localStorage.getItem('userRole') == 'moderator' && <Route path='moderator' element={<Moderator />} />}
-          
+
           <Route path='birthdays' element={<_Birthdays />} />
           <Route path='resumes' element={<_Resumes />} />
 

@@ -10,8 +10,9 @@ function useURL() {
   const LogoutUrl = 'http://192.168.3.140:1000/logout'
   const LoginUrl = 'http://192.168.5.130:1000/login'
   const RegisterByGoogle = 'http://192.168.5.130:1000/register_gmail'
+  const SearchResumesUrl = 'http://192.168.5.130:1000/search'
 
-  return { BirthDayURL, defaultImage, AllUsersData, OneUserData, ProfileUpdate, ConfirmCode, LoginUrl, LogoutUrl, RegisterUrl, RegisterByGoogle }
+  return { BirthDayURL, defaultImage, AllUsersData, OneUserData, ProfileUpdate, ConfirmCode, LoginUrl, LogoutUrl, RegisterUrl, RegisterByGoogle, SearchResumesUrl }
 }
 
 export default useURL
