@@ -16,7 +16,7 @@ import _PopUp from '../_PopUp'
 import Edit_Major from './part/Edit_Major'
 import Edit_Skills from './part/Edit_Skills'
 import Edit_Experience from './part/Edit_Experience'
-
+import Edit_Resume from './part/Edit_Resume'
 
 // Custon Hooks
 import { useUsername } from '../../hooks/useUsername'
@@ -66,6 +66,7 @@ function UpdateProfile() {
   const [major, setMajor] = useState("")
   const [experience, setExperience] = useState("")
   const [skills, setSkills] = useState([])
+  const [userResume, setUserResume] = useState(numbers)
 
   // Loader
   const [isPending, setIsPending] = useState(false)
@@ -123,20 +124,28 @@ function UpdateProfile() {
     }
   }
 
+  const handleResumeChange = (event) => {
+    const file = event.target.files[0]
+    console.log(file);
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      const base64String = reader.result
+      setUserResume(base64String)
+      console.log(base64String);
+    }
+    if (file) {
+      reader.readAsDataURL(file)
+    }
+  }
+
   // Cancle Edition === Working
   const CancleEdition = useCallback(() => {
 
     setIsPending(true)
     axios.get(OneUserData + `/${localStorage.getItem('userId')}`)
       .then(res => {
-
-        // Doing smth even I don't know :|
-        var phoneNumbers = res.data.phone_number.slice(1, -1).split(',')
-        if (phoneNumbers[0] === '') {
-          phoneNumbers = []
-        } else {
-          phoneNumbers = phoneNumbers.map(number => Number(number.trim()))
-        }
+        console.log(res.data);
 
         set_data(res.data)
         setFullName(res.data.fullname)
@@ -146,8 +155,8 @@ function UpdateProfile() {
         setAddress(res.data.address)
         setDateOfBirth(res.data.date_birth)
         setSelectedImage(res.data.profile_photo)
-        // setNumbers(res.data.phone_number)
-        setNumbers(phoneNumbers)
+        setUserResume(res.data.resume)
+        setNumbers(res.data.phone_number)
         setMajor(res.data.major)
         setExperience(res.data.experience)
         setSkills(res.data.skills)
@@ -176,6 +185,7 @@ function UpdateProfile() {
       date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
       phone_number: data.phone_number !== numbers ? numbers : undefined,
       profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
+      resume: data.resume !== userResume ? userResume : undefined,
       major: data.major !== major ? major : undefined,
       experience: data.experience !== experience ? experience : undefined,
       skills: data.skills !== skills ? skills : undefined,
@@ -199,7 +209,7 @@ function UpdateProfile() {
 
   }, [fullName, usernameValue, emailValue, passwordValue, address,
     dateOfBirth, selectedImage, numbers, data, tokenExpired,
-    ProfileUpdate, major, experience, skills])
+    ProfileUpdate, major, experience, skills, userResume])
 
   // Log Out === Working
   const logOut = () => {
@@ -372,7 +382,11 @@ function UpdateProfile() {
                 />
               </div>
               <div className={`${styles.bottomRightData} bg-light`}>
-                <input type="file" />
+                <Edit_Resume
+                  userResume={userResume}
+                  handleResumeChange={handleResumeChange}
+                  changeProfile={changeProfile} 
+                  />
               </div>
             </div>
             <div className={styles.btnStyles}>

@@ -1,0 +1,80 @@
+.resumeDetailsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resumeDetailsWrapper {
+  width: 96%;
+  height: 100vh;
+  padding: 2rem auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.resumeDetailsWrapper>div {
+  height: 100%;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  background-color: var(--oddUserGray);
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  box-shadow: 0 0 8px var(--evenUserGray);
+}
+
+.resumeDetailsWrapper>div>h1 {
+  text-transform: uppercase;
+}
+
+.resumeDetailsWrapper>div>div {
+  font-size: large;
+  gap: 2rem;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  padding: 1.5rem 0.2rem;
+}
+
+.userGeneralData>div {
+  font-size: 1.8rem;
+}
+
+.userGeneralData>div,
+.userExperience>div,
+.userSkills>div {
+  font-weight: bold;
+  font-size: 1.7rem;
+  color: gray;
+}
+.userSkills>div{
+  display: flex;
+  flex-wrap: wrap;
+}
+.userGeneralData>div>code,
+.userExperience>div>code,
+.userSkills>div>code,
+.userPhoneNumber>div>code {
+  color: var(--dark);
+  font-size: 1.6rem;
+}
+
+.userSkills>div>code,
+.userPhoneNumber>code {
+  background-color: lightgray;
+  padding: 0.3rem 1rem;
+  border-radius: 10rem;
+  -webkit-border-radius: 10rem;
+  -moz-border-radius: 10rem;
+  -ms-border-radius: 10rem;
+  -o-border-radius: 10rem;
+}

@@ -23,6 +23,7 @@ import _Birthdays from './_Birthdays'
 import _PageNotFound404 from './_PageNotFound404'
 import _About from './_About'
 import _Resumes from './_Resumes'
+import _ResumeDetails from './_ResumeDetails'
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
 
           <Route path='birthdays' element={<_Birthdays />} />
           <Route path='resumes' element={<_Resumes />} />
+          <Route path='resumes/userResume' element={<_ResumeDetails />} />
 
         </Route>
         <Route path='*' element={<_PageNotFound404 />} />

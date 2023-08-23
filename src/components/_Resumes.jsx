@@ -1,16 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from '../css/Resumes.module.css'
 import useURL from '../hooks/useURL'
 import axios from 'axios'
 function _Resumes() {
   const { SearchResumesUrl } = useURL()
-
-  var ResumeNumbers = []
-  var ResumeSkills = []
+  const navigate = useNavigate()
+  // var ResumeNumbers = []
+  // var ResumeSkills = []
 
   const [skills, setSkills] = useState([])
   const [experience, setExperience] = useState('')
   const [major, setMajor] = useState('')
+
+  const [resumeData, setResumeData] = useState([])
 
   const Skills = [
     'typesctipt', 'javascript', 'react', 'vue', 'angular',
@@ -25,21 +28,51 @@ function _Resumes() {
   ]
 
   const sendData = () => {
+    // ResumeNumbers.length = 0
+    // ResumeSkills.length = 0
+    setResumeData([])
+
     axios.post(SearchResumesUrl, {
       skills: skills.length === 0 ? undefined : skills,
       major: major === '' ? undefined : major,
       experience: experience === '' ? undefined : experience,
     })
       .then(res => {
+        setResumeData(res.data.results)
+        console.log(res);
 
         //* Getting numbers and skills!
+        // for (let i = 0; i < res.data.results.length; i++) {
+        //   ResumeNumbers.push(res.data.results[i].phone_number.slice(2, -2))
+        //   ResumeSkills.push(res.data.results[i].skills.slice(2, -2))
+        // }
+        // console.log(ResumeNumbers);
+        // console.log(ResumeSkills);
+      })
+      .catch(err => console.error(err))
+  }
+
+  const seeAllResumes = () => {
+    // ResumeNumbers.length = 0
+    // ResumeSkills.length = 0
+    setResumeData([])
+
+    axios.post(SearchResumesUrl, {
+      skills: undefined,
+      major: undefined,
+      experience: undefined
+    })
+      .then(res => {
+        setResumeData(res.data.results)
         console.log(res);
-        for (let i = 0; i < res.data.results.length; i++) {
-          ResumeNumbers.push(res.data.results[i].phone_number.slice(2, -2))
-          ResumeSkills.push(res.data.results[i].skills.slice(2, -2))
-        }
-        console.log(ResumeNumbers);
-        console.log(ResumeSkills);
+
+        //* Getting numbers and skills!
+        // for (let i = 0; i < res.data.results.length; i++) {
+        //   ResumeNumbers.push(res.data.results[i].phone_number.slice(2, -2))
+        //   ResumeSkills.push(res.data.results[i].skills.slice(2, -2))
+        // }
+        // console.log(ResumeNumbers);
+        // console.log(ResumeSkills);
       })
       .catch(err => console.error(err))
   }
@@ -60,6 +93,25 @@ function _Resumes() {
     setMajor(value)
   }
 
+  useEffect(
+    () => {
+      axios.post(SearchResumesUrl, {
+        skills: undefined,
+        major: undefined,
+        experience: undefined
+      })
+        .then(res => {
+          setResumeData(res.data.results)
+        })
+        .catch(err => console.error(err))
+    }, [SearchResumesUrl]
+  )
+
+  const seeResumeDetail = (userID) => {
+    localStorage.setItem('userResumeID', userID)
+    navigate('./userResume')
+  }
+
   return (
     <div className={`text-center ${styles.resumesPage} pageAnimation`}>
       <div className={styles.header} style={{}}>
@@ -76,15 +128,41 @@ function _Resumes() {
       </div>
       <main className={styles.main}>
         <aside className={styles.leftAside}>
-          Aside Left
+          {resumeData.length === 0 && <h1 className='display-4 text-secondary'>No Suitable CV</h1>}
+          {resumeData.length > 0 && resumeData.map((resume) => {
+            return (
+              <div key={resume.id} className={styles.resumeCard}>
+                <div className={styles.resumeCardMajor}>
+                  <h2>{resume.major}</h2>
+                </div>
+                <div className={styles.resumeCardSkills}>
+                  {resume.skills && resume.skills.slice(2, -1).map((skill, index) => (
+                    <code key={index}>{skill}</code>
+                  ))}
+                </div>
+                <div className={styles.resumeCardMore}>
+                  <div className={styles.resumeCardUsername}>
+                    <span>Username</span>
+                    <p>{resume.username}</p>
+                  </div>
+                  <div className={styles.resumeCardExperience}>
+                    <span>Experience</span>
+                    <h3>{resume.experience}</h3>
+                  </div>
+                  <div className={styles.resumeCVCard}>
+                    <span>Full Resume</span>
+                    <button onClick={() => seeResumeDetail(resume.id)}>See</button>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </aside>
         <aside className={styles.rightAside}>
           <form method='GET' onSubmit={(e) => e.preventDefault()}>
             <div className={styles.filterWrapper}>
-              <input type="search" />
-              <button type='submit' onClick={sendData}>
-                <i className="bi bi-search"></i>
-              </button>
+              <button type='submit' onClick={sendData}>Filter</button>
+              <button type='submit' onClick={seeAllResumes}>All</button>
             </div>
             <div className={styles.filterWrapper}>
               <h3>Specializations</h3>
