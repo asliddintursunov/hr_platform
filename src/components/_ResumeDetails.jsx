@@ -12,11 +12,9 @@ function _ResumeDetails() {
     () => {
       axios.get(SearchResumesUrl + '/' + userID)
         .then(res => {
-          console.log(res.data);
-          console.log(res.data.skills);
           setUserResumeData(res.data)
         })
-        .catch(err => console.log(err))
+        .catch(err => console.error(err))
     }, [SearchResumesUrl, userID]
   )
 
@@ -50,8 +48,14 @@ function _ResumeDetails() {
             ))}
           </div>
         </div>
-        <div>
+        <div className={styles.userResumeContainer}>
           <h1>Resume</h1>
+          <embed
+            type='application/pdf'
+            src={userResumeData.resume}
+            height='400'
+            width='100%'
+          />
         </div>
       </div>
     </div>

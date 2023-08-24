@@ -66,7 +66,7 @@ function UpdateProfile() {
   const [major, setMajor] = useState("")
   const [experience, setExperience] = useState("")
   const [skills, setSkills] = useState([])
-  const [userResume, setUserResume] = useState(numbers)
+  const [userResume, setUserResume] = useState(null)
 
   // Loader
   const [isPending, setIsPending] = useState(false)
@@ -126,13 +126,14 @@ function UpdateProfile() {
 
   const handleResumeChange = (event) => {
     const file = event.target.files[0]
-    console.log(file);
+
+    localStorage.setItem('fileName', file.name)
+    
     const reader = new FileReader()
 
     reader.onload = () => {
       const base64String = reader.result
       setUserResume(base64String)
-      console.log(base64String);
     }
     if (file) {
       reader.readAsDataURL(file)
@@ -145,7 +146,6 @@ function UpdateProfile() {
     setIsPending(true)
     axios.get(OneUserData + `/${localStorage.getItem('userId')}`)
       .then(res => {
-        console.log(res.data);
 
         set_data(res.data)
         setFullName(res.data.fullname)
@@ -178,7 +178,8 @@ function UpdateProfile() {
   const saveEdition = useCallback(() => {
     axios.patch(ProfileUpdate + `/${localStorage.getItem('userId')}`, {
       fullname: data.fullname !== fullName ? fullName : undefined,
-      username: data.username !== usernameValue ? usernameValue : undefined,
+      // username: data.username !== usernameValue ? usernameValue : undefined,
+      username: usernameValue,
       email: data.email !== emailValue ? emailValue : undefined,
       password: passwordValue !== "" ? passwordValue : undefined,
       address: data.address !== address ? address : undefined,
@@ -383,10 +384,9 @@ function UpdateProfile() {
               </div>
               <div className={`${styles.bottomRightData} bg-light`}>
                 <Edit_Resume
-                  userResume={userResume}
                   handleResumeChange={handleResumeChange}
-                  changeProfile={changeProfile} 
-                  />
+                  changeProfile={changeProfile}
+                />
               </div>
             </div>
             <div className={styles.btnStyles}>
