@@ -1,12 +1,26 @@
+import Highcharts from 'highcharts/highstock';
+import HighchartsReact from 'highcharts-react-official';
 import styles from '../css/Landing.module.css'
+
+// Charts
+import { useLineGraph } from '../hooks/charts/useLineGraph';
+import usePieChart from '../hooks/charts/usePieChart';
+import CardChart from '../hooks/charts/CardChart';
+
 function _About() {
+  const { lineGraph } = useLineGraph()
+  const { pieChartSecond } = usePieChart()
+
   return (
     <div className={`text-center ${styles.aboutPage} pageAnimation`}>
       <div>
-        <h1 className="display-2">This is <code>about</code> Page</h1>
-        <h1 className='display-1'>
-          Hello dear <code>{localStorage.getItem('userRole')}</code>! Enjoy your HR platform...
-        </h1>
+        <div className={styles.basicStatsContainer}>
+          <HighchartsReact highcharts={Highcharts} options={lineGraph} />
+          <HighchartsReact highcharts={Highcharts} options={pieChartSecond} />
+        </div>
+        <div className={styles.detailsContainer}>
+          <CardChart />
+        </div>
       </div>
     </div>
   )

@@ -1,0 +1,28 @@
+.majorCardContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; */
+    position: relative;
+}
+.majorCardContainer > div:first-child {
+    height: 10rem;
+    width: 18rem;
+    background-color: lightblue;
+}
+.majorCardContainer > div:last-child{
+    transition: all 1s;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -ms-transition: all 1s;
+    -o-transition: all 1s;
+    height: 5rem;
+    width: 8rem;
+    position: absolute;
+    background-color: green;
+    right: 30%;
+    opacity: 0;
+}
+.majorCardContainer > div:first-child:hover ~ div{
+    opacity: 1;
+}
