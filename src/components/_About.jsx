@@ -14,6 +14,7 @@ function _About() {
   return (
     <div className={`text-center ${styles.aboutPage} pageAnimation`}>
       <div>
+        <h1 className="display-3 text-dark text-center">About Page</h1>
         <div className={styles.basicStatsContainer}>
           <HighchartsReact highcharts={Highcharts} options={lineGraph} />
           <HighchartsReact highcharts={Highcharts} options={pieChartSecond} />

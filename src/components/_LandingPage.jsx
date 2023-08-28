@@ -60,7 +60,7 @@ function _LandingPage() {
                 to='./'
                 style={location.pathname === defaultPath + '' ? navbarColor : null}>
                 <i className="bi bi-house-door-fill"></i>
-                &#160; About
+                &#160; Dashboard
               </NavLink>
 
               {userRole === 'moderator' &&

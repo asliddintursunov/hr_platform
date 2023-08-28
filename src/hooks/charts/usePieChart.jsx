@@ -1,97 +1,72 @@
+import useUserData from "./useUserData";
+
 export default function usePieChart() {
+  
+  const userMajorData = []
+  const { userMajor, userMajorCount } = useUserData()
 
-    const pieChartSecond = {
-        chart: {
-            type: 'pie'
-        },
-        title: {
-            text: 'Number of All Developers',
-            align: 'left',
-            style: {
-                fontSize: '2rem'
-            }
-        },
-        subtitle: {
-            align: 'left',
-            style: {
-                fontSize: '1.2rem'
-            }
-        },
+  for(let i = 0; i < userMajorCount.length; i++){
+    userMajorData.push({name: userMajor[i], y: userMajorCount[i], drilldown: userMajor[i]})
+  }
 
-        accessibility: {
-            announceNewData: {
-                enabled: true
-            },
-            point: {
-                valueSuffix: '%'
-            }
-        },
+  const pieChartSecond = {
+    chart: {
+      type: 'pie'
+    },
+    title: {
+      text: 'Number of All Developers',
+      align: 'left',
+      style: {
+        fontSize: '2rem'
+      }
+    },
+    subtitle: {
+      align: 'left',
+      style: {
+        fontSize: '1.2rem'
+      }
+    },
 
-        plotOptions: {
-            series: {
-                borderRadius: 8,
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: {point.y:.1f}%',
-                    style: {
-                        fontSize: '1.4rem'
-                    }
-                }
-            }
-        },
+    accessibility: {
+      announceNewData: {
+        enabled: true
+      },
+    },
 
-        tooltip: {
-            headerFormat: '<span style="font-size:1.2rem">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>',
-            style: {
-                fontSize: '1.4rem'
-            }
-        },
-
-        series: [
-            {
-                name: 'Majors',
-                colorByPoint: true,
-                data: [
-                    {
-                        name: 'FullStack',
-                        y: 61.04, // Percentage
-                        drilldown: 'FullStack'
-                    },
-                    {
-                        name: 'Frontend',
-                        y: 9.47, // Percentage
-                        drilldown: 'Frontend'
-                    },
-                    {
-                        name: 'Backend',
-                        y: 9.32, // Percentage
-                        drilldown: 'Backend'
-                    },
-                    {
-                        name: 'Mobile',
-                        y: 8.15, // Percentage
-                        drilldown: 'Mobile'
-                    },
-                    {
-                        name: 'Desktop',
-                        y: 11.02, // Percentage
-                        drilldown: 'Desktop'
-                    },
-                    {
-                        name: 'Design',
-                        y: 11.02, // Percentage
-                        drilldown: 'Design'
-                    }
-                ]
-            }
-        ],
-        drilldown: {
-            series: [
-                // Drilldown series data...
-            ]
+    plotOptions: {
+      series: {
+        borderRadius: 8,
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}: {point.y:1f}',
+          style: {
+            fontSize: '1.4rem'
+          }
         }
-    };
+      }
+    },
 
-    return { pieChartSecond }
+    tooltip: {
+      headerFormat: '<span style="font-size:1.2rem">{series.name}</span><br>',
+      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:2f}</b> of total developers<br/>',
+      style: {
+        fontSize: '1.4rem'
+      }
+    },
+
+    series: [
+      {
+        name: 'Major',
+        colorByPoint: true,
+        data: userMajorData
+      }
+    ],
+    drilldown: {
+      series: [
+        // Drilldown series data...
+      ]
+    }
+  };
+
+  return { pieChartSecond }
 }

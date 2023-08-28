@@ -1,33 +1,7 @@
-import { useEffect, useState } from "react"
-import useURL from "../useURL"
-import axios from "axios"
+import useUserData from "./useUserData"
 
 export function useLineGraph() {
-  const { usersStatsUrl } = useURL()
-
-  const [byDate, setByDate] = useState([])
-  const [userCount, setUserCount] = useState([])
-
-  useEffect(
-    () => {
-      axios.get(usersStatsUrl)
-        .then((res) => {
-
-          // Getting users data
-          const dates = res.data.map(item => item.date.slice(0, 10))
-          setByDate(dates)
-
-          // Getting users number
-          const userNumbers = res.data.map(item => item.user_count)
-          setUserCount(userNumbers)
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    }, [usersStatsUrl]
-  )
-  useEffect(() => { console.log(byDate); }, [byDate])
-
+  const { byDate, userCount } = useUserData()
 
   const lineGraph = {
     chart: {
