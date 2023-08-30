@@ -12,6 +12,7 @@
 }
 body{
   background: var(--lightGrayBackground);
+  user-select: none;
 }
 
 .landing-page {

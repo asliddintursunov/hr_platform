@@ -10,6 +10,7 @@ import '../App.css'
 // Layouts
 import SignUpLayout from '../layouts/SignUpLayout'
 import SignInLayout from '../layouts/SignInLayout'
+import ChatLayout from '../layouts/ChatLayout'
 
 // Pages
 import Home from './Home/Home'
@@ -24,7 +25,6 @@ import _PageNotFound404 from './_PageNotFound404'
 import _About from './_About'
 import _Resumes from './_Resumes'
 import _ResumeDetails from './_ResumeDetails'
-
 
 function App() {
 
@@ -48,7 +48,7 @@ function App() {
           <Route path='birthdays' element={<_Birthdays />} />
           <Route path='resumes' element={<_Resumes />} />
           <Route path='resumes/userResume' element={<_ResumeDetails />} />
-
+          <Route path='chat' element={<ChatLayout />} />
         </Route>
         <Route path='*' element={<_PageNotFound404 />} />
 

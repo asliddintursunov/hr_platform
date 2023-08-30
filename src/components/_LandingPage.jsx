@@ -99,6 +99,14 @@ function _LandingPage() {
                 <i className="bi bi-file-person"></i>
                 &#160; Resumes
               </NavLink>
+
+              <NavLink
+                style={location.pathname === defaultPath + 'chat' ? navbarColor : null}
+                to='chat'>
+                <i className="bi bi-chat-dots-fill"></i>
+                &#160; Chat
+              </NavLink>
+              
             </div>
             <div className={styles.logout}>
               <button className='btn btn-dark'>HR Platform</button>

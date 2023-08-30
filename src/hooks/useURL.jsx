@@ -12,9 +12,11 @@ function useURL() {
   const RegisterByGoogle = 'http://192.168.5.130:1000/register_gmail'
   const SearchResumesUrl = 'http://192.168.5.130:1000/search'
   const usersStatsUrl = 'http://192.168.5.130:1000/stat'
+  const chatUrl = 'http://192.168.5.130:1000/chat'
+  const chatRoomUrl = 'http://192.168.5.130:1000/chat/room'
 
   return { BirthDayURL, defaultImage, AllUsersData, OneUserData, ProfileUpdate, ConfirmCode, LoginUrl, LogoutUrl, RegisterUrl, 
-    RegisterByGoogle, SearchResumesUrl, usersStatsUrl }
+    RegisterByGoogle, SearchResumesUrl, usersStatsUrl, chatUrl, chatRoomUrl}
 }
 
 export default useURL
