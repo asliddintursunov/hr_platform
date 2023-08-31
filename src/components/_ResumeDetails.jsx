@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react'
 import styles from '../css/ResumeDetails.module.css'
 import useURL from '../hooks/useURL'
 import axios from 'axios'
+import { baseUrl } from '../utils/api'
 function _ResumeDetails() {
-  const { SearchResumesUrl } = useURL()
   const [userResumeData, setUserResumeData] = useState([])
 
   const userID = localStorage.getItem('userResumeID')
 
   useEffect(
     () => {
-      axios.get(SearchResumesUrl + '/' + userID)
+      axios.get(`${baseUrl}` + '/search/' + userID)
         .then(res => {
           setUserResumeData(res.data)
         })
         .catch(err => console.error(err))
-    }, [SearchResumesUrl, userID]
+    }, [userID]
   )
 
   return (

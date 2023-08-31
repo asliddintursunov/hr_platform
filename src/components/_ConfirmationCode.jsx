@@ -4,15 +4,14 @@ import { useCallback } from 'react';
 import '../css/_PopUp.css'
 import { useNavigate } from 'react-router-dom';
 import useURL from '../hooks/useURL';
+import { baseUrl } from '../utils/api';
 function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode, confirmEmailCode,
   setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setIsOpen, setPopupInfo, setErrorOccured }) {
-
-  const { ConfirmCode } = useURL()
 
   const navigate = useNavigate()
 
   const sendEmailCode = useCallback(() => {
-    axios.post(ConfirmCode, {
+    axios.post(`${baseUrl}/register/code`, {
       code: confirmEmailCode.toString(),
       username: localStorage.getItem('new_username')
     })
@@ -20,7 +19,7 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
         if (req.status === 202) {
           console.log(202, req);
           setConfirmCodeOpen(true)
-          
+
           setErrorOccured(true)
           setIsOpen(true)
           setPopupInfo(req.data)
@@ -28,14 +27,14 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
         if (req.status === 200) {
           console.log(200, req);
           setConfirmCodeOpen(false)
-          
+
           setErrorOccured(false)
-          
+
           setUsernameValue('')
           setEmailValue('')
           setPasswordValue('')
           setPasswordMatchValue('')
-          
+
           setTimeout(() => {
             setIsOpen(true)
             setPopupInfo(req.data)
@@ -54,10 +53,10 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
         setErrorOccured(true)
         setConfirmCodeOpen(false)
         setPopupInfo(err.response.data)
-        
+
       })
-  }, [confirmEmailCode, setIsOpen, setPopupInfo, navigate, ConfirmCode, setUsernameValue, setEmailValue, 
-    setPasswordValue, setPasswordMatchValue,  setConfirmCodeOpen, setErrorOccured])
+  }, [confirmEmailCode, setIsOpen, setPopupInfo, navigate, setUsernameValue, setEmailValue,
+    setPasswordValue, setPasswordMatchValue, setConfirmCodeOpen, setErrorOccured])
   // const [emailCode, setEmailCode] = useState(null);
 
   const ClickSendBtn = () => {

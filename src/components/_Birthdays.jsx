@@ -2,13 +2,11 @@ import axios from "axios"
 import { useCallback, useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import _PopUp from "./_PopUp"
-import useURL from "../hooks/useURL"
 import styles from '../css/Birthdays.module.css'
+import { baseUrl } from "../utils/api"
 function _Birthdays() {
 
   const navigate = useNavigate()
-
-  const { BirthDayURL } = useURL()
 
   const [userBday, setUserBday] = useState([]) // Shows User's B-day in table
   var setUserBdayToDays = [] // Users' B-day in days in array
@@ -25,13 +23,6 @@ function _Birthdays() {
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
 
-  // Add a request interceptor
-  axios.interceptors.request.use(function (config) {
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = 'Bearer ' + token;
-
-    return config;
-  });
 
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
@@ -47,7 +38,7 @@ function _Birthdays() {
 
   const getBday = useCallback(() => {
     setIsPending(true)
-    axios.get(BirthDayURL)
+    axios.get(`${baseUrl}/users`)
       .then(res => {
         setIsPending(false)
         setUserBday(res.data)
@@ -60,7 +51,7 @@ function _Birthdays() {
         }
         setIsPending(false)
       })
-  }, [tokenExpired, BirthDayURL])
+  }, [tokenExpired])
   useEffect(() => { getBday() }, [getBday])
 
   const dayTillBirthday = () => {
@@ -120,11 +111,11 @@ function _Birthdays() {
 
   const greenBackground = {
     // backgroundColor: 'rgb(23, 172, 23)',
-  background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
+    background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
     // backgroundColor: 'lime',
     color: 'var(--white)',
   }
-  
+
   return (
     <div className={`container pageAnimation`}>
       <br />

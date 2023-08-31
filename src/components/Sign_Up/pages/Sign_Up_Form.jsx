@@ -17,10 +17,8 @@ import GoogleAUTH from '../../../GoogleAUTH'
 import { useUsername } from '../../../hooks/useUsername'
 import { useEmail } from '../../../hooks/useEmail'
 import { useConfirmPassword } from '../../../hooks/useConfirmPassword'
-import useURL from '../../../hooks/useURL'
+import { baseUrl } from '../../../utils/api'
 function Sign_Up_Form() {
-
-  const { RegisterUrl } = useURL()
 
   // Pop Up States  
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +44,7 @@ function Sign_Up_Form() {
 
   const addNewUser = () => {
     if (passwordValue == passwordMatchValue) {
-      axios.post(RegisterUrl, {
+      axios.post(`${baseUrl}/register`, {
         username: usernameValue,
         email: emailValue,
         password: passwordValue,
@@ -89,7 +87,7 @@ function Sign_Up_Form() {
         <div>
           <h2><i className="bi bi-lock lock"></i></h2>
           <h2>Sign Up</h2>
-          <GoogleAUTH page={'/signin'} number={1}/>
+          <GoogleAUTH page={'/signin'} number={1} />
         </div>
         <hr style={{ width: '100%' }} />
         <br />

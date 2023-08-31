@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from '../css/Resumes.module.css'
-import useURL from '../hooks/useURL'
 import axios from 'axios'
+import { baseUrl } from '../utils/api'
 function _Resumes() {
-  const { SearchResumesUrl } = useURL()
+
   const navigate = useNavigate()
-  // var ResumeNumbers = []
-  // var ResumeSkills = []
 
   const [skills, setSkills] = useState([])
   const [experience, setExperience] = useState('')
@@ -28,11 +26,9 @@ function _Resumes() {
   ]
 
   const sendData = () => {
-    // ResumeNumbers.length = 0
-    // ResumeSkills.length = 0
     setResumeData([])
 
-    axios.post(SearchResumesUrl, {
+    axios.post(`${baseUrl}/search`, {
       skills: skills.length === 0 ? undefined : skills,
       major: major === '' ? undefined : major,
       experience: experience === '' ? undefined : experience,
@@ -41,23 +37,14 @@ function _Resumes() {
         setResumeData(res.data.results)
         console.log(res);
 
-        //* Getting numbers and skills!
-        // for (let i = 0; i < res.data.results.length; i++) {
-        //   ResumeNumbers.push(res.data.results[i].phone_number.slice(2, -2))
-        //   ResumeSkills.push(res.data.results[i].skills.slice(2, -2))
-        // }
-        // console.log(ResumeNumbers);
-        // console.log(ResumeSkills);
       })
       .catch(err => console.error(err))
   }
 
   const seeAllResumes = () => {
-    // ResumeNumbers.length = 0
-    // ResumeSkills.length = 0
     setResumeData([])
 
-    axios.post(SearchResumesUrl, {
+    axios.post(`${baseUrl}/search`, {
       skills: undefined,
       major: undefined,
       experience: undefined
@@ -65,14 +52,6 @@ function _Resumes() {
       .then(res => {
         setResumeData(res.data.results)
         console.log(res);
-
-        //* Getting numbers and skills!
-        // for (let i = 0; i < res.data.results.length; i++) {
-        //   ResumeNumbers.push(res.data.results[i].phone_number.slice(2, -2))
-        //   ResumeSkills.push(res.data.results[i].skills.slice(2, -2))
-        // }
-        // console.log(ResumeNumbers);
-        // console.log(ResumeSkills);
       })
       .catch(err => console.error(err))
   }
@@ -95,7 +74,7 @@ function _Resumes() {
 
   useEffect(
     () => {
-      axios.post(SearchResumesUrl, {
+      axios.post(`${baseUrl}/search`, {
         skills: undefined,
         major: undefined,
         experience: undefined
@@ -104,7 +83,7 @@ function _Resumes() {
           setResumeData(res.data.results)
         })
         .catch(err => console.error(err))
-    }, [SearchResumesUrl]
+    }, []
   )
 
   const seeResumeDetail = (userID) => {
@@ -223,9 +202,6 @@ function _Resumes() {
           </form>
         </aside>
       </main>
-      <footer className={styles.footer} style={{ backgroundColor: '#623CEA' }}>
-        Footer
-      </footer>
     </div>
   )
 }

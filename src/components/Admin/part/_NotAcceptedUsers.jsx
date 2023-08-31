@@ -5,10 +5,11 @@ import _PopUp from "../../_PopUp"
 import { useNavigate } from "react-router-dom"
 import useURL from "../../../hooks/useURL"
 import styles from '../../../css/Admin.module.css'
+import { baseUrl } from "../../../utils/api"
 function _NotAcceptedUsers() {
 
   const navigate = useNavigate()
-  const {defaultImage, AllUsersData, OneUserData} = useURL()
+  const { defaultImage } = useURL()
 
   const [datas, setDatas] = useState('')
   const [isPending, setIsPending] = useState(false)
@@ -17,14 +18,6 @@ function _NotAcceptedUsers() {
   const [isOpen, setIsOpen] = useState(false);
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
-
-  // Add a request interceptor
-  axios.interceptors.request.use(function (config) {
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = 'Bearer ' + token;
-
-    return config;
-  });
 
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
@@ -39,7 +32,7 @@ function _NotAcceptedUsers() {
 
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(AllUsersData)
+    axios.get(`${baseUrl}/users`)
       .then((req) => {
         setDatas(req.data)
         setIsPending(false)
@@ -50,7 +43,7 @@ function _NotAcceptedUsers() {
         }
         setIsPending(false)
       })
-  }, [AllUsersData, tokenExpired])
+  }, [tokenExpired])
 
   useEffect(() => { fetchData() }, [fetchData])
 
@@ -60,7 +53,7 @@ function _NotAcceptedUsers() {
       return prev.filter(e => e.id !== id)
     })
 
-    axios.patch(OneUserData + `/${id}`, {
+    axios.patch(`${baseUrl}/user/${id}`, {
       accepted: true,
     })
       .then((res) => {
@@ -83,7 +76,7 @@ function _NotAcceptedUsers() {
       return prev.filter(e => e.id !== id)
     })
 
-    axios.delete(OneUserData + `/${id}`)
+    axios.delete(`${baseUrl}/user/${id}`)
       .then((res) => {
         console.log(res);
         setPopupInfo(res.data)

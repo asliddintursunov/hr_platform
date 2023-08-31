@@ -5,11 +5,12 @@ import { useCallback, useEffect, useState } from "react"
 import _PopUp from "../_PopUp"
 import { useNavigate } from "react-router-dom"
 import useURL from "../../hooks/useURL"
+import { baseUrl } from "../../utils/api"
 function Moderator() {
 
   const navigate = useNavigate()
 
-  const {defaultImage, AllUsersData, OneUserData} = useURL()
+  const { defaultImage } = useURL()
   const [datas, setDatas] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -38,7 +39,7 @@ function Moderator() {
 
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(AllUsersData)
+    axios.get(`${baseUrl}/users`)
       .then((req) => {
         setIsPending(false)
         setDatas(req.data)
@@ -50,16 +51,16 @@ function Moderator() {
         setIsPending(false)
 
       })
-  }, [AllUsersData, tokenExpired])
+  }, [tokenExpired])
 
   useEffect(() => { fetchData() }, [fetchData])
-  
+
   const handleDelete = (id) => {
     setDatas(prev => {
       return prev.filter(data => data.id !== id)
     })
 
-    axios.delete(OneUserData + `/${id}`)
+    axios.delete(`${baseUrl}/user/${id}`)
       .then((res) => {
         setErrorOccured(false)
         setPopupInfo(res.data)

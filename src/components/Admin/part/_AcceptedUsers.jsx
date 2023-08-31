@@ -4,11 +4,12 @@ import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import _PopUp from "../../_PopUp"
 import useURL from "../../../hooks/useURL"
+import { baseUrl } from "../../../utils/api"
 function _AcceptedUsers() {
 
   const navigate = useNavigate()
 
-  const { defaultImage, AllUsersData, OneUserData } = useURL()
+  const { defaultImage } = useURL()
 
   const [datas, setDatas] = useState(null)
   const [userRole, setUserRole] = useState('user')
@@ -18,14 +19,6 @@ function _AcceptedUsers() {
   const [isOpen, setIsOpen] = useState(false);
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
-
-  // Add a request interceptor
-  axios.interceptors.request.use(function (config) {
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = 'Bearer ' + token;
-
-    return config;
-  });
 
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
@@ -40,7 +33,7 @@ function _AcceptedUsers() {
 
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(AllUsersData)
+    axios.get(`${baseUrl}/users`)
       .then((req) => {
         setIsPending(false)
         setDatas(req.data)
@@ -51,17 +44,16 @@ function _AcceptedUsers() {
         }
         setIsPending(false)
       })
-  }, [AllUsersData, tokenExpired])
+  }, [tokenExpired])
 
   useEffect(() => { fetchData() }, [fetchData])
 
   const handleDelete = (id) => {
-    setDatas(prev => {
-      return prev.filter(data => data.id !== id)
-    })
-
-    axios.delete(OneUserData + `/${id}`)
+    axios.delete(`${baseUrl}/user/${id}`)
       .then((res) => {
+        setDatas(prev => {
+          return prev.filter(data => data.id !== id)
+        })
         setErrorOccured(false)
         setPopupInfo(res.data)
         setIsOpen(true)
@@ -74,11 +66,13 @@ function _AcceptedUsers() {
         setErrorOccured(true)
         setPopupInfo('Qandaydir xatolik ro\'y berdi!')
         setIsOpen(true)
+
+        console.log(err);
       })
   }
 
   const handleEdit = (id) => {
-    axios.patch(OneUserData + `/${id}`, {
+    axios.patch(`${baseUrl}/user/${id}`, {
       role: userRole,
     })
       .then((res) => {

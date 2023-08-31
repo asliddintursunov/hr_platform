@@ -15,10 +15,9 @@ import GoogleAUTH from '../../../GoogleAUTH'
 import { useUsername } from '../../../hooks/useUsername'
 import { usePassword } from '../../../hooks/usePassword'
 import useURL from '../../../hooks/useURL'
+import { baseUrl } from '../../../utils/api'
 
 function Sign_In_Form() {
-
-  const {LoginUrl} = useURL()
 
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
     usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
@@ -35,7 +34,7 @@ function Sign_In_Form() {
 
 
   const logInToProfile = () => {
-    axios.post(LoginUrl, {
+    axios.post(`${baseUrl}/login`, {
       'username': usernameValue,
       'password': passwordValue,
     },)
@@ -74,7 +73,7 @@ function Sign_In_Form() {
           <h2><i className="bi bi-key-fill key"></i></h2>
           <h2>Sign In</h2>
         </div>
-        <GoogleAUTH page={'/landing'} number={2}/>
+        <GoogleAUTH page={'/landing'} number={2} />
         <hr style={{ width: '100%' }} />
         <br />
         <div className='input-container'>
