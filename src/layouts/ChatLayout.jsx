@@ -1,10 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import _ChatUserSidebar from "../components/_ChatUserSidebar"
 import _ChatWebsocketPlace from "../components/_ChatWebsocketPlace"
 import styles from "../css/Chat.module.css"
-import useURL from "../hooks/useURL"
 import axios from "axios"
 import { baseUrl } from "../utils/api"
+import { io } from "socket.io-client"
 function ChatLayout() {
   const [chatSelected, setChatSelected] = useState(false)
   const [oneUserData, setOneUserData] = useState({})
@@ -12,7 +12,7 @@ function ChatLayout() {
 
   const [showUsers, setShowUsers] = useState(false)
   const usersSideBarStyle = {
-    transform: "translateX(90%)"
+    flex: 0.3
   }
 
   const GetReceiverUsername = async (id, username) => {
@@ -43,10 +43,34 @@ function ChatLayout() {
       })
   }
 
+
+  // const [socketMessage, setSocketMessage] = useState('')
+  // const [socketMessageS, setSocketMessageS] = useState([])
+
+  // const socket = io('http://localhost:5000')
+
+  // useEffect(
+  //   () => {
+  //     socket.on('message', (data) => {
+  //       setSocketMessageS((prevMessages) => [...prevMessages, data])
+  //     })
+
+  //     return () => {
+  //       socket.disconnect()
+  //     }
+  //   }, [socket]
+  // )
+  // const sendMessage = () => {
+  //   if (socketMessage.trim() !== '') {
+  //     socket.emit('message', socketMessage)
+  //     setSocketMessage('')
+  //   }
+  // }
+
   return (
     <div className={`${styles.chatLayoutContainer} pageAnimation`}>
       <div className={styles.chatPlace}>
-        {chatSelected && <_ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} />}
+        {chatSelected && <_ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} showUsers={showUsers} />}
         {!chatSelected && (
           <h1 className="display-2 text-center">
             Select A Chat to have a conversation!

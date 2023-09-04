@@ -3,7 +3,7 @@ import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
 import axios from "axios"
 import { baseUrl } from "../utils/api"
-function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers, usersSideBarStyle }) {
+function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 	const { defaultImage } = useURL()
 	const [usersData, setUsersData] = useState([])
 
@@ -25,7 +25,7 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers, usersS
 			<div className={styles.usersShowHide} onClick={() => setShowUsers(!showUsers)}>
 				<i className="bi bi-list"></i>
 			</div>
-			<h1 className="text-center">Users List</h1>
+			<h2 className="text-center" style={showUsers ? { color: 'transparent' } : null}>Users List</h2>
 			{usersData &&
 				usersData.map((user) => {
 					return (

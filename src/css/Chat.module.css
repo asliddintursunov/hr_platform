@@ -4,17 +4,16 @@
 	flex-direction: row;
 	align-items: flex-start;
 	justify-content: space-between;
-	/* background-color: red; */
 	gap: 1rem;
 	user-select: text;
 }
 
 .chatPlace {
-	flex: 4;
+	flex: 5;
 	display: flex;
 	flex-direction: column;
-	/* align-items: center; */
 	justify-content: center;
+	box-shadow: 0 0 3px darkgray;
 }
 
 
@@ -22,26 +21,13 @@
 .usersSidebar {
 	flex: 1;
 	padding: 2rem 1rem;
-	min-width: 320px;
 	background-color: var(--white);
 	box-shadow: 0 0 10px lightgray;
 	display: flex;
 	flex-direction: column;
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	-ms-border-radius: 4px;
-	-o-border-radius: 4px;
-	position: fixed;
-	right: 3rem;
-	top: 2rem;
 	height: 100%;
-	overflow: scroll;
-	transition: all 0.2s;
-	-webkit-transition: all 0.2s;
-	-moz-transition: all 0.2s;
-	-ms-transition: all 0.2s;
-	-o-transition: all 0.2s;
+	overflow-y: scroll;
+	position: relative;
 }
 
 .usersListContainer {
@@ -49,7 +35,6 @@
 	flex-direction: column;
 	justify-content: center;
 	gap: 1rem;
-	position: relative;
 }
 
 .usersShowHide {
@@ -57,10 +42,8 @@
 	color: orangered;
 	cursor: pointer;
 	font-size: 4rem;
-	/* top: -2.8rem;
-	left: -1rem; */
-	left: 0.5rem;
-	top: -1.5rem;
+	left: 1rem;
+	top: 0;
 }
 
 .userCard {
@@ -82,6 +65,7 @@
 	-moz-transition: all 0.2s;
 	-ms-transition: all 0.2s;
 	-o-transition: all 0.2s;
+	overflow: auto;
 }
 
 .userCard:hover {
@@ -108,102 +92,28 @@
 
 
 /** =============== Chatting Place  =============== */
-.chatPlaceContainer {
+
+.conversationPath {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 	height: 100%;
-	position: relative;
-	max-width: 1270px;
-	margin: 3rem 0 4rem 0;
-	background-color: rgb(229, 229, 229);
-	box-shadow: 0 0 5px darkgray;
 }
-
-@media (max-width: 1880px) {
-	.chatPlaceContainer {
-		max-width: 1170px;
-	}
-}
-
-@media (max-width: 1810px) {
-	.chatPlaceContainer {
-		max-width: 1060px;
-	}
-}
-
-@media (max-width: 1740px) {
-	.chatPlaceContainer {
-		max-width: 1000px;
-	}
-}
-
-@media (max-width: 1670px) {
-	.chatPlaceContainer {
-		max-width: 930px;
-	}
-}
-
-@media (max-width: 1600px) {
-	.chatPlaceContainer {
-		max-width: 840px;
-	}
-}
-
-@media (max-width: 1530px) {
-	.chatPlaceContainer {
-		max-width: 770px;
-	}
-}
-
-@media (max-width: 1460px) {
-	.chatPlaceContainer {
-		max-width: 700px;
-	}
-}
-
-@media (max-width: 1310px) {
-	.chatPlaceContainer {
-		max-width: 630px;
-	}
-}
-
-@media (max-width: 1240px) {
-	.chatPlaceContainer {
-		max-width: 540px;
-	}
-}
-
-@media (max-width: 1170px) {
-	.chatPlaceContainer {
-		max-width: 490px;
-	}
-}
-
-@media (max-width: 1100px) {
-	.chatPlaceContainer {
-		max-width: 420px;
-	}
-}
-
 
 .receiverHeader {
-	padding: 0.4rem 0 0.4rem 1.2rem;
+	padding: 0.8rem 1rem;
+	position: relative;
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
 	display: flex;
 	flex-direction: row-reverse;
 	align-items: center;
 	justify-content: start;
 	gap: 0.7rem;
 	background-color: lightgray;
-	position: fixed;
-	top: 0;
-	width: 1270px;
-	z-index: 10;
-	box-shadow: 0 4px 6px rgb(189, 189, 189);
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	-ms-border-radius: 4px;
-	-o-border-radius: 4px;
+	z-index: 2;
 }
 
 .receiverHeader>img {
@@ -221,122 +131,19 @@
 	font-size: 1.7rem;
 }
 
-.chatWrapper {
-	height: 100%;
-	position: relative;
-}
-
 .chatInputPart {
-	position: absolute;
-	position: fixed;
+	position: sticky;
+	left: 0;
 	bottom: 0;
+	width: 100%;
 	padding: 1rem;
 	background-color: lightgray;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	width: 1270px;
 }
 
-@media (max-width: 1880px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 1160px;
-	}
-}
-
-@media (max-width: 1810px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 1060px;
-	}
-}
-
-@media (max-width: 1740px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 990px;
-	}
-}
-
-@media (max-width: 1670px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 910px;
-	}
-}
-
-@media (max-width: 1600px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 830px;
-	}
-}
-
-@media (max-width: 1530px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 760px;
-	}
-}
-
-@media (max-width: 1460px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 690px;
-	}
-}
-
-@media (max-width: 1310px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 620px;
-	}
-}
-
-@media (max-width: 1240px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 550px;
-	}
-}
-
-@media (max-width: 1170px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 480px;
-	}
-}
-
-@media (max-width: 1100px) {
-
-	.chatInputPart,
-	.receiverHeader,
-	.conversationPath {
-		width: 410px;
-	}
-}
 
 .chatInputPart>input {
 	width: 100%;
@@ -347,11 +154,4 @@
 .chatInputPart>button {
 	padding: 0.7rem;
 	border: none;
-}
-
-.conversationPath {
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	width: 100%;
 }
