@@ -3,8 +3,11 @@ import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
 import axios from "axios"
 import { baseUrl } from "../utils/api"
+import { io } from "socket.io-client"
 
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
+	const socket = io(baseUrl)
+
 	const sendingStyle = {
 		padding: "0.3rem 1.6rem",
 		color: "#fff",
@@ -69,32 +72,27 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	const senderId = localStorage.getItem("userId")
 	const receiverId = localStorage.getItem("receiverId")
 
-	const textSend = async () => {
-		if (senderText !== "") {
-			await axios
-				.post(`${baseUrl}/chat/${senderId}`, {
-					receiver_id: receiverId,
-					message_text: senderText
-				})
-				.then((res) => {
-					console.log(res.data)
-				})
-				.catch((err) => {
-					console.log(err)
-				})
-			setSenderText("")
+	socket.on("connected", (data) => {
+		// console.log(data)
+	})
 
-			await axios
-				.get(`${baseUrl}/chat/room?user_id1=${senderId}&user_id2=${receiverId}`)
-				.then((res) => {
-					setMessages(res.data)
-					console.log(res.data)
-				})
-				.catch((err) => {
-					console.log(err)
-				})
+	socket.on("message", (data) => {
+		console.log(data);
+		setMessages(data)
+	})
+
+	const textSend = async () => {
+		if (senderText.trim() !== "") {
+			const data = {
+				message: senderText,
+				sender_id: senderId,
+				receiver_id: receiverId
+			}
+			socket.emit("message", data)
+			setSenderText("")
 		}
 	}
+
 	return (
 		<Fragment>
 			<div className={styles.receiverHeader}>
@@ -108,7 +106,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 							<div key={message.timestamp}>
 								{message.sender_id === Number(senderId) ? (
 									<div style={message.sender_id === Number(senderId) && sendingStyle}>
-										<p style={sender_P}>{message.message_text}</p>
+										<p style={sender_P}>{message.message}</p>
 										<i style={sender_Time}>
 											&#40;{new Date(message.timestamp).getFullYear()}&#45;
 											{String(new Date(message.timestamp).getMonth() + 1).padStart(2, "0")}&#45;
@@ -119,7 +117,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 									</div>
 								) : message.sender_id === Number(receiverId) ? (
 									<div style={message.sender_id === Number(receiverId) && receivingStyle}>
-										<p style={receiver_P}>{message.message_text}</p>
+										<p style={receiver_P}>{message.message}</p>
 										<i style={receiver_Time}>
 											&#40;{new Date(message.timestamp).getFullYear()}&#45;
 											{String(new Date(message.timestamp).getMonth() + 1).padStart(2, "0")}&#45;
@@ -133,7 +131,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 						)
 					})}
 			</div>
-			<form className={styles.chatInputPart} onSubmit={(e) => e.preventDefault()} style={showUsers ? { right: '11.9rem' } : null}>
+			<form className={styles.chatInputPart} onSubmit={(e) => e.preventDefault()} style={showUsers ? { right: "11.9rem" } : null}>
 				<input type="text" className="form-control" onChange={(e) => setSenderText(e.target.value)} value={senderText} />
 				<button type="submit" onClick={() => textSend()}>
 					Send
