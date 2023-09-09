@@ -18,14 +18,16 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 			.catch((err) => {
 				console.log(err)
 			})
-	}, [])
+	}, [userid])
 
 	return (
-		<div className={styles.usersListContainer} >
+		<div className={styles.usersListContainer}>
 			<div className={styles.usersShowHide} onClick={() => setShowUsers(!showUsers)}>
 				<i className="bi bi-list"></i>
 			</div>
-			<h2 className="text-center" style={showUsers ? { color: 'transparent' } : null}>Users List</h2>
+			<h2 className="text-center" style={showUsers ? { color: "transparent" } : null}>
+				Users List
+			</h2>
 			{usersData &&
 				usersData.map((user) => {
 					return (

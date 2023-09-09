@@ -5,12 +5,13 @@
 
   --lightGrayBackground: #f4f4f4;
   --darkBackground: #222;
-  
+
   --oddUserGray: rgb(240, 240, 240);
   --evenUserGray: rgb(186, 185, 185);
 
 }
-body{
+
+body {
   background: var(--lightGrayBackground);
   user-select: none;
 }
@@ -83,25 +84,27 @@ body{
   }
 }
 
-.pageAnimation{
+.pageAnimation {
   animation: toLeft 0.4s 1;
   -webkit-animation: toLeft 0.4s 1;
 }
+
 @keyframes toLeft {
-  from{
+  from {
     opacity: 0;
     transform: translateY(-80px);
     -webkit-transform: translateY(-80px);
     -moz-transform: translateY(-80px);
     -ms-transform: translateY(-80px);
     -o-transform: translateY(-80px);
-}
-to{
-  opacity: 1;
-  transform: translateY(0);
-  -webkit-transform: translateY(0);
-  -moz-transform: translateY(0);
-  -ms-transform: translateY(0);
-  -o-transform: translateY(0);
-}
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+  }
 }

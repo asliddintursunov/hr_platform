@@ -1,25 +1,20 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import _ChatUserSidebar from "../components/_ChatUserSidebar"
 import _ChatWebsocketPlace from "../components/_ChatWebsocketPlace"
 import styles from "../css/Chat.module.css"
 import axios from "axios"
 import { baseUrl } from "../utils/api"
-import { io } from "socket.io-client"
 
 function ChatLayout() {
-  const socket = io(baseUrl)
   const [chatSelected, setChatSelected] = useState(false)
   const [oneUserData, setOneUserData] = useState({})
   const [messages, setMessages] = useState([])
 
   const [showUsers, setShowUsers] = useState(false)
   const usersSideBarStyle = {
-    flex: 0.3
+    transform: 'translateX(78%)',
+    flex: 0.5,
   }
-
-  socket.on("connected", (data) => {
-    // console.log(data)
-  })
 
   const GetReceiverUsername = async (id, username) => {
     localStorage.setItem("receiverId", id)
@@ -41,7 +36,6 @@ function ChatLayout() {
     await axios
       .get(`${baseUrl}/chat/room?user_id1=${senderId}&user_id2=${id}`)
       .then((res) => {
-        console.log(res.data)
         setMessages(res.data)
       })
       .catch((err) => {
