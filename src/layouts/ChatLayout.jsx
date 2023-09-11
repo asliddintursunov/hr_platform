@@ -34,7 +34,7 @@ function ChatLayout() {
       .catch((err) => console.log(err))
 
     await axios
-      .get(`${baseUrl}/chat/room?user_id1=${senderId}&user_id2=${id}`)
+      .get(`${baseUrl}/chat/room`, { params: { user_id1: senderId, user_id2: id } })
       .then((res) => {
         setMessages(res.data)
       })

@@ -29,7 +29,6 @@ function GoogleAUTH({ page, number }) {
             id: id
           })
           .then((res) => {
-            console.log(res)
             setPopupInfo(res.data)
             setErrorOccured(false)
             setIsOpen(true)
@@ -39,7 +38,6 @@ function GoogleAUTH({ page, number }) {
             }, 2000)
           })
           .catch((err) => {
-            console.error(err)
             setPopupInfo(err.response.data)
             setErrorOccured(true)
             setIsOpen(true)
@@ -58,7 +56,6 @@ function GoogleAUTH({ page, number }) {
             password: id
           })
           .then((res) => {
-            console.log(res)
             setPopupInfo(res.data.message)
             setErrorOccured(false)
             setIsOpen(true)
@@ -72,7 +69,6 @@ function GoogleAUTH({ page, number }) {
             }, 2000)
           })
           .catch((err) => {
-            console.error(err)
             setPopupInfo(err.response.data.message)
             setErrorOccured(true)
             setIsOpen(true)

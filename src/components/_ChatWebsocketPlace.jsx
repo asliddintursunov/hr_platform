@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect, useState, useRef } from "react"
 import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
 import { io } from "socket.io-client"
@@ -8,29 +8,37 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	const { defaultImage } = useURL()
 	const [senderText, setSenderText] = useState("")
 	const [socket, setSocket] = useState(null)
+	const chatContainerRef = useRef(null)
 
 	const senderId = localStorage.getItem("userId")
 	const receiverId = localStorage.getItem("receiverId")
-	const conversationPathRef =
 
-		useEffect(() => {
-			const newSocket = io(baseUrl)
-			setSocket(newSocket)
+	const scrollToBottom = () => {
+		if (chatContainerRef.current) {
+			chatContainerRef.current.scrollIntoView({ behavior: "smooth" })
+		}
+	}
 
-			return () => {
-				if (newSocket) {
-					newSocket.disconnect()
-				}
+	useEffect(() => {
+		const newSocket = io(baseUrl)
+		setSocket(newSocket)
+
+		return () => {
+			if (newSocket) {
+				newSocket.disconnect()
 			}
-		}, [])
+		}
+	}, [])
 
 	useEffect(() => {
 		if (socket) {
 			socket.on("message", (data) => {
 				setMessages(data)
+				scrollToBottom()
 			})
 		}
 	}, [socket])
+	useEffect(() => { scrollToBottom() }, [messages])
 
 	const textSend = async () => {
 		if (senderText.trim() !== "") {
@@ -50,6 +58,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			date.getUTCMinutes()
 		).padStart(2, "0")}`
 	}
+
 
 	return (
 		<Fragment>
@@ -74,6 +83,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 							) : null}
 						</div>
 					))}
+				<div ref={chatContainerRef}></div>
 			</div>
 			<form className={styles.chatInputPart} onSubmit={(e) => e.preventDefault()} style={showUsers ? { right: "11.9rem" } : null}>
 				<input type="text" className="form-control" onChange={(e) => setSenderText(e.target.value)} value={senderText} />
@@ -110,7 +120,7 @@ const receivingStyle = {
 }
 
 const messageStyle = {
-	padding: "0.3rem 1.6rem 1rem 1.6rem",
+	padding: "0.3rem 1rem 1rem 1rem",
 	borderRadius: "4px",
 	border: "none",
 	minWidth: "10rem"
@@ -122,5 +132,6 @@ const timeStyle = {
 	fontSize: "1rem",
 	fontWeight: 400,
 	color: "lightgray",
-	padding: "0.3rem 0"
+	padding: "0.3rem 0.7rem",
+	fontWeight: 'bold'
 }

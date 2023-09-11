@@ -24,12 +24,13 @@ function App() {
   const routest = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/">
-        {(localStorage.getItem("userRole") == "admin") | (localStorage.getItem("userRole") == "admin") && <Route index element={<Home />} />}
         <Route path="signup" element={<SignUpLayout />} />
         <Route path="signin" element={<SignInLayout />} />
 
         <Route path="landing" element={<_LandingPage />}>
-          <Route index element={<_About />} />
+          {(localStorage.getItem("userRole") == "admin") && <Route index element={<_About />} />}
+          {(localStorage.getItem("userRole") == "moderator") && <Route index element={<_About />} />}
+          {(localStorage.getItem("userRole") == "user") && <Route index element={<UpdateProfile />} />}
           <Route path="profile" element={<UpdateProfile />} />
           {localStorage.getItem("userRole") == "admin" && (
             <Route path="admin" element={<Admin />}>
