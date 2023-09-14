@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom"
 import "../App.css"
 
 // Layouts
@@ -19,43 +19,67 @@ import _PageNotFound404 from "./_PageNotFound404"
 import _About from "./_About"
 import _Resumes from "./_Resumes"
 import _ResumeDetails from "./_ResumeDetails"
+import { useEffect, useState } from "react"
 
 function App() {
-  const routest = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/">
-        <Route path="signup" element={<SignUpLayout />} />
-        <Route path="signin" element={<SignInLayout />} />
+  const userRole = localStorage.getItem('userRole');
+  const [authenticated, setAuthenticated] = useState(localStorage.getItem("token"));
+  const navigate = useNavigate();
+  const location = useLocation();
 
-        <Route path="landing" element={<_LandingPage />}>
-          {(localStorage.getItem("userRole") == "admin") && <Route index element={<_About />} />}
-          {(localStorage.getItem("userRole") == "moderator") && <Route index element={<_About />} />}
-          {(localStorage.getItem("userRole") == "user") && <Route index element={<UpdateProfile />} />}
-          <Route path="profile" element={<UpdateProfile />} />
-          {localStorage.getItem("userRole") == "admin" && (
-            <Route path="admin" element={<Admin />}>
-              <Route path="accepted" element={<_AcceptedUsers />} />
-              <Route path="waitingusers" element={<_NotAcceptedUsers />} />
-            </Route>
-          )}
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("token");
+    if (loggedInUser) {
+      setAuthenticated(loggedInUser);
+      navigate("/landing/profile");
+    }
+  }, []);
 
-          {localStorage.getItem("userRole") == "moderator" && <Route path="moderator" element={<Moderator />} />}
-
-          <Route path="birthdays" element={<_Birthdays />} />
-          {localStorage.getItem("userRole") == "admin" && <Route path="resumes" element={<_Resumes />} />}
-          {localStorage.getItem("userRole") == "admin" && <Route path="resumes/userResume" element={<_ResumeDetails />} />}
-          <Route path="chat" element={<ChatLayout />} />
-        </Route>
-        <Route path="*" element={<_PageNotFound404 />} />
-      </Route>
-    )
-  )
+  useEffect(() => {
+    if (!authenticated) navigate("/signin");
+    else {
+      if (location.pathname !== "/landing/profile") navigate(location.pathname);
+      else navigate("/landing/profile");
+    }
+  }, [authenticated]);
 
   return (
     <div>
-      <RouterProvider router={routest} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUpLayout />} />
+        <Route path="/signin" element={<SignInLayout />} />
+        {authenticated ? (
+          <Route path="/landing" element={<_LandingPage />}>
+            {userRole == 'admin' && <Route index element={<_About />} />}
+            {userRole == 'moderator' && <Route index element={<_About />} />}
+            {userRole == 'user' && <Route index element={<UpdateProfile />} />}
+
+            <Route path="profile" element={<UpdateProfile />} />
+            {userRole === 'admin' && (
+              <>
+                <Route path="admin" element={<Admin />} />
+                <Route path="admin/accepted" element={<_AcceptedUsers />} />
+                <Route path="admin/waitingusers" element={<_NotAcceptedUsers />} />
+              </>
+            )}
+            {userRole === 'moderator' && <Route path="moderator" element={<Moderator />} />}
+            <Route path="birthdays" element={<_Birthdays />} />
+            {userRole === 'admin' && (
+              <>
+                <Route path="resumes" element={<_Resumes />} />
+                <Route path="resumes/userResume" element={<_ResumeDetails />} />
+              </>
+            )}
+            <Route path="chat" element={<ChatLayout />} />
+          </Route>
+        ) : (
+          <Route path="/signin" element={<SignInLayout />} />
+        )}
+        <Route path="*" element={<_PageNotFound404 />} />
+      </Routes>
     </div>
-  )
+  );
 }
 
 export default App

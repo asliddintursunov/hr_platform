@@ -8,6 +8,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	const { defaultImage } = useURL()
 	const [senderText, setSenderText] = useState("")
 	const [socket, setSocket] = useState(null)
+	const [scrollBottom, setScrollBottom] = useState(false)
 	const chatContainerRef = useRef(null)
 
 	const senderId = localStorage.getItem("userId")
@@ -42,6 +43,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 
 	const textSend = async () => {
 		if (senderText.trim() !== "") {
+			setScrollBottom(true)
 			const data = {
 				message: senderText,
 				sender_id: senderId,
@@ -73,17 +75,17 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 							{message.sender_id === Number(senderId) ? (
 								<div style={sendingStyle}>
 									<p style={{ ...messageStyle, backgroundColor: "green" }}>{message.message}</p>
-									<i style={timeStyle}>{formatMessageTimestamp(message.timestamp)}</i>
+									<i style={timeStyle}>{message.timestamp}</i>
 								</div>
 							) : message.sender_id === Number(receiverId) ? (
 								<div style={receivingStyle}>
 									<p style={{ ...messageStyle, backgroundColor: "royalblue" }}>{message.message}</p>
-									<i style={timeStyle}>{formatMessageTimestamp(message.timestamp)}</i>
+									<i style={timeStyle}>{message.timestamp}</i>
 								</div>
 							) : null}
 						</div>
 					))}
-				<div ref={chatContainerRef}></div>
+				{scrollBottom && <div ref={chatContainerRef}></div>}
 			</div>
 			<form className={styles.chatInputPart} onSubmit={(e) => e.preventDefault()} style={showUsers ? { right: "11.9rem" } : null}>
 				<input type="text" className="form-control" onChange={(e) => setSenderText(e.target.value)} value={senderText} />
