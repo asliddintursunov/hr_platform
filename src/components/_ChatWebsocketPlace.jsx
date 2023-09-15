@@ -9,16 +9,16 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	const [senderText, setSenderText] = useState("")
 	const [socket, setSocket] = useState(null)
 	const [scrollBottom, setScrollBottom] = useState(false)
-	const chatContainerRef = useRef(null)
+	const chatContainerRef = useRef(null);
 
 	const senderId = localStorage.getItem("userId")
 	const receiverId = localStorage.getItem("receiverId")
 
 	const scrollToBottom = () => {
 		if (chatContainerRef.current) {
-			chatContainerRef.current.scrollIntoView({ behavior: "smooth" })
+			chatContainerRef.current.scrollIntoView({ behavior: "smooth" });
 		}
-	}
+	};
 
 	useEffect(() => {
 		const newSocket = io(baseUrl)
@@ -54,13 +54,6 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 		}
 	}
 
-	function formatMessageTimestamp(timestamp) {
-		const date = new Date(timestamp)
-		return `(${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}) ${String(date.getUTCHours()).padStart(2, "0")}:${String(
-			date.getUTCMinutes()
-		).padStart(2, "0")}`
-	}
-
 
 	return (
 		<Fragment>
@@ -71,7 +64,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			<div className={styles.conversationPath}>
 				{messages &&
 					messages.map((message, index) => (
-						<div key={index}>
+						<div key={index} ref={message.ref}>
 							{message.sender_id === Number(senderId) ? (
 								<div style={sendingStyle}>
 									<p style={{ ...messageStyle, backgroundColor: "green" }}>{message.message}</p>

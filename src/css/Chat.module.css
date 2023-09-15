@@ -50,7 +50,9 @@
 }
 
 .userCard {
+	position: relative;
 	padding: 0.4rem;
+	padding-top: 0.8rem;
 	display: flex;
 	flex-direction: row-reverse;
 	align-items: center;
@@ -85,9 +87,20 @@
 	object-fit: cover;
 }
 
-.userCard>span {
+.userCard>span:last-child {
 	font-size: 1.7rem;
 	color: var(--dark);
+}
+
+.unreadMsg {
+	position: absolute;
+	right: 1rem;
+	top: 0.3rem;
+	background-color: orange;
+	padding: 0rem 0.8rem;
+	text-align: center;
+	color: #fff;
+	border-radius: 50%;
 }
 
 /* ======================================== */

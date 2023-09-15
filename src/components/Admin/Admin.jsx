@@ -1,4 +1,3 @@
-// import './Admin.css' 
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import styles from '../../css/Admin.module.css'
 function Admin() {
@@ -18,10 +17,10 @@ function Admin() {
       <nav className={`container ${styles.adminNav}`}>
         <NavLink
           style={location.pathname === defaultPath + 'accepted' ? navbarColor : null}
-          to='accepted'>Accepted Users</NavLink>
+          to='admin/accepted'>Accepted Users</NavLink>
         <NavLink
           style={location.pathname === defaultPath + 'waitingusers' ? navbarColor : null}
-          to='waitingusers'>Waiting Users</NavLink>
+          to='admin/waitingusers'>Waiting Users</NavLink>
         <br />
       </nav>
       <Outlet />

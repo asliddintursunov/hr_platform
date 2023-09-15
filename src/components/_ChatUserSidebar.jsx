@@ -13,6 +13,7 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 		axios
 			.get(`${baseUrl}/chat/${userid}`)
 			.then((res) => {
+				console.log(res.data);
 				setUsersData(res.data)
 			})
 			.catch((err) => {
@@ -32,6 +33,7 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 				usersData.map((user) => {
 					return (
 						<div key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(user.id, user.username)}>
+							<span className={styles.unreadMsg}>{user.unread_msg}</span>
 							<span>{user.username}</span>
 							<img src={user.profile_photo !== null ? user.profile_photo : defaultImage} />
 						</div>

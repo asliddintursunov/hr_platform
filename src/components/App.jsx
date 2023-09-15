@@ -31,16 +31,16 @@ function App() {
     const loggedInUser = localStorage.getItem("token");
     if (loggedInUser) {
       setAuthenticated(loggedInUser);
-      navigate("/landing/profile");
+      if (location.pathname === '/signin') navigate("/landing");
     }
   }, []);
 
   useEffect(() => {
     if (!authenticated) navigate("/signin");
-    else {
-      if (location.pathname !== "/landing/profile") navigate(location.pathname);
-      else navigate("/landing/profile");
-    }
+    else if (authenticated)
+      navigate('/landing')
+    else if (location.pathname)
+      navigate(location.pathname)
   }, [authenticated]);
 
   return (
@@ -58,9 +58,10 @@ function App() {
             <Route path="profile" element={<UpdateProfile />} />
             {userRole === 'admin' && (
               <>
-                <Route path="admin" element={<Admin />} />
-                <Route path="admin/accepted" element={<_AcceptedUsers />} />
-                <Route path="admin/waitingusers" element={<_NotAcceptedUsers />} />
+                <Route path="admin" element={<Admin />}>
+                  <Route path="admin/accepted" element={<_AcceptedUsers />} />
+                  <Route path="admin/waitingusers" element={<_NotAcceptedUsers />} />
+                </Route>
               </>
             )}
             {userRole === 'moderator' && <Route path="moderator" element={<Moderator />} />}
@@ -76,6 +77,7 @@ function App() {
         ) : (
           <Route path="/signin" element={<SignInLayout />} />
         )}
+        {!authenticated && < Route path="/landing" element={<_LandingPage />} />}
         <Route path="*" element={<_PageNotFound404 />} />
       </Routes>
     </div>

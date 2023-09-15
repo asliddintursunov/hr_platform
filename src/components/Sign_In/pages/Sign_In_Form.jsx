@@ -57,9 +57,11 @@ function Sign_In_Form() {
       })
       .then((res) => {
         setIsOpen(true)
+
         localStorage.setItem("token", res.data.token)
         localStorage.setItem("userId", res.data.id)
         localStorage.setItem("userRole", res.data.role)
+
         setPopupInfo(res.data.message)
         setErrorOccured(false)
 
