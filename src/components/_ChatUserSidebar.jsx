@@ -13,7 +13,6 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 		axios
 			.get(`${baseUrl}/chat/${userid}`)
 			.then((res) => {
-				console.log(res.data);
 				setUsersData(res.data)
 			})
 			.catch((err) => {
