@@ -77,7 +77,7 @@ function App() {
         ) : (
           <Route path="/signin" element={<SignInLayout />} />
         )}
-        {!authenticated && < Route path="/landing" element={<_LandingPage />} />}
+        {!authenticated && <Route path="/landing" element={<_LandingPage />} />}
         <Route path="*" element={<_PageNotFound404 />} />
       </Routes>
     </div>

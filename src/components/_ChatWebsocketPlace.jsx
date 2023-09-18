@@ -11,6 +11,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	const [socket, setSocket] = useState(null)
 	const [scrollBottom, setScrollBottom] = useState(false)
 	const chatContainerRef = useRef(null);
+	const [smsSend, setSmsSend] = useState(false)
 
 	const senderId = localStorage.getItem("userId")
 	const receiverId = localStorage.getItem("receiverId")
@@ -35,6 +36,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	useEffect(() => {
 		if (socket) {
 			socket.on("message", (data) => {
+				setSmsSend(false)
 				setMessages(data)
 				scrollToBottom()
 			})
@@ -44,93 +46,70 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 
 	const textSend = async () => {
 		if (senderText.trim() !== "") {
+			setSmsSend(true)
 			setScrollBottom(true)
 			const data = {
 				message: senderText,
 				sender_id: senderId,
-				receiver_id: receiverId
+				receiver_id: receiverId,
+				profile_id: senderId,
 			}
 			socket.emit("message", data)
 			setSenderText("")
 		}
 	}
 
-	// ========== TEST =============
-	const messageRef = useRef();
-
 	const readMsg = (id) => {
-		console.log(id);
-		axios
-			.post(`${baseUrl}/chat/msg`, {
-				msg_id: id,
-				is_read: true,
-				sender_id: senderId,
-				receiver_id: receiverId,
-			})
-			.then((res) => console.log(res))
-			.catch((err) => console.log(err));
+		// if (smsSend) {
+		if (senderText == '' && senderId === Number(localStorage.getItem("userId"))) {
+			axios
+				.post(`${baseUrl}/chat/msg`, {
+					msg_id: id,
+					sender_id: senderId,
+					receiver_id: receiverId,
+				})
+				.then((res) => console.log(res))
+				.catch((err) => console.log(err));
+		}
+		// }
 	};
 
-	// Create a state variable to track the ID of the first received but unread message
-	const [firstUnreadMessageId, setFirstUnreadMessageId] = useState(null);
 
-	useEffect(() => {
-		const handleIntersection = (entries, observer) => {
+	const conversationPathRef = useRef(null)
+	const observer = new IntersectionObserver(
+		(entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
-					const unreadMessage = messages.find(
-						(msg) => msg.msg_id === Number(entry.target.id) && !msg.is_read
-					);
-					const unreadMessages = messages.filter(
-						(msg) => msg.receiver_id === Number(senderId) && !msg.is_read
-					)
-					console.log(unreadMessages);
-
-					if (unreadMessage) {
-						// Send the ID of the first unread message to the backend
-						readMsg(unreadMessage.msg_id);
-						// Set the ID of the first unread message in state
-						setFirstUnreadMessageId(unreadMessage.msg_id);
+					const attributeValue = entry.target.getAttribute("value");
+					console.log(attributeValue);
+					if (attributeValue === "false") {
+						console.log(entry.target.id);
+						readMsg(entry.target.id)
 					}
-
 					observer.unobserve(entry.target);
 				}
 			});
-		};
-
-		const currentRef = messageRef.current;
-
-		if (currentRef) {
-			const observer = new IntersectionObserver(handleIntersection);
-
-			observer.observe(currentRef);
-
-			return () => {
-				observer.unobserve(currentRef);
-			};
+		},
+		{
+			threshold: 1,
 		}
-	}, [messageRef, messages, readMsg]);
+	);
 
-	const handleScroll = () => {
-		// Your code to handle scrolling goes here
-
-		// Check if the firstUnreadMessageId is set and not null
-		if (firstUnreadMessageId !== null) {
-			console.log('First unread message ID in view:', firstUnreadMessageId);
-			// Optionally, you can reset firstUnreadMessageId to null here
-			// if you want to only log it once when it appears on screen
-			// setFirstUnreadMessageId(null);
-		}
-	};
 
 	useEffect(() => {
-		window.addEventListener('scroll', handleScroll);
+		const getElements = async () => {
+			await conversationPathRef.current.childNodes.forEach((sms) => {
+				observer.observe(sms);
+			});
 
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		};
-	}, [firstUnreadMessageId]);
-
+			return () => {
+				conversationPathRef.current.childNodes.forEach((sms) => {
+					observer.unobserve(sms);
+				});
+			};
+		}
+		getElements()
+	}, [conversationPathRef, messages, senderId, receiverId, readMsg, chatContainerRef]);
 
 
 
@@ -140,29 +119,11 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 				<span>{oneUserData.username}</span>
 				<img src={oneUserData.profile_photo || defaultImage} alt={oneUserData.username} />
 			</div>
-			{/* <div className={styles.conversationPath} ref={messageRef}>
+			<div className={styles.conversationPath} ref={conversationPathRef} id="converationPath">
 				{messages &&
 					messages.map((message, index) => (
-						<div key={index} >
-							{message.sender_id === Number(senderId) ? (
-								<div style={sendingStyle}>
-									<p style={{ ...messageStyle, backgroundColor: "green" }}>{message.message}</p>
-									<i style={timeStyle}>{message.timestamp}</i>
-								</div>
-							) : message.sender_id === Number(receiverId) ? (
-								<div style={receivingStyle}>
-									<p style={{ ...messageStyle, backgroundColor: "royalblue" }}>{message.message}</p>
-									<i style={timeStyle}>{message.timestamp}</i>
-								</div>
-							) : null}
-						</div>
-					))}
-				{scrollBottom && <div ref={chatContainerRef}></div>}
-			</div> */}
-			<div className={styles.conversationPath}>
-				{messages &&
-					messages.map((message, index) => (
-						<div key={index} ref={messageRef} id={message.msg_id}>
+						<div key={index} id={message.msg_id} value={message.is_read}>
+							{console.log(message)}
 							{message.sender_id === Number(senderId) ? (
 								<div style={sendingStyle}>
 									<p style={{ ...messageStyle, backgroundColor: "green" }}>{message.message}</p>
