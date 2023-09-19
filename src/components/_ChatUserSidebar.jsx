@@ -3,22 +3,34 @@ import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
 import axios from "axios"
 import { baseUrl } from "../utils/api"
+import { io } from "socket.io-client"
 function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 	const { defaultImage } = useURL()
 	const [usersData, setUsersData] = useState([])
+	const socket = io(baseUrl)
 
 	const userid = localStorage.getItem("userId")
 
 	useEffect(() => {
-		axios
-			.get(`${baseUrl}/chat/${userid}`)
-			.then((res) => {
-				setUsersData(res.data)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
+		// axios
+		// 	.get(`${baseUrl}/chat/${userid}`)
+		// 	.then((res) => {
+		// 		setUsersData(res.data)
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err)
+		// 	})
+		socket.emit("count", {
+			id: userid,
+		})
 	}, [userid])
+
+	useEffect(() => {
+		socket.on("count", (data) => {
+			console.log(1);
+			setUsersData(data)
+		})
+	}, [])
 
 	return (
 		<div className={styles.usersListContainer}>

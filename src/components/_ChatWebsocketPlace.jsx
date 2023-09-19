@@ -1,9 +1,8 @@
-import { Fragment, useEffect, useState, useRef, useCallback } from "react"
+import { Fragment, useEffect, useState, useRef } from "react"
 import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
 import { io } from "socket.io-client"
 import { baseUrl } from "../utils/api"
-import axios from "axios"
 
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
 	const { defaultImage } = useURL()
@@ -11,7 +10,6 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	const [socket, setSocket] = useState(null)
 	const [scrollBottom, setScrollBottom] = useState(false)
 	const chatContainerRef = useRef(null);
-	const [smsSend, setSmsSend] = useState(false)
 
 	const senderId = localStorage.getItem("userId")
 	const receiverId = localStorage.getItem("receiverId")
@@ -36,23 +34,21 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	useEffect(() => {
 		if (socket) {
 			socket.on("message", (data) => {
-				setSmsSend(false)
 				setMessages(data)
 				scrollToBottom()
 			})
 		}
-	}, [socket])
+	}, []);
+
 	useEffect(() => { scrollToBottom() }, [messages])
 
 	const textSend = async () => {
 		if (senderText.trim() !== "") {
-			setSmsSend(true)
 			setScrollBottom(true)
 			const data = {
 				message: senderText,
 				sender_id: senderId,
 				receiver_id: receiverId,
-				profile_id: senderId,
 			}
 			socket.emit("message", data)
 			setSenderText("")
@@ -60,18 +56,18 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	}
 
 	const readMsg = (id) => {
-		// if (smsSend) {
-		if (senderText == '' && senderId === Number(localStorage.getItem("userId"))) {
-			axios
-				.post(`${baseUrl}/chat/msg`, {
-					msg_id: id,
-					sender_id: senderId,
-					receiver_id: receiverId,
-				})
-				.then((res) => console.log(res))
-				.catch((err) => console.log(err));
+		if (senderText === '' && Number(senderId) === Number(localStorage.getItem("userId"))) {
+			messages.map((message) => {
+				if (message.is_read === false && message.sender_id !== Number(senderId)) {
+					const data = {
+						msg_id: id,
+						sender_id: receiverId,
+						receiver_id: senderId,
+					}
+					socket.emit("new_message", data)
+				}
+			})
 		}
-		// }
 	};
 
 
@@ -81,9 +77,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					const attributeValue = entry.target.getAttribute("value");
-					console.log(attributeValue);
 					if (attributeValue === "false") {
-						console.log(entry.target.id);
 						readMsg(entry.target.id)
 					}
 					observer.unobserve(entry.target);
@@ -123,11 +117,11 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 				{messages &&
 					messages.map((message, index) => (
 						<div key={index} id={message.msg_id} value={message.is_read}>
-							{console.log(message)}
 							{message.sender_id === Number(senderId) ? (
 								<div style={sendingStyle}>
 									<p style={{ ...messageStyle, backgroundColor: "green" }}>{message.message}</p>
 									<i style={timeStyle}>{message.timestamp}</i>
+									{!message.is_read ? <i className="bi bi-check2" style={tickStyle}></i> : <i className="bi bi-check2-all" style={tickStyle}></i>}
 								</div>
 							) : message.sender_id === Number(receiverId) ? (
 								<div style={receivingStyle}>
@@ -160,7 +154,7 @@ const sendingStyle = {
 	display: "flex",
 	justifyContent: "end",
 	position: "relative",
-	marginLeft: "10rem"
+	marginLeft: "10rem",
 }
 
 const receivingStyle = {
@@ -175,18 +169,25 @@ const receivingStyle = {
 }
 
 const messageStyle = {
-	padding: "0.3rem 1rem 1rem 1rem",
+	padding: "0.3rem 1rem 2.5rem 1rem",
 	borderRadius: "4px",
 	border: "none",
-	minWidth: "10rem"
+	minWidth: "11rem"
 }
 
 const timeStyle = {
 	position: "absolute",
-	bottom: "1rem",
+	bottom: "2rem",
 	fontSize: "1rem",
 	fontWeight: 400,
 	color: "lightgray",
 	padding: "0.3rem 0.7rem",
 	fontWeight: 'bold'
+}
+
+const tickStyle = {
+	color: 'lightgray',
+	position: 'absolute',
+	bottom: '.7rem',
+	marginRight: '0.3rem'
 }
