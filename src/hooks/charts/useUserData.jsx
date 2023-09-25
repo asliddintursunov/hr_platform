@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import useURL from "../useURL"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
 function useUserData() {
@@ -50,7 +49,7 @@ function useUserData() {
         setUserMajorCount(majorCount)
       })
       .catch((err) => {
-        console.log(err)
+        console.error(err)
       })
   }, [])
   return {

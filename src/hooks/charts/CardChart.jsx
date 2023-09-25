@@ -1,23 +1,21 @@
+import { useSelector } from 'react-redux'
 import styles from '../../css/Charts.module.css'
-import useUserData from './useUserData'
+import { allMajors } from '../../features/chartsSlice'
+
 
 function CardChart() {
-  const { backendDev,
-    frontendDev,
-    fullstackDev,
-    MobileDev,
-    DesktopDev,
-    DesignDev } = useUserData()
+  const allMajorsData = useSelector(allMajors)
+
 
   return (
     <div className="container mt-4">
-      {backendDev.length > 0 && <div className={styles.majorCardContainer}>
+      {allMajorsData.backendDev.length > 0 && <div className={styles.majorCardContainer}>
         <div className={styles.majorType}>
           <h3>Backend</h3>
           <h3>Developer</h3>
         </div>
         <div className={styles.usersMajorInfo}>
-          {backendDev.map(item => {
+          {allMajorsData.backendDev.map(item => {
             return (
               <div key={item.count}>
                 <span>{item.experience} years of experience - </span>
@@ -27,13 +25,13 @@ function CardChart() {
           })}
         </div>
       </div>}
-      {frontendDev.length > 0 && <div className={styles.majorCardContainer}>
+      {allMajorsData.frontendDev.length > 0 && <div className={styles.majorCardContainer}>
         <div className={styles.majorType}>
           <h3>Frontend</h3>
           <h3>Developer</h3>
         </div>
         <div className={styles.usersMajorInfo}>
-          {frontendDev.map(item => {
+          {allMajorsData.frontendDev.map(item => {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
@@ -43,13 +41,13 @@ function CardChart() {
           })}
         </div>
       </div>}
-      {fullstackDev.length > 0 && <div className={styles.majorCardContainer}>
+      {allMajorsData.fullstackDev.length > 0 && <div className={styles.majorCardContainer}>
         <div className={styles.majorType}>
           <h3>FullStack</h3>
           <h3>Developer</h3>
         </div>
         <div className={styles.usersMajorInfo}>
-          {fullstackDev.map(item => {
+          {allMajorsData.fullstackDev.map(item => {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
@@ -59,13 +57,13 @@ function CardChart() {
           })}
         </div>
       </div>}
-      {MobileDev.length > 0 && <div className={styles.majorCardContainer}>
+      {allMajorsData.MobileDev.length > 0 && <div className={styles.majorCardContainer}>
         <div className={styles.majorType}>
           <h3>Mobile</h3>
           <h3>Developer</h3>
         </div>
         <div className={styles.usersMajorInfo}>
-          {MobileDev.map(item => {
+          {allMajorsData.MobileDev.map(item => {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
@@ -75,13 +73,13 @@ function CardChart() {
           })}
         </div>
       </div>}
-      {DesktopDev.length > 0 && <div className={styles.majorCardContainer}>
+      {allMajorsData.DesktopDev.length > 0 && <div className={styles.majorCardContainer}>
         <div className={styles.majorType}>
           <h3>Desktop</h3>
           <h3>Developer</h3>
         </div>
         <div className={styles.usersMajorInfo}>
-          {DesktopDev.map(item => {
+          {allMajorsData.DesktopDev.map(item => {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
@@ -91,13 +89,13 @@ function CardChart() {
           })}
         </div>
       </div>}
-      {DesignDev.length > 0 && <div className={styles.majorCardContainer}>
+      {allMajorsData.DesignDev.length > 0 && <div className={styles.majorCardContainer}>
         <div className={styles.majorType}>
           <h3>Design</h3>
           <h3>Developer</h3>
         </div>
         <div className={styles.usersMajorInfo}>
-          {DesignDev.map(item => {
+          {allMajorsData.DesignDev.map(item => {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>

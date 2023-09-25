@@ -13,7 +13,7 @@ function Edit_Address({ changeProfile, address, setAddress }) {
           id='address'
           name='address'
           placeholder='Address'
-          value={address}
+          value={address ? address : ''}
           onChange={e => setAddress(e.target.value)}
         />
       </div>

@@ -13,7 +13,7 @@ function Edit_FullName({ changeProfile, fullName, setFullName }) {
           id='fullname'
           name='fullname'
           placeholder='Full Name'
-          value={fullName}
+          value={fullName ? fullName : ''}
           onChange={e => setFullName(e.target.value)}
         />
       </div>

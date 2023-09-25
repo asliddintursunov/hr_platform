@@ -1,35 +1,33 @@
 import { useEffect, useState } from "react"
 import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
-import axios from "axios"
-import { baseUrl } from "../utils/api"
-import { io } from "socket.io-client"
+import { useSelector } from "react-redux"
+
+
 function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
+
+	const isConnected = useSelector((state) => state.connection.isConnected)
+	const socketInstance = useSelector((state) => state.connection.socketInstance)
+
 	const { defaultImage } = useURL()
 	const [usersData, setUsersData] = useState([])
-	const socket = io(baseUrl)
 
 	const userid = localStorage.getItem("userId")
 
 	useEffect(() => {
-		// axios
-		// 	.get(`${baseUrl}/chat/${userid}`)
-		// 	.then((res) => {
-		// 		setUsersData(res.data)
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err)
-		// 	})
-		socket.emit("count", {
-			id: userid,
-		})
-	}, [userid])
+		if (userid && isConnected) {
+			socketInstance.emit("count", {
+				id: userid,
+			})
 
-	useEffect(() => {
-		socket.on("count", (data) => {
-			console.log(1);
-			setUsersData(data)
-		})
+			socketInstance.on("count", (data) => {
+				setUsersData(data)
+			})
+
+			return () => {
+				socketInstance.off("count")
+			}
+		}
 	}, [])
 
 	return (

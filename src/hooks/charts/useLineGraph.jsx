@@ -1,7 +1,8 @@
-import useUserData from "./useUserData"
+import { useSelector } from "react-redux"
+import { allMajors } from "../../features/chartsSlice"
 
 export function useLineGraph() {
-  const { byDate, userCount } = useUserData()
+  const allMajorsData = useSelector(allMajors)
 
   const lineGraph = {
     chart: {
@@ -29,7 +30,7 @@ export function useLineGraph() {
       }
     },
     xAxis: {
-      categories: byDate,
+      categories: allMajorsData.byDate,
       labels: {
         style: {
           fontSize: '1.6rem'
@@ -62,7 +63,7 @@ export function useLineGraph() {
     series: [
       {
         name: 'Users',
-        data: userCount
+        data: allMajorsData.userCount
       }
     ]
   }

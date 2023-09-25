@@ -1,13 +1,14 @@
 import { Fragment, useEffect, useState, useRef } from "react"
 import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
-import { io } from "socket.io-client"
-import { baseUrl } from "../utils/api"
+import { useSelector } from "react-redux"
 
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
+	const socketInstance = useSelector((state) => state.connection.socketInstance)
+
+
 	const { defaultImage } = useURL()
 	const [senderText, setSenderText] = useState("")
-	const [socket, setSocket] = useState(null)
 	const [scrollBottom, setScrollBottom] = useState(false)
 	const chatContainerRef = useRef(null);
 
@@ -21,24 +22,12 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	};
 
 	useEffect(() => {
-		const newSocket = io(baseUrl)
-		setSocket(newSocket)
+		socketInstance.on("message", (data) => {
+			setMessages(data)
+			scrollToBottom()
+		})
 
-		return () => {
-			if (newSocket) {
-				newSocket.disconnect()
-			}
-		}
 	}, [])
-
-	useEffect(() => {
-		if (socket) {
-			socket.on("message", (data) => {
-				setMessages(data)
-				scrollToBottom()
-			})
-		}
-	}, []);
 
 	useEffect(() => { scrollToBottom() }, [messages])
 
@@ -50,7 +39,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 				sender_id: senderId,
 				receiver_id: receiverId,
 			}
-			socket.emit("message", data)
+			socketInstance.emit("message", data)
 			setSenderText("")
 		}
 	}
@@ -64,7 +53,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 						sender_id: receiverId,
 						receiver_id: senderId,
 					}
-					socket.emit("new_message", data)
+					socketInstance.emit("new_message", data)
 				}
 			})
 		}

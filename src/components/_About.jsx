@@ -4,10 +4,21 @@ import styles from '../css/Landing.module.css'
 
 // Charts
 import { useLineGraph } from '../hooks/charts/useLineGraph';
-import usePieChart from '../hooks/charts/usePieChart';
+import { usePieChart } from '../hooks/charts/usePieChart';
 import CardChart from '../hooks/charts/CardChart';
+import { useDispatch } from 'react-redux';
+import { fetchMajors } from '../features/chartsSlice';
+import { useEffect } from 'react';
 
 function _About() {
+
+  const dispatch = useDispatch()
+  useEffect(
+    () => {
+      dispatch(fetchMajors())
+    }, [dispatch]
+  )
+
   const { lineGraph } = useLineGraph()
   const { pieChartSecond } = usePieChart()
 

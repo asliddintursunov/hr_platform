@@ -12,7 +12,7 @@ function Edit_DateOfBirth({ changeProfile, dateOfBirth, setDateOfBirth }) {
           type="date"
           name="dateofbirth"
           id="dateofbirth"
-          value={dateOfBirth}
+          value={dateOfBirth ? dateOfBirth : ''}
           onChange={e => setDateOfBirth(e.target.value)}
         />
       </div>

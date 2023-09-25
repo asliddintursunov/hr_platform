@@ -1,12 +1,13 @@
-import useUserData from "./useUserData";
+import { useSelector } from "react-redux";
+import { allMajors } from "../../features/chartsSlice";
 
-export default function usePieChart() {
-  
+
+export function usePieChart() {
+  const allMajorsData = useSelector(allMajors)
+
   const userMajorData = []
-  const { userMajor, userMajorCount } = useUserData()
-
-  for(let i = 0; i < userMajorCount.length; i++){
-    userMajorData.push({name: userMajor[i], y: userMajorCount[i], drilldown: userMajor[i]})
+  for (let i = 0; i < allMajorsData.userMajorCount.length; i++) {
+    userMajorData.push({ name: allMajorsData.userMajor[i], y: allMajorsData.userMajorCount[i], drilldown: allMajorsData.userMajor[i] })
   }
 
   const pieChartSecond = {

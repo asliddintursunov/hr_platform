@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import _ChatUserSidebar from "../components/_ChatUserSidebar"
 import _ChatWebsocketPlace from "../components/_ChatWebsocketPlace"
 import styles from "../css/Chat.module.css"
@@ -23,15 +23,6 @@ function ChatLayout() {
     const senderId = localStorage.getItem("userId")
 
     setChatSelected(true)
-
-    await axios
-      .post(`${baseUrl}/chat/${id}`, {
-        username: username
-      })
-      .then((res) => {
-        setOneUserData(res.data)
-      })
-      .catch((err) => console.log(err))
 
     await axios
       .get(`${baseUrl}/chat/room`, { params: { user_id1: senderId, user_id2: id } })

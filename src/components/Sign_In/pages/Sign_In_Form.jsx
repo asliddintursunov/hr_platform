@@ -25,29 +25,30 @@ function Sign_In_Form() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
-  const [socket, setSocket] = useState(null)
+  // const [socket, setSocket] = useState(null)
 
-  useEffect(() => {
-    const newSocket = io(baseUrl)
-    setSocket(newSocket)
+  // useEffect(() => {
+  //   const newSocket = io(baseUrl)
+  //   setSocket(newSocket)
 
-    return () => {
-      if (newSocket) {
-        newSocket.disconnect()
-      }
-    }
-  }, [])
+  //   return () => {
+  //     if (newSocket) {
+  //       newSocket.disconnect()
+  //     }
+  //   }
+  // }, [])
 
-  useEffect(() => {
-    if (socket) {
-      socket.on("connected", (data) => {
-        console.log(data)
-      })
-      return () => {
-        socket.off("connected")
-      }
-    }
-  }, [socket])
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on("connected", (data) => {
+  //       console.log(data)
+  //     })
+
+  //     return () => {
+  //       socket.off("connected")
+  //     }
+  //   }
+  // }, [socket])
 
   const logInToProfile = () => {
     axios
