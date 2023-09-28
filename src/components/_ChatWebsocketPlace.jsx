@@ -6,30 +6,30 @@ import { useSelector } from "react-redux"
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
 	const socketInstance = useSelector((state) => state.connection.socketInstance)
 
-
 	const { defaultImage } = useURL()
 	const [senderText, setSenderText] = useState("")
 	const [scrollBottom, setScrollBottom] = useState(false)
-	const chatContainerRef = useRef(null);
+	const chatContainerRef = useRef(null)
 
 	const senderId = localStorage.getItem("userId")
 	const receiverId = localStorage.getItem("receiverId")
 
 	const scrollToBottom = () => {
 		if (chatContainerRef.current) {
-			chatContainerRef.current.scrollIntoView({ behavior: "smooth" });
+			chatContainerRef.current.scrollIntoView({ behavior: "smooth" })
 		}
-	};
+	}
 
 	useEffect(() => {
 		socketInstance.on("message", (data) => {
 			setMessages(data)
 			scrollToBottom()
 		})
-
 	}, [])
 
-	useEffect(() => { scrollToBottom() }, [messages])
+	useEffect(() => {
+		scrollToBottom()
+	}, [messages])
 
 	const textSend = async () => {
 		if (senderText.trim() !== "") {
@@ -37,7 +37,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			const data = {
 				message: senderText,
 				sender_id: senderId,
-				receiver_id: receiverId,
+				receiver_id: receiverId
 			}
 			socketInstance.emit("message", data)
 			setSenderText("")
@@ -45,56 +45,53 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	}
 
 	const readMsg = (id) => {
-		if (senderText === '' && Number(senderId) === Number(localStorage.getItem("userId"))) {
+		if (senderText === "" && Number(senderId) === Number(localStorage.getItem("userId"))) {
 			messages.map((message) => {
 				if (message.is_read === false && message.sender_id !== Number(senderId)) {
+					console.log(id)
 					const data = {
 						msg_id: id,
 						sender_id: receiverId,
-						receiver_id: senderId,
+						receiver_id: senderId
 					}
 					socketInstance.emit("new_message", data)
 				}
 			})
 		}
-	};
-
+	}
 
 	const conversationPathRef = useRef(null)
 	const observer = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
-					const attributeValue = entry.target.getAttribute("value");
+					const attributeValue = entry.target.getAttribute("value")
 					if (attributeValue === "false") {
 						readMsg(entry.target.id)
 					}
-					observer.unobserve(entry.target);
+					observer.unobserve(entry.target)
 				}
-			});
+			})
 		},
 		{
-			threshold: 1,
+			threshold: 1
 		}
-	);
-
+	)
 
 	useEffect(() => {
 		const getElements = async () => {
 			await conversationPathRef.current.childNodes.forEach((sms) => {
-				observer.observe(sms);
-			});
+				observer.observe(sms)
+			})
 
 			return () => {
 				conversationPathRef.current.childNodes.forEach((sms) => {
-					observer.unobserve(sms);
-				});
-			};
+					observer.unobserve(sms)
+				})
+			}
 		}
 		getElements()
-	}, [conversationPathRef, messages, senderId, receiverId, readMsg, chatContainerRef]);
-
-
+	}, [conversationPathRef, messages, senderId, receiverId, readMsg, chatContainerRef])
 
 	return (
 		<Fragment>
@@ -143,7 +140,7 @@ const sendingStyle = {
 	display: "flex",
 	justifyContent: "end",
 	position: "relative",
-	marginLeft: "10rem",
+	marginLeft: "10rem"
 }
 
 const receivingStyle = {
@@ -168,15 +165,14 @@ const timeStyle = {
 	position: "absolute",
 	bottom: "2rem",
 	fontSize: "1rem",
-	fontWeight: 400,
 	color: "lightgray",
 	padding: "0.3rem 0.7rem",
-	fontWeight: 'bold'
+	fontWeight: "bold"
 }
 
 const tickStyle = {
-	color: 'lightgray',
-	position: 'absolute',
-	bottom: '.7rem',
-	marginRight: '0.3rem'
+	color: "lightgray",
+	position: "absolute",
+	bottom: ".7rem",
+	marginRight: "0.3rem"
 }

@@ -40,6 +40,10 @@
 
 }
 
+.usersListContainer>h2 {
+	transition: all .15s;
+}
+
 .usersShowHide {
 	position: absolute;
 	color: orangered;

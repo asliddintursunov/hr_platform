@@ -16,13 +16,22 @@ function ChatLayout() {
     flex: 0.5,
   }
 
+  const senderId = localStorage.getItem("userId")
+
   const GetReceiverUsername = async (id, username) => {
     localStorage.setItem("receiverId", id)
+
     localStorage.setItem("receiverUsername", username)
 
-    const senderId = localStorage.getItem("userId")
 
     setChatSelected(true)
+
+    axios.post(`${baseUrl}/chat/${senderId}`, {
+      username: username,
+    })
+      .then((res) => setOneUserData(res.data))
+      .catch((err) => console.log(err))
+
 
     await axios
       .get(`${baseUrl}/chat/room`, { params: { user_id1: senderId, user_id2: id } })

@@ -4,7 +4,7 @@ import { baseUrl } from "../utils/api"
 
 const userConnection = {
   isConnected: false,
-  socketInstance: {}
+  socketInstance: {},
 }
 
 export const userConnectionSlice = createSlice({
@@ -17,11 +17,11 @@ export const userConnectionSlice = createSlice({
         return {
           ...state,
           isConnected: true,
-          socketInstance: newSocket
+          socketInstance: newSocket,
         }
       }
       return state
-    }
+    },
   }
 })
 
