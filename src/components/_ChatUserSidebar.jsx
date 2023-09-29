@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
 import { useSelector, useDispatch } from "react-redux"
@@ -24,10 +24,10 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 				id: userid
 			})
 
-			socketInstance.on("count", (data) => {
-				dispatch(setUsersData(data))
-				console.log(data)
-			})
+			// socketInstance.on("count", (data) => {
+			// 	dispatch(setUsersData(data))
+			// 	console.log(data)
+			// })
 
 			return () => {
 				socketInstance.off("count")
@@ -35,6 +35,14 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 		}
 	}, [])
 
+	useEffect(
+		() => {
+			socketInstance.on("count", (data) => {
+				dispatch(setUsersData(data))
+				console.log(data)
+			})
+		}, []
+	)
 
 	useEffect(() => {
 		axios
@@ -53,17 +61,19 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 			<h2 className="text-center" style={showUsers ? { color: "transparent", userSelect: "none" } : null}>
 				Users List
 			</h2>
-			{userData &&
-				userImage &&
-				userData?.map((user, index) => {
+			{userData && userImage && userData.map((user, index) => {
+				const userInfo = userImage[index];
+				if (userInfo) {
 					return (
-						<div key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userImage?.[index].id, userImage?.[index].username)}>
-							<span className={styles.unreadMsg}>{user.unread_msg}</span>
-							<span>{userImage?.[index]?.username}</span>
-							<img src={userImage?.[index]?.profile_photo !== null ? userImage[index]?.profile_photo : defaultImage} />
+						<div key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
+							{user.id == userImage[index].id && <span className={styles.unreadMsg}>{user.unread_msg}</span>}
+							<span>{userInfo.username}</span>
+							<img src={userInfo.profile_photo !== null ? userInfo.profile_photo : defaultImage} alt={`Profile of ${userInfo.username}`} />
 						</div>
-					)
-				})}
+					);
+				}
+				return null;
+			})}
 		</div>
 	)
 }

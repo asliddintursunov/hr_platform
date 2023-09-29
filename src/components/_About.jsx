@@ -6,12 +6,23 @@ import styles from '../css/Landing.module.css'
 import { useLineGraph } from '../hooks/charts/useLineGraph';
 import { usePieChart } from '../hooks/charts/usePieChart';
 import CardChart from '../hooks/charts/CardChart';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchMajors } from '../features/chartsSlice';
 import { useEffect } from 'react';
 
 function _About() {
-
+  const socketInstance = useSelector((state) => state.connection.socketInstance)
+  const isConnected = useSelector((state) => state.connection.isConnected)
+  const userID = localStorage.getItem("userId")
+  useEffect(
+    () => {
+      if (isConnected) {
+        socketInstance.emit("hello", {
+          id: userID
+        })
+      }
+    }, [isConnected]
+  )
   const dispatch = useDispatch()
   useEffect(
     () => {

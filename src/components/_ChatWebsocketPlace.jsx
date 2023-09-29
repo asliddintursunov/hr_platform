@@ -21,7 +21,16 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	}
 
 	useEffect(() => {
-		socketInstance.on("message", (data) => {
+		socketInstance.on("new_message", (data) => {
+			console.log(data);
+			setMessages(data)
+			scrollToBottom()
+		})
+	}, [])
+
+	useEffect(() => {
+		socketInstance.on("see_message", (data) => {
+			console.log(data);
 			setMessages(data)
 			scrollToBottom()
 		})
@@ -39,8 +48,12 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 				sender_id: senderId,
 				receiver_id: receiverId
 			}
-			socketInstance.emit("message", data)
+			socketInstance.emit("new_message", data)
 			setSenderText("")
+
+			socketInstance.emit("count", {
+				id: receiverId
+			})
 		}
 	}
 
@@ -54,7 +67,11 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 						sender_id: receiverId,
 						receiver_id: senderId
 					}
-					socketInstance.emit("new_message", data)
+					socketInstance.emit("see_message", data)
+
+					socketInstance.emit("count", {
+						id: senderId
+					})
 				}
 			})
 		}
