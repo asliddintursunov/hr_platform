@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import styles from '../css/ResumeDetails.module.css'
-import useURL from '../hooks/useURL'
 import axios from 'axios'
 import { baseUrl } from '../utils/api'
 function _ResumeDetails() {

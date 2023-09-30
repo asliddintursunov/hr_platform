@@ -37,6 +37,7 @@ const chartsSlice = createSlice({
         state.status = 'loading'
       })
       .addCase(fetchMajors.fulfilled, (state, action) => {
+        // localStorage.removeItem("accessToken")
         state.status = 'succeeded'
 
         const experienceFilter = action.payload[action.payload.length - 1].experience

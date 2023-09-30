@@ -24,11 +24,6 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 				id: userid
 			})
 
-			// socketInstance.on("count", (data) => {
-			// 	dispatch(setUsersData(data))
-			// 	console.log(data)
-			// })
-
 			return () => {
 				socketInstance.off("count")
 			}
@@ -37,10 +32,12 @@ function _ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 
 	useEffect(
 		() => {
-			socketInstance.on("count", (data) => {
-				dispatch(setUsersData(data))
-				console.log(data)
-			})
+			if (isConnected) {
+				socketInstance.on("count", (data) => {
+					dispatch(setUsersData(data))
+					console.log(data)
+				})
+			}
 		}, []
 	)
 

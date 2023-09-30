@@ -25,6 +25,7 @@ import { useEmail } from "../../hooks/useEmail"
 import { useCallback, useEffect, useState } from "react"
 import useURL from "../../hooks/useURL"
 import { baseUrl } from "../../utils/api"
+import { googleLogout } from "@react-oauth/google"
 
 function UpdateProfile() {
   // Redirect user to another page
@@ -77,6 +78,7 @@ function UpdateProfile() {
       setPopupInfo(info)
       setTimeout(() => {
         localStorage.removeItem("token")
+        // localStorage.removeItem("accessToken")
         navigate("/signin")
       }, 1500)
     },
@@ -199,6 +201,7 @@ function UpdateProfile() {
 
   // Log Out === Working
   const logOut = () => {
+    googleLogout()
     axios
       .get(`${baseUrl}/logout/${localStorage.getItem('userId')}`)
       .then((res) => {
@@ -213,6 +216,7 @@ function UpdateProfile() {
           navigate("/signin")
         }, 1500)
         localStorage.removeItem("token")
+        // localStorage.removeItem("accessToken")
         localStorage.removeItem("userRole")
         localStorage.removeItem("userId")
       })

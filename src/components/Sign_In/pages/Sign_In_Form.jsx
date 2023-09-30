@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import axios from "axios"
 
 // Css
@@ -15,8 +15,11 @@ import GoogleAUTH from "../../../GoogleAUTH"
 import { useUsername } from "../../../hooks/useUsername"
 import { usePassword } from "../../../hooks/usePassword"
 import { baseUrl } from "../../../utils/api"
-import { io } from "socket.io-client"
+import { useDispatch } from "react-redux"
+
 function Sign_In_Form() {
+  const dispatch = useDispatch()
+
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus, usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
 
   const { passwordValue, setPasswordValue, validPasswordChecker, passwordTrue, setPasswordTrue, passwordType, setPasswordType, passwordChecker, passwordInputStyle } = usePassword()
@@ -25,30 +28,6 @@ function Sign_In_Form() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
-  // const [socket, setSocket] = useState(null)
-
-  // useEffect(() => {
-  //   const newSocket = io(baseUrl)
-  //   setSocket(newSocket)
-
-  //   return () => {
-  //     if (newSocket) {
-  //       newSocket.disconnect()
-  //     }
-  //   }
-  // }, [])
-
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on("connected", (data) => {
-  //       console.log(data)
-  //     })
-
-  //     return () => {
-  //       socket.off("connected")
-  //     }
-  //   }
-  // }, [socket])
 
   const logInToProfile = () => {
     axios
@@ -58,7 +37,6 @@ function Sign_In_Form() {
       })
       .then((res) => {
         setIsOpen(true)
-
         localStorage.setItem("token", res.data.token)
         localStorage.setItem("userId", res.data.id)
         localStorage.setItem("userRole", res.data.role)

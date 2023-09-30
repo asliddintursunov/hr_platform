@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react"
-import { googleLogout, useGoogleLogin } from "@react-oauth/google"
+import { useGoogleLogin } from "@react-oauth/google"
 import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
 import _PopUp from "./components/_PopUp"
@@ -35,6 +35,7 @@ function GoogleAUTH({ page, number }) {
 
             setTimeout(() => {
               navigate(page)
+              // console.log(page);
             }, 2000)
           })
           .catch((err) => {
@@ -44,7 +45,7 @@ function GoogleAUTH({ page, number }) {
           })
       }
     },
-    [navigate, page]
+    [navigate]
   )
 
   const Login_sendUserDetailsToBackend = useCallback(
@@ -65,7 +66,7 @@ function GoogleAUTH({ page, number }) {
             localStorage.setItem("userRole", res.data.role)
 
             setTimeout(() => {
-              navigate(page)
+              location.assign(page)
             }, 2000)
           })
           .catch((err) => {
@@ -75,7 +76,7 @@ function GoogleAUTH({ page, number }) {
           })
       }
     },
-    [navigate, page]
+    [page]
   )
 
   const sendUserDetails = useCallback(
@@ -104,7 +105,8 @@ function GoogleAUTH({ page, number }) {
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       isUserValid(codeResponse)
-      localStorage.setItem("accessToken", codeResponse.access_token)
+      console.log(codeResponse);
+      // localStorage.setItem("accessToken", codeResponse.access_token)
     },
     onError: (error) => console.error("Login Failed:", error)
   })
@@ -120,6 +122,7 @@ function GoogleAUTH({ page, number }) {
         })
         .then((res) => {
           sendUserDetails(res.data)
+          console.log(res.data);
         })
         .catch((err) => console.error(err))
     }

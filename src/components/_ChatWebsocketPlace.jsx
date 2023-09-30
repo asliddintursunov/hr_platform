@@ -108,7 +108,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			}
 		}
 		getElements()
-	}, [conversationPathRef, messages, senderId, receiverId, readMsg, chatContainerRef])
+	}, [conversationPathRef])
 
 	return (
 		<Fragment>
@@ -116,7 +116,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 				<span>{oneUserData.username}</span>
 				<img src={oneUserData.profile_photo || defaultImage} alt={oneUserData.username} />
 			</div>
-			<div className={styles.conversationPath} ref={conversationPathRef} id="converationPath">
+			<div className={styles.conversationPath} ref={conversationPathRef}>
 				{messages &&
 					messages.map((message, index) => (
 						<div key={index} id={message.msg_id} value={message.is_read}>

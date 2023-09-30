@@ -24,6 +24,7 @@ import { useEffect, useState } from "react"
 function App() {
   const userRole = localStorage.getItem('userRole');
   const [authenticated, setAuthenticated] = useState(localStorage.getItem("token"));
+  // const [googleAuthenticated, googleSetAuthenticated] = useState(localStorage.getItem("accessToken"))
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -77,7 +78,8 @@ function App() {
         ) : (
           <Route path="/signin" element={<SignInLayout />} />
         )}
-        {!authenticated && <Route path="/landing" element={<_LandingPage />} />}
+        {(!authenticated) && <Route path="/landing" element={<_LandingPage />} />}
+
         <Route path="*" element={<_PageNotFound404 />} />
       </Routes>
     </div>
