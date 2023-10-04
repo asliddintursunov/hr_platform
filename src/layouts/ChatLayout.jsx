@@ -4,8 +4,13 @@ import _ChatWebsocketPlace from "../components/_ChatWebsocketPlace"
 import styles from "../css/Chat.module.css"
 import axios from "axios"
 import { baseUrl } from "../utils/api"
+import { useDispatch, useSelector } from "react-redux"
+import { logoutUser, sendHeaders } from "../features/userDataSlice"
 
 function ChatLayout() {
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
+
   const [chatSelected, setChatSelected] = useState(false)
   const [oneUserData, setOneUserData] = useState({})
   const [messages, setMessages] = useState([])
@@ -16,10 +21,16 @@ function ChatLayout() {
     flex: 0.5,
   }
 
-  const senderId = localStorage.getItem("userId")
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
+
 
   const GetReceiverUsername = async (id, username) => {
     localStorage.setItem("receiverId", id)
+    const senderId = localStorage.getItem("userId")
 
     localStorage.setItem("receiverUsername", username)
 
@@ -28,18 +39,26 @@ function ChatLayout() {
 
     axios.post(`${baseUrl}/chat/${senderId}`, {
       username: username,
-    })
+    }, { headers: head })
       .then((res) => setOneUserData(res.data))
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
+      })
 
 
     await axios
-      .get(`${baseUrl}/chat/room`, { params: { user_id1: senderId, user_id2: id } })
+      .get(`${baseUrl}/chat/room`, { params: { user_id1: senderId, user_id2: id }, headers: head })
       .then((res) => {
         setMessages(res.data)
       })
       .catch((err) => {
-        console.log(err)
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
       })
   }
 

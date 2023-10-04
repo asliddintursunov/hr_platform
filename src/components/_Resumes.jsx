@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import styles from '../css/Resumes.module.css'
 import axios from 'axios'
 import { baseUrl } from '../utils/api'
+import { logoutUser, sendHeaders } from '../features/userDataSlice'
+import { useDispatch, useSelector } from 'react-redux'
 function _Resumes() {
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
@@ -25,35 +29,51 @@ function _Resumes() {
     'FullStack-developer', 'Frontend-developer', 'Backend-developer', 'Mobile-developer', 'Desktop-developer', 'Design-UI/UX'
   ]
 
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
   const sendData = () => {
     setResumeData([])
-
     axios.post(`${baseUrl}/search`, {
       skills: skills.length === 0 ? undefined : skills,
       major: major === '' ? undefined : major,
       experience: experience === '' ? undefined : experience,
+    }, {
+      headers: head
     })
       .then(res => {
         setResumeData(res.data.results)
         console.log(res);
 
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
+      })
   }
 
   const seeAllResumes = () => {
     setResumeData([])
-
     axios.post(`${baseUrl}/search`, {
       skills: undefined,
       major: undefined,
       experience: undefined
+    }, {
+      headers: head
     })
       .then(res => {
         setResumeData(res.data.results)
-        console.log(res);
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
+      })
   }
 
   const KnowingSkills = (value) => {
@@ -78,11 +98,18 @@ function _Resumes() {
         skills: undefined,
         major: undefined,
         experience: undefined
+      }, {
+        headers: head
       })
         .then(res => {
           setResumeData(res.data.results)
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          if (err.response.status === 401) {
+            alert(err.response.data)
+            dispatch(logoutUser())
+          }
+        })
     }, []
   )
 

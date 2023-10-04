@@ -26,10 +26,15 @@ import { useCallback, useEffect, useState } from "react"
 import useURL from "../../hooks/useURL"
 import { baseUrl } from "../../utils/api"
 import { googleLogout } from "@react-oauth/google"
+import { useDispatch, useSelector } from "react-redux"
+import { sendHeaders, logoutUser } from "../../features/userDataSlice"
 
 function UpdateProfile() {
   // Redirect user to another page
   const navigate = useNavigate()
+
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
 
   // Custom URL hook
   const { defaultImage } = useURL()
@@ -69,6 +74,12 @@ function UpdateProfile() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
+
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -134,7 +145,9 @@ function UpdateProfile() {
   const CancleEdition = useCallback(() => {
     setIsPending(true)
     axios
-      .get(`${baseUrl}/user/${localStorage.getItem("userId")}`)
+      .get(`${baseUrl}/user/${localStorage.getItem("userId")}`, {
+        headers: head
+      })
       .then((res) => {
         set_data(res.data)
         setFullName(res.data.fullname)
@@ -152,6 +165,10 @@ function UpdateProfile() {
         setIsPending(false)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
@@ -180,15 +197,20 @@ function UpdateProfile() {
         major: data.major !== major ? major : undefined,
         experience: data.experience !== experience ? experience : undefined,
         skills: data.skills !== skills ? skills : undefined
+      }, {
+        headers: head
       })
       .then((res) => {
         setIsOpen(true)
-        console.log(res)
         setPopupInfo(res.data)
         setErrorOccured(false)
       })
       .catch((err) => {
-        console.log(err)
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
+
         setIsOpen(true)
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
@@ -203,7 +225,9 @@ function UpdateProfile() {
   const logOut = () => {
     googleLogout()
     axios
-      .get(`${baseUrl}/logout/${localStorage.getItem('userId')}`)
+      .get(`${baseUrl}/logout/${localStorage.getItem('userId')}`, {
+        headers: head
+      })
       .then((res) => {
         console.log(res)
 
@@ -221,6 +245,10 @@ function UpdateProfile() {
         localStorage.removeItem("userId")
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         console.log(err);
         setIsOpen(true)
         if (err.response.data.msg) {

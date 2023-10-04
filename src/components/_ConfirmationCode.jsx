@@ -1,19 +1,29 @@
 import axios from 'axios';
 import { InputNumber } from 'primereact/inputnumber';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import '../css/_PopUp.css'
 import { useNavigate } from 'react-router-dom';
-import useURL from '../hooks/useURL';
 import { baseUrl } from '../utils/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser, sendHeaders } from '../features/userDataSlice';
 function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode, confirmEmailCode,
   setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setIsOpen, setPopupInfo, setErrorOccured }) {
-
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
   const sendEmailCode = useCallback(() => {
+
     axios.post(`${baseUrl}/register/code`, {
       code: confirmEmailCode.toString(),
       username: localStorage.getItem('new_username')
+    }, {
+      headers: head
     })
       .then(req => {
         if (req.status === 202) {
@@ -48,7 +58,11 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
         }
       })
       .catch(err => {
-        console.log(400, err);
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
+
         setIsOpen(true)
         setErrorOccured(true)
         setConfirmCodeOpen(false)

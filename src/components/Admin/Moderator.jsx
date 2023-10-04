@@ -6,7 +6,11 @@ import _PopUp from "../_PopUp"
 import { useNavigate } from "react-router-dom"
 import useURL from "../../hooks/useURL"
 import { baseUrl } from "../../utils/api"
+import { useDispatch, useSelector } from "react-redux"
+import { logoutUser, sendHeaders } from "../../features/userDataSlice"
 function Moderator() {
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
@@ -19,13 +23,19 @@ function Moderator() {
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
 
-  // Add a request interceptor
-  axios.interceptors.request.use(function (config) {
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = 'Bearer ' + token;
 
-    return config;
-  });
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
+  // Add a request interceptor
+  // axios.interceptors.request.use(function (config) {
+  //   const token = localStorage.getItem('token')
+  //   config.headers.Authorization = 'Bearer ' + token;
+
+  //   return config;
+  // });
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
     setIsOpen(true)
@@ -39,12 +49,18 @@ function Moderator() {
 
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(`${baseUrl}/users`)
+    axios.get(`${baseUrl}/users`, {
+      headers: head
+    })
       .then((req) => {
         setIsPending(false)
         setDatas(req.data)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
@@ -60,13 +76,19 @@ function Moderator() {
       return prev.filter(data => data.id !== id)
     })
 
-    axios.delete(`${baseUrl}/user/${id}`)
+    axios.delete(`${baseUrl}/user/${id}`, {
+      headers: head
+    })
       .then((res) => {
         setErrorOccured(false)
         setPopupInfo(res.data)
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }

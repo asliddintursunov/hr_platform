@@ -6,8 +6,12 @@ import { useNavigate } from "react-router-dom"
 import useURL from "../../../hooks/useURL"
 import styles from '../../../css/Admin.module.css'
 import { baseUrl } from "../../../utils/api"
-function _NotAcceptedUsers() {
+import { useDispatch, useSelector } from "react-redux"
+import { logoutUser, sendHeaders } from "../../../features/userDataSlice"
 
+function _NotAcceptedUsers() {
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const { defaultImage } = useURL()
 
@@ -19,6 +23,11 @@ function _NotAcceptedUsers() {
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
 
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
     setIsOpen(true)
@@ -32,12 +41,16 @@ function _NotAcceptedUsers() {
 
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(`${baseUrl}/users`)
+    axios.get(`${baseUrl}/users`, { headers: head })
       .then((req) => {
         setDatas(req.data)
         setIsPending(false)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
@@ -55,13 +68,17 @@ function _NotAcceptedUsers() {
 
     axios.patch(`${baseUrl}/user/${id}`, {
       accepted: true,
-    })
+    }, { headers: head })
       .then((res) => {
         setPopupInfo(res.data)
         setErrorOccured(false)
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
@@ -76,7 +93,7 @@ function _NotAcceptedUsers() {
       return prev.filter(e => e.id !== id)
     })
 
-    axios.delete(`${baseUrl}/user/${id}`)
+    axios.delete(`${baseUrl}/user/${id}`, { headers: head })
       .then((res) => {
         console.log(res);
         setPopupInfo(res.data)
@@ -84,6 +101,10 @@ function _NotAcceptedUsers() {
         setErrorOccured(false)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }

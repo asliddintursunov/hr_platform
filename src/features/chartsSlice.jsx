@@ -1,11 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseUrl } from "../utils/api";
-
+const userRole = localStorage.getItem("userRole")
+const userId = localStorage.getItem("userId")
 export const fetchMajors = createAsyncThunk(
   'charts/fetchMajors',
   async () => {
-    const response = await axios.get(`${baseUrl}/stat`)
+    const response = await axios.get(`${baseUrl}/stat`, {
+      headers: {
+        'X-UserRole': userRole,
+        'X-UserId': userId
+      }
+    })
     return response.data
   }
 )

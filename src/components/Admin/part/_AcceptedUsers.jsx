@@ -5,8 +5,12 @@ import { useNavigate } from "react-router-dom"
 import _PopUp from "../../_PopUp"
 import useURL from "../../../hooks/useURL"
 import { baseUrl } from "../../../utils/api"
-function _AcceptedUsers() {
+import { useDispatch, useSelector } from "react-redux"
+import { logoutUser, sendHeaders } from "../../../features/userDataSlice"
 
+function _AcceptedUsers() {
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const { defaultImage } = useURL()
@@ -19,6 +23,12 @@ function _AcceptedUsers() {
   const [isOpen, setIsOpen] = useState(false);
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
+
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
 
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
@@ -33,12 +43,18 @@ function _AcceptedUsers() {
 
   const fetchData = useCallback(() => {
     setIsPending(true)
-    axios.get(`${baseUrl}/users`)
+    axios.get(`${baseUrl}/users`, {
+      headers: head
+    })
       .then((req) => {
         setIsPending(false)
         setDatas(req.data)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
@@ -49,7 +65,9 @@ function _AcceptedUsers() {
   useEffect(() => { fetchData() }, [fetchData])
 
   const handleDelete = (id) => {
-    axios.delete(`${baseUrl}/user/${id}`)
+    axios.delete(`${baseUrl}/user/${id}`, {
+      headers: head
+    })
       .then((res) => {
         setDatas(prev => {
           return prev.filter(data => data.id !== id)
@@ -59,6 +77,10 @@ function _AcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
@@ -74,6 +96,8 @@ function _AcceptedUsers() {
   const handleEdit = (id) => {
     axios.patch(`${baseUrl}/user/${id}`, {
       role: userRole,
+    }, {
+      headers: head
     })
       .then((res) => {
         setErrorOccured(false)
@@ -81,6 +105,10 @@ function _AcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }

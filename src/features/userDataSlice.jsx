@@ -1,24 +1,35 @@
+import { googleLogout } from "@react-oauth/google";
 import { createSlice } from "@reduxjs/toolkit";
 
+const userRole = localStorage.getItem("userRole")
+const userId = localStorage.getItem("userId")
+
 const headers = {
-  userId: null,
-  userRole: null,
+  'X-UserRole': userRole,
+  'X-UserId': userId
 }
 
 export const userDataSlice = createSlice({
   initialState: headers,
   name: 'headers',
   reducers: {
-    fetchUserIdHeader: (state, action) => {
-      state.userId = action.payload
-      console.log(action.payload);
+    sendHeaders: (state) => {
+      state["X-UserId"] = localStorage.getItem("userId")
+      state["X-UserRole"] = localStorage.getItem("userRole")
     },
-    fetchUserRoleHeader: (state, action) => {
-      state.userRole = action.payload
-      console.log(action.payload);
-    },
+    logoutUser: () => {
+
+      googleLogout()
+      localStorage.removeItem("token")
+      localStorage.removeItem("userRole")
+      localStorage.removeItem("userId")
+      setTimeout(() => {
+        location.assign('/signin')
+      }, 200);
+
+    }
   }
 })
 
-export const { fetchUserIdHeader, fetchUserRoleHeader } = userDataSlice.actions
+export const { sendHeaders, logoutUser } = userDataSlice.actions
 export default userDataSlice.reducer

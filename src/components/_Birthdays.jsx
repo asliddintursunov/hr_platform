@@ -4,9 +4,20 @@ import { useNavigate } from "react-router-dom"
 import _PopUp from "./_PopUp"
 import styles from '../css/Birthdays.module.css'
 import { baseUrl } from "../utils/api"
-function _Birthdays() {
+import { useDispatch, useSelector } from "react-redux"
+import { sendHeaders, logoutUser } from "../features/userDataSlice"
 
+function _Birthdays() {
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(
+    () => {
+      dispatch(sendHeaders())
+    }, []
+  )
+
 
   const [userBday, setUserBday] = useState([]) // Shows User's B-day in table
   var setUserBdayToDays = [] // Users' B-day in days in array
@@ -24,6 +35,7 @@ function _Birthdays() {
   const [errorOccured, setErrorOccured] = useState('')
 
 
+
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
     setIsOpen(true)
@@ -38,14 +50,20 @@ function _Birthdays() {
 
   const getBday = useCallback(() => {
     setIsPending(true)
-    axios.get(`${baseUrl}/users`)
+    axios.get(`${baseUrl}/users`, {
+      headers: head
+    })
       .then(res => {
         setIsPending(false)
         setUserBday(res.data)
         setUsersLength(res.data.length)
       })
       .catch(err => {
-        console.log(err);
+        if (err.response.status === 401) {
+          alert(err.response.data)
+          dispatch(logoutUser())
+        }
+
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
@@ -110,9 +128,7 @@ function _Birthdays() {
   dayTillBirthday()
 
   const greenBackground = {
-    // backgroundColor: 'rgb(23, 172, 23)',
     background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
-    // backgroundColor: 'lime',
     color: 'var(--white)',
   }
 

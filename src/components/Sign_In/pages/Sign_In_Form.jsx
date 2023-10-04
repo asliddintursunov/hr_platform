@@ -46,7 +46,7 @@ function Sign_In_Form() {
 
         setTimeout(() => {
           // Redirecting uset to another page
-          window.location.assign("/landing")
+          location.assign("/landing")
         }, 1500)
       })
       .catch((err) => {

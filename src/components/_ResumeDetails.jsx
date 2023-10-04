@@ -2,18 +2,35 @@ import { useEffect, useState } from 'react'
 import styles from '../css/ResumeDetails.module.css'
 import axios from 'axios'
 import { baseUrl } from '../utils/api'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logoutUser, sendHeaders } from '../features/userDataSlice'
 function _ResumeDetails() {
   const [userResumeData, setUserResumeData] = useState([])
-
+  const head = useSelector((state) => state.headers)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const userID = localStorage.getItem('userResumeID')
 
   useEffect(
     () => {
-      axios.get(`${baseUrl}` + '/search/' + userID)
+      dispatch(sendHeaders())
+    }, []
+  )
+  useEffect(
+    () => {
+      axios.get(`${baseUrl}` + '/search/' + userID, {
+        headers: head
+      })
         .then(res => {
           setUserResumeData(res.data)
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          if (err.response.status === 401) {
+            alert(err.response.data)
+            dispatch(logoutUser())
+          }
+        })
     }, [userID]
   )
 
