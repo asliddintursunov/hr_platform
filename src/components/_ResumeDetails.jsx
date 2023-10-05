@@ -5,12 +5,16 @@ import { baseUrl } from '../utils/api'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logoutUser, sendHeaders } from '../features/userDataSlice'
+import AnotherUser from './modal/AnotherUser'
 function _ResumeDetails() {
   const [userResumeData, setUserResumeData] = useState([])
   const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const userID = localStorage.getItem('userResumeID')
+
+  const [wrongUser, setWrongUser] = useState(false)
+  const [wrongUserData, setWrongUserData] = useState('')
 
   useEffect(
     () => {
@@ -27,7 +31,8 @@ function _ResumeDetails() {
         })
         .catch(err => {
           if (err.response.status === 401) {
-            alert(err.response.data)
+            setWrongUser(true)
+            setWrongUserData(err.response.data)
             dispatch(logoutUser())
           }
         })
@@ -35,46 +40,49 @@ function _ResumeDetails() {
   )
 
   return (
-    <div className={styles.resumeDetailsContainer} >
-      <div className={styles.resumeDetailsWrapper}>
-        <h1 className='display-3'>Resume Details</h1>
-        <div className={styles.userGeneralData}>
-          <h1>General Information</h1>
-          <div>Full Name: <code>{userResumeData.fullname}</code></div>
-          <div>Username: <code>{userResumeData.username}</code></div>
-          <div>Email: <code>{userResumeData.email}</code></div>
-          <div>Address: <code>{userResumeData.address}</code></div>
-          <div>Date of Birth: <code>{userResumeData.date_birth}</code></div>
-          <div className={styles.userPhoneNumber}>Phone Numbers:
-            {userResumeData.phone_number && userResumeData.phone_number.map((num, index) => (
-              <code key={index}>{num}</code>
-            ))}
+    <>
+      {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
+      <div className={styles.resumeDetailsContainer} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
+        <div className={styles.resumeDetailsWrapper}>
+          <h1 className='display-3'>Resume Details</h1>
+          <div className={styles.userGeneralData}>
+            <h1>General Information</h1>
+            <div>Full Name: <code>{userResumeData.fullname}</code></div>
+            <div>Username: <code>{userResumeData.username}</code></div>
+            <div>Email: <code>{userResumeData.email}</code></div>
+            <div>Address: <code>{userResumeData.address}</code></div>
+            <div>Date of Birth: <code>{userResumeData.date_birth}</code></div>
+            <div className={styles.userPhoneNumber}>Phone Numbers:
+              {userResumeData.phone_number && userResumeData.phone_number.map((num, index) => (
+                <code key={index}>{num}</code>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className={styles.userExperience}>
-          <h1>Work Experience</h1>
-          <div>Major: <code>{userResumeData.major}</code></div>
-          <div>Experience: <code>{userResumeData.experience} years</code></div>
-        </div>
-        <div className={styles.userSkills}>
-          <h1>Technologies, Skills</h1>
-          <div>
-            {userResumeData.skills && userResumeData.skills.map((skill, index) => (
-              <code key={index}>{skill}</code>
-            ))}
+          <div className={styles.userExperience}>
+            <h1>Work Experience</h1>
+            <div>Major: <code>{userResumeData.major}</code></div>
+            <div>Experience: <code>{userResumeData.experience} years</code></div>
           </div>
-        </div>
-        <div className={styles.userResumeContainer}>
-          <h1>Resume</h1>
-          <embed
-            type='application/pdf'
-            src={userResumeData.resume}
-            height='400'
-            width='100%'
-          />
+          <div className={styles.userSkills}>
+            <h1>Technologies, Skills</h1>
+            <div>
+              {userResumeData.skills && userResumeData.skills.map((skill, index) => (
+                <code key={index}>{skill}</code>
+              ))}
+            </div>
+          </div>
+          <div className={styles.userResumeContainer}>
+            <h1>Resume</h1>
+            <embed
+              type='application/pdf'
+              src={userResumeData.resume}
+              height='400'
+              width='100%'
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

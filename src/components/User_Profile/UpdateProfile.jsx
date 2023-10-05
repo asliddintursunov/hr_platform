@@ -11,7 +11,7 @@ import Edit_Address from "./part/Edit_Address"
 import Edit_DateOfBirth from "./part/Edit_DateOfBirth"
 import Edit_UploadImage from "./part/Edit_UploadImage"
 import AddPhoneNumber from "./part/AddPhoneNumber"
-import LogOutModal from "./part/LogOutModal"
+import LogOutModal from "../modal/LogOutModal"
 import _PopUp from "../_PopUp"
 import Edit_Major from "./part/Edit_Major"
 import Edit_Skills from "./part/Edit_Skills"
@@ -28,6 +28,7 @@ import { baseUrl } from "../../utils/api"
 import { googleLogout } from "@react-oauth/google"
 import { useDispatch, useSelector } from "react-redux"
 import { sendHeaders, logoutUser } from "../../features/userDataSlice"
+import AnotherUser from "../modal/AnotherUser"
 
 function UpdateProfile() {
   // Redirect user to another page
@@ -74,6 +75,9 @@ function UpdateProfile() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
+
+  const [wrongUser, setWrongUser] = useState(false)
+  const [wrongUserData, setWrongUserData] = useState('')
 
   useEffect(
     () => {
@@ -166,7 +170,8 @@ function UpdateProfile() {
       })
       .catch((err) => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
         if (err.response.data.msg) {
@@ -207,7 +212,8 @@ function UpdateProfile() {
       })
       .catch((err) => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
 
@@ -246,7 +252,8 @@ function UpdateProfile() {
       })
       .catch((err) => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
         console.log(err);
@@ -282,11 +289,12 @@ function UpdateProfile() {
   return (
     <div className={`container ${styles.userProfileContainer} pageAnimation`}>
       <br />
+      {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
       {isPending && <div className="loaderr"></div>}
       {!isPending && (
-        <div style={{ filter: showModal ? "blur(4px)" : "blur(0)" }}>
+        <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
           {/* Header, Image ... */}
           <div className={styles.profileUpdateHeader}>
             <h2>My Profile</h2>

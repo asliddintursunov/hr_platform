@@ -19,7 +19,7 @@ function CardChart() {
             return (
               <div key={item.count}>
                 <span>{item.experience} years of experience - </span>
-                <b>{item.count}</b>
+                <b>{item.count} ta</b>
               </div>
             )
           })}
@@ -35,7 +35,7 @@ function CardChart() {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
-                <b>{item.count}</b>
+                <b>{item.count} ta</b>
               </div>
             )
           })}
@@ -51,7 +51,7 @@ function CardChart() {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
-                <b>{item.count}</b>
+                <b>{item.count} ta</b>
               </div>
             )
           })}
@@ -67,7 +67,7 @@ function CardChart() {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
-                <b>{item.count}</b>
+                <b>{item.count} ta</b>
               </div>
             )
           })}
@@ -83,7 +83,7 @@ function CardChart() {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
-                <b>{item.count}</b>
+                <b>{item.count} ta</b>
               </div>
             )
           })}
@@ -99,7 +99,7 @@ function CardChart() {
             return (
               <div key={item.count}>
                 <p>{item.experience} years of experience - </p>
-                <b>{item.count}</b>
+                <b>{item.count} ta</b>
               </div>
             )
           })}

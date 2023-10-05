@@ -6,11 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser, sendHeaders } from '../features/userDataSlice';
+import AnotherUser from './modal/AnotherUser';
 function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode, confirmEmailCode,
   setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setIsOpen, setPopupInfo, setErrorOccured }) {
   const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const [wrongUser, setWrongUser] = useState(false)
+  const [wrongUserData, setWrongUserData] = useState('')
 
   useEffect(
     () => {
@@ -59,7 +63,8 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
       })
       .catch(err => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
 
@@ -88,18 +93,21 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
   }
 
   return (
-    <div>
-      <div className='popupContainer open'>
-        <div className='popup open'>
-          <label htmlFor="number-input">{popupInfo}</label>
-          <br />
-          <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
-          <button className="btn btn-primary sendBtn" onClick={() => { ClickSendBtn() }
-          }>Send</button>
-          {/* <button onClick={() => { ClickCloseBtn() }} className='btn closeBtn'><i className="bi bi-x-lg"></i></button> */}
+    <>
+      {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
+      <div style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
+        <div className='popupContainer open'>
+          <div className='popup open'>
+            <label htmlFor="number-input">{popupInfo}</label>
+            <br />
+            <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
+            <button className="btn btn-primary sendBtn" onClick={() => { ClickSendBtn() }
+            }>Send</button>
+            {/* <button onClick={() => { ClickCloseBtn() }} className='btn closeBtn'><i className="bi bi-x-lg"></i></button> */}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

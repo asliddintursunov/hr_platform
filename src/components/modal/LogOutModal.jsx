@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Fragment } from 'react'
-import '../User_Profile.css'
+import '../User_Profile/User_Profile.css'
 // import { Link } from 'react-router-dom'
 function LogOutModal({ toggleModal, logOut }) {
   return (

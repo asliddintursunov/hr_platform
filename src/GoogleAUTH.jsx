@@ -35,7 +35,6 @@ function GoogleAUTH({ page, number }) {
 
             setTimeout(() => {
               navigate(page)
-              // console.log(page);
             }, 2000)
           })
           .catch((err) => {
@@ -105,8 +104,6 @@ function GoogleAUTH({ page, number }) {
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       isUserValid(codeResponse)
-      console.log(codeResponse);
-      // localStorage.setItem("accessToken", codeResponse.access_token)
     },
     onError: (error) => console.error("Login Failed:", error)
   })
@@ -122,7 +119,6 @@ function GoogleAUTH({ page, number }) {
         })
         .then((res) => {
           sendUserDetails(res.data)
-          console.log(res.data);
         })
         .catch((err) => console.error(err))
     }

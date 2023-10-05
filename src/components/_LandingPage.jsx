@@ -16,7 +16,6 @@ function _LandingPage() {
   const [navbarAppear, setNavbarAppear] = useState(true)
 
   const location = useLocation()
-
   const defaultPath = "/" + location.pathname.split("/")[1] + "/"
 
   const style_nav_appear = {

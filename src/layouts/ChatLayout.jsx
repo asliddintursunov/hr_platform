@@ -21,6 +21,9 @@ function ChatLayout() {
     flex: 0.5,
   }
 
+  const [wrongUser, setWrongUser] = useState(false)
+  const [wrongUserData, setWrongUserData] = useState('')
+
   useEffect(
     () => {
       dispatch(sendHeaders())
@@ -43,7 +46,8 @@ function ChatLayout() {
       .then((res) => setOneUserData(res.data))
       .catch((err) => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
       })
@@ -56,7 +60,8 @@ function ChatLayout() {
       })
       .catch((err) => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
       })
@@ -64,15 +69,18 @@ function ChatLayout() {
 
 
   return (
-    <div className={`${styles.chatLayoutContainer} pageAnimation`}>
-      <div className={styles.chatPlace}>
-        {chatSelected && <_ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} showUsers={showUsers} />}
-        {!chatSelected && <h1 className="display-2 text-center">Select A Chat to have a conversation!</h1>}
+    <>
+      {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
+      <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
+        <div className={styles.chatPlace}>
+          {chatSelected && <_ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} showUsers={showUsers} />}
+          {!chatSelected && <h1 className="display-2 text-center">Select A Chat to have a conversation!</h1>}
+        </div>
+        <div className={styles.usersSidebar} style={showUsers ? usersSideBarStyle : null}>
+          <_ChatUserSidebar GetReceiverUsername={GetReceiverUsername} showUsers={showUsers} setShowUsers={setShowUsers} />
+        </div>
       </div>
-      <div className={styles.usersSidebar} style={showUsers ? usersSideBarStyle : null}>
-        <_ChatUserSidebar GetReceiverUsername={GetReceiverUsername} showUsers={showUsers} setShowUsers={setShowUsers} />
-      </div>
-    </div>
+    </>
   )
 }
 

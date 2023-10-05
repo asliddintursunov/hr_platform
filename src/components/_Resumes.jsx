@@ -5,6 +5,7 @@ import axios from 'axios'
 import { baseUrl } from '../utils/api'
 import { logoutUser, sendHeaders } from '../features/userDataSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import AnotherUser from './modal/AnotherUser'
 function _Resumes() {
   const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
@@ -29,6 +30,9 @@ function _Resumes() {
     'FullStack-developer', 'Frontend-developer', 'Backend-developer', 'Mobile-developer', 'Desktop-developer', 'Design-UI/UX'
   ]
 
+  const [wrongUser, setWrongUser] = useState(false)
+  const [wrongUserData, setWrongUserData] = useState('')
+
   useEffect(
     () => {
       dispatch(sendHeaders())
@@ -50,7 +54,8 @@ function _Resumes() {
       })
       .catch(err => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
       })
@@ -70,7 +75,8 @@ function _Resumes() {
       })
       .catch(err => {
         if (err.response.status === 401) {
-          alert(err.response.data)
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
       })
@@ -106,7 +112,8 @@ function _Resumes() {
         })
         .catch(err => {
           if (err.response.status === 401) {
-            alert(err.response.data)
+            setWrongUser(true)
+            setWrongUserData(err.response.data)
             dispatch(logoutUser())
           }
         })
@@ -119,117 +126,120 @@ function _Resumes() {
   }
 
   return (
-    <div className={`text-center ${styles.resumesPage} pageAnimation`}>
-      <div className={styles.header} style={{}}>
-        <div>
-          <h1 className='display-2'>Resumes</h1>
+    <>
+      {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
+      <div className={`text-center ${styles.resumesPage} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
+        <div className={styles.header} style={{}}>
           <div>
-            <span>CV&nbsp;&#x2f;&nbsp;IT Jobs</span>
-          </div>
-          <div>
-            <strong>User Resumes</strong>
-            <strong>Resumes of people who are looking for an IT job</strong>
+            <h1 className='display-2'>Resumes</h1>
+            <div>
+              <span>CV&nbsp;&#x2f;&nbsp;IT Jobs</span>
+            </div>
+            <div>
+              <strong>User Resumes</strong>
+              <strong>Resumes of people who are looking for an IT job</strong>
+            </div>
           </div>
         </div>
-      </div>
-      <main className={styles.main}>
-        <aside className={styles.leftAside}>
-          {resumeData.length === 0 && <h1 className='display-4 text-secondary'>No Suitable CV</h1>}
-          {resumeData.length > 0 && resumeData.map((resume) => {
-            return (
-              <div key={resume.id} className={styles.resumeCard}>
-                <div className={styles.resumeCardMajor}>
-                  <h2>{resume.major}</h2>
-                </div>
-                <div className={styles.resumeCardSkills}>
-                  {resume.skills && resume.skills.slice(2, -1).map((skill, index) => (
-                    <code key={index}>{skill}</code>
-                  ))}
-                </div>
-                <div className={styles.resumeCardMore}>
-                  <div className={styles.resumeCardUsername}>
-                    <span>Username</span>
-                    <p>{resume.username}</p>
+        <main className={styles.main}>
+          <aside className={styles.leftAside}>
+            {resumeData.length === 0 && <h1 className='display-4 text-secondary'>No Suitable CV</h1>}
+            {resumeData.length > 0 && resumeData.map((resume) => {
+              return (
+                <div key={resume.id} className={styles.resumeCard}>
+                  <div className={styles.resumeCardMajor}>
+                    <h2>{resume.major}</h2>
                   </div>
-                  <div className={styles.resumeCardExperience}>
-                    <span>Experience</span>
-                    <h3>{resume.experience}</h3>
+                  <div className={styles.resumeCardSkills}>
+                    {resume.skills && resume.skills.slice(2, -1).map((skill, index) => (
+                      <code key={index}>{skill}</code>
+                    ))}
                   </div>
-                  <div className={styles.resumeCVCard}>
-                    <span>Full Resume</span>
-                    <button onClick={() => seeResumeDetail(resume.id)}>See</button>
+                  <div className={styles.resumeCardMore}>
+                    <div className={styles.resumeCardUsername}>
+                      <span>Username</span>
+                      <p>{resume.username}</p>
+                    </div>
+                    <div className={styles.resumeCardExperience}>
+                      <span>Experience</span>
+                      <h3>{resume.experience}</h3>
+                    </div>
+                    <div className={styles.resumeCVCard}>
+                      <span>Full Resume</span>
+                      <button onClick={() => seeResumeDetail(resume.id)}>See</button>
+                    </div>
                   </div>
                 </div>
+              )
+            })}
+          </aside>
+          <aside className={styles.rightAside}>
+            <form method='GET' onSubmit={(e) => e.preventDefault()}>
+              <div className={styles.filterWrapper}>
+                <button type='submit' onClick={sendData}>Filter</button>
+                <button type='submit' onClick={seeAllResumes}>All</button>
               </div>
-            )
-          })}
-        </aside>
-        <aside className={styles.rightAside}>
-          <form method='GET' onSubmit={(e) => e.preventDefault()}>
-            <div className={styles.filterWrapper}>
-              <button type='submit' onClick={sendData}>Filter</button>
-              <button type='submit' onClick={seeAllResumes}>All</button>
-            </div>
-            <div className={styles.filterWrapper}>
-              <h3>Specializations</h3>
-              {Specializations && Specializations.map(type => {
-                return (
-                  <div key={type}>
-                    <label>
-                      <input
-                        type="radio"
-                        name="skills"
-                        value={type.split('-')[0]}
-                        onChange={(e) => MajorStudy(e.target.value)}
-                      />
-                      <span className={`${styles.radioCheckmark}`}></span>
-                      {type.split('-').join(' ')}
-                    </label>
-                  </div>
-                )
-              })}
-            </div>
-            <div className={styles.filterWrapper}>
-              <h3>Work Experience</h3>
-              {WorkExperience && WorkExperience.map(type => {
-                return (
-                  <div key={type}>
-                    <label>
-                      <input
-                        type="radio"
-                        name="workexperience"
-                        value={type}
-                        onChange={(e) => ExperienceYears(e.target.value)}
-                      />
-                      <span className={`${styles.radioCheckmark}`}></span>
-                      {type} years
-                    </label>
-                  </div>
-                )
-              })}
-            </div>
-            <div className={styles.filterWrapper}>
-              <h3>Languages / Technologies</h3>
-              {Skills && Skills.map(type => {
-                return (
-                  <div key={type}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value={type.split('-').join('').toLowerCase()}
-                        onChange={(e) => { KnowingSkills(e.target.value) }}
-                      />
-                      {type.split('-').join(' ')}
-                      <span className={styles.checkboxSpan}></span>
-                    </label>
-                  </div>
-                )
-              })}
-            </div>
-          </form>
-        </aside>
-      </main>
-    </div>
+              <div className={styles.filterWrapper}>
+                <h3>Specializations</h3>
+                {Specializations && Specializations.map(type => {
+                  return (
+                    <div key={type}>
+                      <label>
+                        <input
+                          type="radio"
+                          name="skills"
+                          value={type.split('-')[0]}
+                          onChange={(e) => MajorStudy(e.target.value)}
+                        />
+                        <span className={`${styles.radioCheckmark}`}></span>
+                        {type.split('-').join(' ')}
+                      </label>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className={styles.filterWrapper}>
+                <h3>Work Experience</h3>
+                {WorkExperience && WorkExperience.map(type => {
+                  return (
+                    <div key={type}>
+                      <label>
+                        <input
+                          type="radio"
+                          name="workexperience"
+                          value={type}
+                          onChange={(e) => ExperienceYears(e.target.value)}
+                        />
+                        <span className={`${styles.radioCheckmark}`}></span>
+                        {type} years
+                      </label>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className={styles.filterWrapper}>
+                <h3>Languages / Technologies</h3>
+                {Skills && Skills.map(type => {
+                  return (
+                    <div key={type}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={type.split('-').join('').toLowerCase()}
+                          onChange={(e) => { KnowingSkills(e.target.value) }}
+                        />
+                        {type.split('-').join(' ')}
+                        <span className={styles.checkboxSpan}></span>
+                      </label>
+                    </div>
+                  )
+                })}
+              </div>
+            </form>
+          </aside>
+        </main>
+      </div>
+    </>
   )
 }
 

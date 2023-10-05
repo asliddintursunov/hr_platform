@@ -23,25 +23,23 @@ import { useEffect, useState } from "react"
 
 function App() {
   const userRole = localStorage.getItem('userRole');
-  const [authenticated, setAuthenticated] = useState(localStorage.getItem("token"));
+  const isAuthenticated = localStorage.getItem('token');
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("token");
-    if (loggedInUser) {
-      setAuthenticated(loggedInUser);
-      if (location.pathname === '/signin') navigate("/landing");
+    if (!isAuthenticated) {
+      // If not authenticated, only allow navigation to signin or signup pages
+      if (location.pathname !== '/signin' && location.pathname !== '/signup') {
+        navigate('/signin');
+      }
+    } else {
+      // If authenticated, prevent navigation to signin and signup pages
+      if (location.pathname === '/signin' || location.pathname === '/signup') {
+        navigate('/landing');
+      }
     }
-  }, []);
-
-  useEffect(() => {
-    if (!authenticated) navigate("/signin");
-    else if (authenticated)
-      navigate('/landing')
-    else if (location.pathname)
-      navigate(location.pathname)
-  }, [authenticated]);
+  }, [isAuthenticated, location.pathname]);
 
   return (
     <div>
@@ -49,7 +47,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUpLayout />} />
         <Route path="/signin" element={<SignInLayout />} />
-        {authenticated ? (
+        {isAuthenticated ? (
           <Route path="/landing" element={<_LandingPage />}>
             {userRole == 'admin' && <Route index element={<_About />} />}
             {userRole == 'moderator' && <Route index element={<_About />} />}
@@ -77,7 +75,7 @@ function App() {
         ) : (
           <Route path="/signin" element={<SignInLayout />} />
         )}
-        {(!authenticated) && <Route path="/landing" element={<_LandingPage />} />}
+        {(!isAuthenticated) && <Route path="/landing" element={<_LandingPage />} />}
 
         <Route path="*" element={<_PageNotFound404 />} />
       </Routes>
