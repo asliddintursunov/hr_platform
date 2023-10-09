@@ -6,7 +6,7 @@ function AcceptUserModal({ AddUser, toggleAcceptModal }) {
       <div className='modal-backdrop'>
         <div className="modal">
           <div style={modalStyle}>
-            <h3 className="text-center">Are you sure you want to reject this user?</h3>
+            <h3 className="text-center">Are you sure you want to accept this user?</h3>
             <div className='modal-options'>
               <button onClick={toggleAcceptModal} className="btn btn-success">No</button>
               <button onClick={() => {

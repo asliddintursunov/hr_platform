@@ -1,3 +1,5 @@
+import { Fragment } from "react"
+
 function RejectUserModal({ toggleRejectModal, RejectUser }) {
   return (
     <Fragment>

@@ -19,6 +19,7 @@ function _ResumeDetails() {
   useEffect(
     () => {
       dispatch(sendHeaders())
+      console.clear()
     }, []
   )
   useEffect(

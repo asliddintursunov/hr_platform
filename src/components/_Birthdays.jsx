@@ -19,6 +19,7 @@ function _Birthdays() {
   useEffect(
     () => {
       dispatch(sendHeaders())
+      console.clear()
     }, []
   )
 

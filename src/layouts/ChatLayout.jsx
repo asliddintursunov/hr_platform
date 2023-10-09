@@ -27,6 +27,7 @@ function ChatLayout() {
   useEffect(
     () => {
       dispatch(sendHeaders())
+      console.clear()
     }, []
   )
 

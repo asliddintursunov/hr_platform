@@ -19,7 +19,7 @@ import _PageNotFound404 from "./_PageNotFound404"
 import _About from "./_About"
 import _Resumes from "./_Resumes"
 import _ResumeDetails from "./_ResumeDetails"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 function App() {
   const userRole = localStorage.getItem('userRole');
@@ -35,7 +35,7 @@ function App() {
       }
     } else {
       // If authenticated, prevent navigation to signin and signup pages
-      if (location.pathname === '/signin' || location.pathname === '/signup') {
+      if (location.pathname === '/signin' || location.pathname === '/signup' || location.pathname.split('').reverse()[0] === '/') {
         navigate('/landing');
       }
     }

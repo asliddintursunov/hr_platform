@@ -24,6 +24,7 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 
 	useEffect(() => {
 		dispatch(sendHeaders())
+		console.clear()
 	}, [])
 
 	useEffect(() => {

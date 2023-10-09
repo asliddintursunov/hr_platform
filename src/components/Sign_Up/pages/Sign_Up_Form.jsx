@@ -43,6 +43,7 @@ function Sign_Up_Form() {
 
 
   const addNewUser = () => {
+    console.log(passwordValue === passwordMatchValue);
     if (passwordValue == passwordMatchValue) {
       axios.post(`${baseUrl}/register`, {
         username: usernameValue,
@@ -79,7 +80,7 @@ function Sign_Up_Form() {
   return (
     <div className='sign-up-form-container' id='signUpContainer'>
       {confirmCodeOpen && <_ConfirmationCode setConfirmCodeOpen={setConfirmCodeOpen} popupInfo={popupInfo}
-        setConfirmEmailCode={setConfirmEmailCode} confirmEmailCode={confirmEmailCode} setUsernameValue={setUsernameValue} setEmailValue={setEmailValue}
+        setConfirmEmailCode={setConfirmEmailCode} confirmEmailCode={confirmEmailCode} usernameValue={usernameValue} setUsernameValue={setUsernameValue} setEmailValue={setEmailValue}
         setPasswordValue={setPasswordValue} setPasswordMatchValue={setPasswordMatchValue} setIsOpen={setIsOpen} setPopupInfo={setPopupInfo}
         setErrorOccured={setErrorOccured} />}
       {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}

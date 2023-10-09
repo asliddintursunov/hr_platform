@@ -33,7 +33,9 @@ function _NotAcceptedUsers() {
 
   useEffect(() => {
     dispatch(sendHeaders())
+    console.clear()
   }, [])
+
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {
@@ -155,7 +157,7 @@ function _NotAcceptedUsers() {
             <h4>ID</h4>
           </div>
           <div className="col-3">
-            <h4>User</h4>
+            <h4>Full Name</h4>
           </div>
           <div className="col-3">
             <h4>Username</h4>

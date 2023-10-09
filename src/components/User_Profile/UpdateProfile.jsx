@@ -82,6 +82,7 @@ function UpdateProfile() {
   useEffect(
     () => {
       dispatch(sendHeaders())
+      console.clear()
     }, []
   )
 

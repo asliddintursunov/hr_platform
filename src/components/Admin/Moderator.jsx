@@ -31,6 +31,7 @@ function Moderator() {
 
   useEffect(() => {
     dispatch(sendHeaders())
+    console.clear()
   }, [])
 
   // Add a request interceptor

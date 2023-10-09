@@ -1,35 +1,28 @@
 import axios from 'axios';
 import { InputNumber } from 'primereact/inputnumber';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import '../css/_PopUp.css'
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../utils/api';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser, sendHeaders } from '../features/userDataSlice';
 import AnotherUser from './modal/AnotherUser';
 function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode, confirmEmailCode,
-  setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setIsOpen, setPopupInfo, setErrorOccured }) {
-  const head = useSelector((state) => state.headers)
-  const dispatch = useDispatch()
+  setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setIsOpen, setPopupInfo, setErrorOccured, usernameValue }) {
+
   const navigate = useNavigate()
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState('')
+  const [remindEmailCode, setRemindEmailCode] = useState(true)
 
-  useEffect(
-    () => {
-      dispatch(sendHeaders())
-    }, []
-  )
   const sendEmailCode = useCallback(() => {
 
     axios.post(`${baseUrl}/register/code`, {
-      code: confirmEmailCode.toString(),
-      username: localStorage.getItem('new_username')
-    }, {
-      headers: head
-    })
+      code: confirmEmailCode ? confirmEmailCode.toString() : null,
+      username: usernameValue
+    },
+    )
       .then(req => {
+        setRemindEmailCode(false)
         if (req.status === 202) {
           console.log(202, req);
           setConfirmCodeOpen(true)
@@ -55,9 +48,7 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
 
             setTimeout(() => {
               navigate('/signin')
-              console.log(2000 + 'ms');
             }, 2000);
-            console.log(500 + 'ms');
           }, 500);
         }
       })
@@ -65,9 +56,7 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
         if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
-          dispatch(logoutUser())
         }
-
         setIsOpen(true)
         setErrorOccured(true)
         setConfirmCodeOpen(false)
@@ -76,7 +65,6 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
       })
   }, [confirmEmailCode, setIsOpen, setPopupInfo, navigate, setUsernameValue, setEmailValue,
     setPasswordValue, setPasswordMatchValue, setConfirmCodeOpen, setErrorOccured])
-  // const [emailCode, setEmailCode] = useState(null);
 
   const ClickSendBtn = () => {
     setConfirmEmailCode('')
@@ -95,17 +83,18 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
   return (
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
-      <div style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
-        <div className='popupContainer open'>
-          <div className='popup open'>
-            <label htmlFor="number-input">{popupInfo}</label>
-            <br />
-            <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
-            <button className="btn btn-primary sendBtn" onClick={() => { ClickSendBtn() }
-            }>Send</button>
-            {/* <button onClick={() => { ClickCloseBtn() }} className='btn closeBtn'><i className="bi bi-x-lg"></i></button> */}
-          </div>
-        </div>
+      <div className='popupContainer open'>
+        <form className='popup open' onSubmit={e => e.preventDefault()}>
+          <label htmlFor="number-input">
+            <h3>{popupInfo}</h3>
+          </label>
+          <br />
+          {remindEmailCode && <h3>Emailingizga kelgan 6 ta raqamdan iborat sonni kiriting!</h3>}
+          <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
+          <button type='submit' className="btn btn-primary sendBtn" onClick={() => { ClickSendBtn() }
+          }>Send</button>
+          {/* <button onClick={() => { ClickCloseBtn() }} className='btn closeBtn'><i className="bi bi-x-lg"></i></button> */}
+        </form>
       </div>
     </>
   )

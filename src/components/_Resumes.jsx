@@ -33,9 +33,13 @@ function _Resumes() {
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState('')
 
+  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [selectedExperience, setSelectedExperience] = useState(null);
+
   useEffect(
     () => {
       dispatch(sendHeaders())
+      console.clear()
     }, []
   )
   const sendData = () => {
@@ -62,6 +66,10 @@ function _Resumes() {
   }
 
   const seeAllResumes = () => {
+    setSelectedSkill(null);
+    setSelectedExperience(null);
+    setSkills([])
+
     setResumeData([])
     axios.post(`${baseUrl}/search`, {
       skills: undefined,
@@ -129,7 +137,7 @@ function _Resumes() {
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`text-center ${styles.resumesPage} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
-        <div className={styles.header} style={{}}>
+        <div className={styles.header}>
           <div>
             <h1 className='display-2'>Resumes</h1>
             <div>
@@ -183,16 +191,25 @@ function _Resumes() {
                 <h3>Specializations</h3>
                 {Specializations && Specializations.map(type => {
                   return (
-                    <div key={type}>
-                      <label>
+                    <div key={type} className={styles.radioWrapper}>
+                      <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                         <input
+                          className={styles.InputRadio}
+                          style={{
+                            cursor: 'pointer',
+                            marginRight: '5px',
+                          }}
                           type="radio"
                           name="skills"
                           value={type.split('-')[0]}
-                          onChange={(e) => MajorStudy(e.target.value)}
+                          onChange={(e) => {
+                            MajorStudy(e.target.value)
+                            setSelectedSkill(e.target.value)
+                          }}
+                          checked={selectedSkill === type.split('-')[0]}
                         />
-                        <span className={`${styles.radioCheckmark}`}></span>
-                        {type.split('-').join(' ')}
+                        <h4>{type.split('-')[0]}</h4>
+                        {/* <span className={`${styles.radioCheckmark}`}></span> */}
                       </label>
                     </div>
                   )
@@ -203,15 +220,24 @@ function _Resumes() {
                 {WorkExperience && WorkExperience.map(type => {
                   return (
                     <div key={type}>
-                      <label>
+                      <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                         <input
+                          style={{
+                            cursor: 'pointer',
+                            marginRight: '5px',
+                          }}
+                          className={styles.InputRadio}
                           type="radio"
                           name="workexperience"
                           value={type}
-                          onChange={(e) => ExperienceYears(e.target.value)}
+                          onChange={(e) => {
+                            ExperienceYears(e.target.value)
+                            setSelectedExperience(e.target.value)
+                          }}
+                          checked={selectedExperience === type}
                         />
-                        <span className={`${styles.radioCheckmark}`}></span>
-                        {type} years
+                        {/* <span className={`${styles.radioCheckmark}`}></span> */}
+                        <h4>{type} years</h4>
                       </label>
                     </div>
                   )
@@ -221,15 +247,20 @@ function _Resumes() {
                 <h3>Languages / Technologies</h3>
                 {Skills && Skills.map(type => {
                   return (
-                    <div key={type}>
-                      <label>
+                    <div key={type} style={{ marginBottom: '10px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center' }}>
                         <input
                           type="checkbox"
                           value={type.split('-').join('').toLowerCase()}
                           onChange={(e) => { KnowingSkills(e.target.value) }}
+                          checked={skills.includes(type.split('-').join('').toLowerCase())}
+                          style={{
+                            cursor: 'pointer',
+                            marginRight: '5px',
+                          }}
                         />
-                        {type.split('-').join(' ')}
-                        <span className={styles.checkboxSpan}></span>
+                        <h4>{type.split('-').join(' ')}</h4>
+                        {/* <span className={styles.checkboxSpan}></span> */}
                       </label>
                     </div>
                   )

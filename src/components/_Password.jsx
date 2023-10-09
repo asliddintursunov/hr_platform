@@ -1,4 +1,3 @@
-import { Fragment } from "react"
 import './Sign_In/Sign_In.css'
 import './Sign_Up/Sign_Up.css'
 function _Password({ passwordValue, setPasswordValue, validPasswordChecker,
@@ -9,8 +8,8 @@ function _Password({ passwordValue, setPasswordValue, validPasswordChecker,
 
   //* ########################################################################################
   return (
-    <Fragment>
-      <label style={{ position: 'relative',  maxWidth: 'min-content', lineHeight: '1.2rem' }}>
+    <>
+      <label style={{ position: 'relative', maxWidth: 'min-content', lineHeight: '1.2rem' }}>
         <input style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null} value={passwordValue} className='form-control' type={passwordType ? "password" : "text"} placeholder='Password'
           onChange={e => setPasswordValue(e.target.value)}
           onKeyUp={() => {
@@ -31,7 +30,7 @@ function _Password({ passwordValue, setPasswordValue, validPasswordChecker,
         {passwordValue.length >= 1 && validPasswordChecker !== 'Valid Password' && <i style={{ color: 'red', fontSize: '1rem' }}>{validPasswordChecker}</i>}
         {/* ==================================== */}
       </label>
-    </Fragment>
+    </>
   )
 }
 
