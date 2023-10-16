@@ -10,6 +10,10 @@ export const store = configureStore({
     connection: userConnectionSlice,
     charts: chartsSlice,
     usersData: chatWebSocketPlaceSlicer,
-    headers: userDataSlice
-  }
+    headers: userDataSlice,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })

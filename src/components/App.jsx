@@ -29,12 +29,10 @@ function App() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      // If not authenticated, only allow navigation to signin or signup pages
       if (location.pathname !== '/signin' && location.pathname !== '/signup') {
         navigate('/signin');
       }
     } else {
-      // If authenticated, prevent navigation to signin and signup pages
       if (location.pathname === '/signin' || location.pathname === '/signup' || location.pathname.split('').reverse()[0] === '/') {
         navigate('/landing');
       }

@@ -5,7 +5,7 @@ import '../css/_PopUp.css'
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../utils/api';
 import AnotherUser from './modal/AnotherUser';
-function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode, confirmEmailCode,
+function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, setConfirmEmailCode, confirmEmailCode,
   setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setIsOpen, setPopupInfo, setErrorOccured, usernameValue }) {
 
   const navigate = useNavigate()
@@ -15,7 +15,7 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
   const [remindEmailCode, setRemindEmailCode] = useState(true)
 
   const sendEmailCode = useCallback(() => {
-
+    setConfirmCodeOpen(false)
     axios.post(`${baseUrl}/register/code`, {
       code: confirmEmailCode ? confirmEmailCode.toString() : null,
       username: usernameValue
@@ -62,6 +62,7 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
         setConfirmCodeOpen(false)
         setPopupInfo(err.response.data)
 
+        setClosepopup(true)
       })
   }, [confirmEmailCode, setIsOpen, setPopupInfo, navigate, setUsernameValue, setEmailValue,
     setPasswordValue, setPasswordMatchValue, setConfirmCodeOpen, setErrorOccured])
@@ -84,7 +85,7 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className='popupContainer open'>
-        <form className='popup open' onSubmit={e => e.preventDefault()}>
+        {confirmCodeOpen && <form className='popup open' onSubmit={e => e.preventDefault()}>
           <label htmlFor="number-input">
             <h3>{popupInfo}</h3>
           </label>
@@ -94,7 +95,7 @@ function _ConfirmationCode({ setConfirmCodeOpen, popupInfo, setConfirmEmailCode,
           <button type='submit' className="btn btn-primary sendBtn" onClick={() => { ClickSendBtn() }
           }>Send</button>
           {/* <button onClick={() => { ClickCloseBtn() }} className='btn closeBtn'><i className="bi bi-x-lg"></i></button> */}
-        </form>
+        </form>}
       </div>
     </>
   )

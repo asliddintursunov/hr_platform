@@ -32,7 +32,6 @@ function _AcceptedUsers() {
 
   useEffect(() => {
     dispatch(sendHeaders())
-    console.clear()
   }, [])
 
   // Token Expired Validation

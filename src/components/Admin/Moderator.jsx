@@ -14,7 +14,6 @@ import AnotherUser from "../modal/AnotherUser"
 function Moderator() {
   const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
   const { defaultImage } = useURL()
@@ -29,18 +28,23 @@ function Moderator() {
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState('')
 
+  const socketInstance = useSelector((state) => state.connection.socketInstance)
+  const isConnected = useSelector((state) => state.connection.isConnected)
+
+  useEffect(
+    () => {
+      if (isConnected) {
+        console.log(isConnected + " Disconnected");
+        socketInstance.disconnect();
+      }
+    }, []
+  )
+
   useEffect(() => {
     dispatch(sendHeaders())
-    console.clear()
   }, [])
 
-  // Add a request interceptor
-  // axios.interceptors.request.use(function (config) {
-  //   const token = localStorage.getItem('token')
-  //   config.headers.Authorization = 'Bearer ' + token;
 
-  //   return config;
-  // });
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {

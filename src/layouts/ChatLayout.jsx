@@ -6,31 +6,39 @@ import axios from "axios"
 import { baseUrl } from "../utils/api"
 import { useDispatch, useSelector } from "react-redux"
 import { logoutUser, sendHeaders } from "../features/userDataSlice"
+import { connect } from "../features/socketConnectionSlice"
 
 function ChatLayout() {
+
+  const socketInstance = useSelector((state) => state.connection.socketInstance)
+  const isConnected = useSelector((state) => state.connection.isConnected)
   const head = useSelector((state) => state.headers)
-  const dispatch = useDispatch()
 
   const [chatSelected, setChatSelected] = useState(false)
   const [oneUserData, setOneUserData] = useState({})
   const [messages, setMessages] = useState([])
 
   const [showUsers, setShowUsers] = useState(false)
-  const usersSideBarStyle = {
-    transform: 'translateX(78%)',
-    flex: 0.5,
-  }
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState('')
+  const userID = localStorage.getItem("userId")
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(sendHeaders())
+    dispatch(connect())
+  }, [])
 
   useEffect(
     () => {
-      dispatch(sendHeaders())
-      console.clear()
-    }, []
+      if (isConnected && userID) {
+        socketInstance.emit("hello", {
+          id: userID
+        })
+      }
+    }, [isConnected, socketInstance, userID]
   )
-
 
   const GetReceiverUsername = async (id, username) => {
     localStorage.setItem("receiverId", id)
@@ -86,3 +94,8 @@ function ChatLayout() {
 }
 
 export default ChatLayout
+
+const usersSideBarStyle = {
+  transform: 'translateX(78%)',
+  flex: 0.5,
+}

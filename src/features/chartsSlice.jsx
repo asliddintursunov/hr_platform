@@ -3,6 +3,7 @@ import axios from "axios";
 import { baseUrl } from "../utils/api";
 const userRole = localStorage.getItem("userRole")
 const userId = localStorage.getItem("userId")
+
 export const fetchMajors = createAsyncThunk(
   'charts/fetchMajors',
   async () => {

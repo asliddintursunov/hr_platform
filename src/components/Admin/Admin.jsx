@@ -1,5 +1,7 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import styles from '../../css/Admin.module.css'
+import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 function Admin() {
   const location = useLocation()
   const defaultPath = '/' + location.pathname.split('/')[1] + '/' + location.pathname.split('/')[2] + '/'
@@ -8,6 +10,16 @@ function Admin() {
     color: 'var(--white)',
     backgroundColor: 'var(--dark)'
   }
+  const socketInstance = useSelector((state) => state.connection.socketInstance)
+  const isConnected = useSelector((state) => state.connection.isConnected)
+  useEffect(
+    () => {
+      if (isConnected) {
+        console.log(isConnected + " Disconnected");
+        socketInstance.disconnect();
+      }
+    }, []
+  )
 
   return (
     <div className={`container ${styles.adminContainer} pageAnimation`}>

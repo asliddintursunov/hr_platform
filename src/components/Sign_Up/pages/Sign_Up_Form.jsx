@@ -22,6 +22,7 @@ function Sign_Up_Form() {
 
   // Pop Up States  
   const [isOpen, setIsOpen] = useState(false);
+
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
   const [confirmEmailCode, setConfirmEmailCode] = useState('')
@@ -79,7 +80,7 @@ function Sign_Up_Form() {
 
   return (
     <div className='sign-up-form-container' id='signUpContainer'>
-      {confirmCodeOpen && <_ConfirmationCode setConfirmCodeOpen={setConfirmCodeOpen} popupInfo={popupInfo}
+      {confirmCodeOpen && <_ConfirmationCode confirmCodeOpen={confirmCodeOpen} setConfirmCodeOpen={setConfirmCodeOpen} popupInfo={popupInfo}
         setConfirmEmailCode={setConfirmEmailCode} confirmEmailCode={confirmEmailCode} usernameValue={usernameValue} setUsernameValue={setUsernameValue} setEmailValue={setEmailValue}
         setPasswordValue={setPasswordValue} setPasswordMatchValue={setPasswordMatchValue} setIsOpen={setIsOpen} setPopupInfo={setPopupInfo}
         setErrorOccured={setErrorOccured} />}

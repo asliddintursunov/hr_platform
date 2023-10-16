@@ -79,10 +79,21 @@ function UpdateProfile() {
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState('')
 
+  const socketInstance = useSelector((state) => state.connection.socketInstance)
+  const isConnected = useSelector((state) => state.connection.isConnected)
+
+  useEffect(
+    () => {
+      if (isConnected) {
+        console.log(isConnected + " Disconnected");
+        socketInstance.disconnect();
+      }
+    }, []
+  )
+
   useEffect(
     () => {
       dispatch(sendHeaders())
-      console.clear()
     }, []
   )
 

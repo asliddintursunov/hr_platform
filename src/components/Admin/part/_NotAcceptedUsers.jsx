@@ -33,7 +33,7 @@ function _NotAcceptedUsers() {
 
   useEffect(() => {
     dispatch(sendHeaders())
-    console.clear()
+    // console.clear()
   }, [])
 
   // Token Expired Validation
@@ -55,6 +55,7 @@ function _NotAcceptedUsers() {
     axios
       .get(`${baseUrl}/users`, { headers: head })
       .then((req) => {
+        console.log(req.data);
         setDatas(req.data)
         setIsPending(false)
       })
@@ -177,7 +178,7 @@ function _NotAcceptedUsers() {
             {datas &&
               datas.map((data) => {
                 return (
-                  !data.accepted && (
+                  !data.accepted && data.approved && (
                     <div key={data.id} className={`form-control ${styles.userDataContainerDiv}`}>
                       <div className="col-1 text-center">
                         <b>#{data.id}</b>

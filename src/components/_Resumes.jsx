@@ -9,9 +9,19 @@ import AnotherUser from './modal/AnotherUser'
 function _Resumes() {
   const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
+  const socketInstance = useSelector((state) => state.connection.socketInstance)
+  const isConnected = useSelector((state) => state.connection.isConnected)
+
+  useEffect(
+    () => {
+      if (isConnected) {
+        console.log(isConnected + " Disconnected");
+        socketInstance.disconnect();
+      }
+    }, []
+  )
   const [skills, setSkills] = useState([])
   const [experience, setExperience] = useState('')
   const [major, setMajor] = useState('')
@@ -39,7 +49,6 @@ function _Resumes() {
   useEffect(
     () => {
       dispatch(sendHeaders())
-      console.clear()
     }, []
   )
   const sendData = () => {
@@ -53,8 +62,6 @@ function _Resumes() {
     })
       .then(res => {
         setResumeData(res.data.results)
-        console.log(res);
-
       })
       .catch(err => {
         if (err.response.status === 401) {
@@ -66,11 +73,14 @@ function _Resumes() {
   }
 
   const seeAllResumes = () => {
+
     setSelectedSkill(null);
     setSelectedExperience(null);
     setSkills([])
-
+    setMajor('')
     setResumeData([])
+    setExperience('')
+
     axios.post(`${baseUrl}/search`, {
       skills: undefined,
       major: undefined,
@@ -205,6 +215,7 @@ function _Resumes() {
                           onChange={(e) => {
                             MajorStudy(e.target.value)
                             setSelectedSkill(e.target.value)
+                            console.log(e.target.value)
                           }}
                           checked={selectedSkill === type.split('-')[0]}
                         />

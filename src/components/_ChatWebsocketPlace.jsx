@@ -22,19 +22,11 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 
 	useEffect(() => {
 		socketInstance.on("new_message", (data) => {
-			console.log(data);
 			setMessages(data)
 			scrollToBottom()
 		})
-	}, [])
+	}, [messages, socketInstance])
 
-	useEffect(() => {
-		socketInstance.on("see_message", (data) => {
-			console.log(data);
-			setMessages(data)
-			scrollToBottom()
-		})
-	}, [])
 
 	useEffect(() => {
 		scrollToBottom()
@@ -60,13 +52,14 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	const readMsg = (id) => {
 		if (senderText === "" && Number(senderId) === Number(localStorage.getItem("userId"))) {
 			messages.map((message) => {
-				if (message.is_read === false && message.sender_id !== Number(senderId)) {
-					console.log(id)
+				if (message.is_read === false && message.receiver_id === Number(senderId)) {
+
 					const data = {
 						msg_id: id,
 						sender_id: receiverId,
 						receiver_id: senderId
 					}
+
 					socketInstance.emit("see_message", data)
 
 					socketInstance.emit("count", {
@@ -77,12 +70,21 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 		}
 	}
 
+	useEffect(() => {
+		socketInstance.on("see_message", (data) => {
+			setMessages(data)
+			scrollToBottom()
+		})
+	}, [messages, socketInstance])
+
 	const conversationPathRef = useRef(null)
+
 	const observer = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					const attributeValue = entry.target.getAttribute("value")
+
 					if (attributeValue === "false") {
 						readMsg(entry.target.id)
 					}
@@ -94,6 +96,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			threshold: 1
 		}
 	)
+
 
 	useEffect(() => {
 		const getElements = async () => {
@@ -108,7 +111,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			}
 		}
 		getElements()
-	}, [conversationPathRef])
+	}, [conversationPathRef, messages])
 
 	return (
 		<Fragment>

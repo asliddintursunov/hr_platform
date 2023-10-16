@@ -4,9 +4,15 @@ import useURL from "../hooks/useURL"
 import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import { baseUrl } from "../utils/api"
-import { setUsersData, setUsersImage } from "../features/chatWebSocketPlaceSlicer"
 import { logoutUser, sendHeaders } from "../features/userDataSlice"
 import AnotherUser from "./modal/AnotherUser"
+
+// import { setUsersData, setUsersImage } from "../features/chatWebSocketPlaceSlicer"
+// import { setUsersData } from "../features/chatWebSocketPlaceSlicer"
+// const userData = useSelector((state) => state.usersData.usersData)
+// const userImage = useSelector((state) => state.usersData.usersImage)
+// dispatch(setUsersData(data)) -> Count
+// dispatch(setUsersImage(res.data)) -> GET
 
 function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 	const { defaultImage } = useURL()
@@ -15,37 +21,37 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 	const dispatch = useDispatch()
 	const socketInstance = useSelector((state) => state.connection.socketInstance)
 	const isConnected = useSelector((state) => state.connection.isConnected)
-	const userData = useSelector((state) => state.usersData.usersData)
-	const userImage = useSelector((state) => state.usersData.usersImage)
 	const head = useSelector((state) => state.headers)
+
+	const [userData, setUserData] = useState([])
+	const [userImage, setUserImage] = useState([])
 
 	const [wrongUser, setWrongUser] = useState(false)
 	const [wrongUserData, setWrongUserData] = useState("")
 
 	useEffect(() => {
 		dispatch(sendHeaders())
-		console.clear()
 	}, [])
 
 	useEffect(() => {
-		if (userid && isConnected) {
+		if (isConnected) {
 			socketInstance.emit("count", {
 				id: userid
 			})
-
 			return () => {
 				socketInstance.off("count")
 			}
 		}
-	}, [userid, isConnected])
+	}, [isConnected, socketInstance])
+
 
 	useEffect(() => {
 		if (isConnected) {
 			socketInstance.on("count", (data) => {
-				dispatch(setUsersData(data))
+				setUserData(data)
 			})
 		}
-	}, [isConnected])
+	}, [isConnected, socketInstance])
 
 	useEffect(() => {
 		if (userid) {
@@ -54,13 +60,12 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 					headers: head
 				})
 				.then((res) => {
-					dispatch(setUsersImage(res.data))
+					setUserImage(res.data)
 				})
 				.catch((err) => {
 					if (err.response && err.response.status === 401) {
 						setWrongUser(true)
 						setWrongUserData(err.response.data)
-						// alert(err.response.data);
 						dispatch(logoutUser())
 					}
 				})

@@ -5,7 +5,6 @@ const userData = {
   usersImage: [],
 }
 
-
 export const getData = createSlice({
   name: 'usersdata',
   initialState: userData,

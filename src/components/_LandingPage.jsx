@@ -1,16 +1,8 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom"
 import styles from "../css/Landing.module.css"
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
-import { connect } from "../features/socketConnectionSlice"
-
 
 function _LandingPage() {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(connect())
-
-  }, [])
 
   const userRole = localStorage.getItem("userRole")
   const [navbarAppear, setNavbarAppear] = useState(true)
