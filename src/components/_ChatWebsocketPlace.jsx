@@ -22,15 +22,31 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 
 	useEffect(() => {
 		socketInstance.on("new_message", (data) => {
-			setMessages(data)
-			scrollToBottom()
+			const id_rec = localStorage.getItem("receiverId")
+			if (Number(id_rec) === data[0].sender_id || Number(id_rec) === data[0].receiver_id) {
+
+				setMessages(data)
+				scrollToBottom()
+			}
 		})
-	}, [messages, socketInstance])
+	}, [socketInstance])
 
 
 	useEffect(() => {
 		scrollToBottom()
 	}, [messages])
+
+	// const handleNewMessage = () => {
+	// 	socketInstance.on("new_message", (data) => {
+	// 		const id_rec = localStorage.getItem("receiverId")
+	// 		if (Number(id_rec) === data[0].sender_id || Number(id_rec) === data[0].receiver_id) {
+
+	// 			setMessages(data)
+	// 			scrollToBottom()
+	// 		}
+	// 	})
+	// 	return () => socketInstance.off('new_message')
+	// }
 
 	const textSend = async () => {
 		if (senderText.trim() !== "") {
@@ -49,6 +65,18 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 		}
 	}
 
+	const handleSeeMessage = () => {
+		socketInstance.on("see_message", (data) => {
+			const id_rec = localStorage.getItem("receiverId")
+			if (Number(id_rec) === data[0].sender_id || Number(id_rec) === data[0].receiver_id) {
+				setMessages(data)
+			}
+		})
+		return () => socketInstance.off("see_message")
+	}
+
+	useEffect(() => { handleSeeMessage() }, [handleSeeMessage])
+
 	const readMsg = (id) => {
 		if (senderText === "" && Number(senderId) === Number(localStorage.getItem("userId"))) {
 			messages.map((message) => {
@@ -61,6 +89,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 					}
 
 					socketInstance.emit("see_message", data)
+					handleSeeMessage()
 
 					socketInstance.emit("count", {
 						id: senderId
@@ -69,13 +98,6 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 			})
 		}
 	}
-
-	useEffect(() => {
-		socketInstance.on("see_message", (data) => {
-			setMessages(data)
-			scrollToBottom()
-		})
-	}, [messages, socketInstance])
 
 	const conversationPathRef = useRef(null)
 
@@ -123,7 +145,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 				{messages &&
 					messages.map((message, index) => (
 						<div key={index} id={message.msg_id} value={message.is_read}>
-							{message.sender_id === Number(senderId) ? (
+							{message.sender_id === Number(senderId) && message.receiver_id === Number(receiverId) ? (
 								<div style={sendingStyle}>
 									<p style={{ ...messageStyle, backgroundColor: "green" }}>{message.message}</p>
 									<i style={timeStyle}>{message.timestamp}</i>

@@ -52,11 +52,13 @@ function _Birthdays() {
 
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
+    console.log(info);
     setIsOpen(true)
     setErrorOccured(true)
     setPopupInfo(info)
     setTimeout(() => {
       localStorage.removeItem('token')
+      localStorage.clear()
       navigate('/signin')
     }, 1500);
   }, [navigate])
@@ -73,16 +75,16 @@ function _Birthdays() {
         setUsersLength(res.data.length)
       })
       .catch(err => {
-        if (err.response.status === 401) {
-          setWrongUser(true)
-          setWrongUserData(err.response.data)
-          // alert(err.response.data)
-          dispatch(logoutUser())
-        }
 
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
+        else if (err.response.status === 401) {
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
+          dispatch(logoutUser())
+        }
+
         setIsPending(false)
       })
   }, [tokenExpired])

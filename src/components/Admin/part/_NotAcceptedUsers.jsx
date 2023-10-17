@@ -44,6 +44,7 @@ function _NotAcceptedUsers() {
       setPopupInfo(info)
       setTimeout(() => {
         localStorage.removeItem("token")
+        localStorage.clear()
         navigate("/signin")
       }, 1500)
     },
@@ -60,13 +61,13 @@ function _NotAcceptedUsers() {
         setIsPending(false)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
-        }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
         }
         setIsPending(false)
       })
@@ -100,13 +101,13 @@ function _NotAcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
-        }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
         }
         setPopupInfo("Qandaydir xatolik ro'y berdi!")
         setErrorOccured(true)
@@ -133,14 +134,15 @@ function _NotAcceptedUsers() {
         setErrorOccured(false)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        }
+
         setPopupInfo("Qandaydir xatolik ro'y berdi!")
         setErrorOccured(true)
         setIsOpen(true)

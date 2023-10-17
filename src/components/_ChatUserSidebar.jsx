@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import styles from "../css/Chat.module.css"
 import useURL from "../hooks/useURL"
 import { useSelector, useDispatch } from "react-redux"
@@ -6,6 +6,9 @@ import axios from "axios"
 import { baseUrl } from "../utils/api"
 import { logoutUser, sendHeaders } from "../features/userDataSlice"
 import AnotherUser from "./modal/AnotherUser"
+import { useNavigate } from "react-router-dom"
+import _PopUp from "./_PopUp"
+
 
 // import { setUsersData, setUsersImage } from "../features/chatWebSocketPlaceSlicer"
 // import { setUsersData } from "../features/chatWebSocketPlaceSlicer"
@@ -17,6 +20,7 @@ import AnotherUser from "./modal/AnotherUser"
 function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 	const { defaultImage } = useURL()
 	const userid = localStorage.getItem("userId")
+	const navigate = useNavigate()
 
 	const dispatch = useDispatch()
 	const socketInstance = useSelector((state) => state.connection.socketInstance)
@@ -29,21 +33,43 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 	const [wrongUser, setWrongUser] = useState(false)
 	const [wrongUserData, setWrongUserData] = useState("")
 
+	// Pop Up States
+	const [isOpen, setIsOpen] = useState(false)
+	const [popupInfo, setPopupInfo] = useState("")
+	const [errorOccured, setErrorOccured] = useState("")
+
 	useEffect(() => {
 		dispatch(sendHeaders())
 	}, [])
 
+
+	// Token Expired Validation
+	const tokenExpired = useCallback(
+		(info) => {
+			setIsOpen(true)
+			setErrorOccured(true)
+			setPopupInfo(info)
+			setTimeout(() => {
+				localStorage.removeItem("token")
+				localStorage.clear()
+				navigate("/signin")
+			}, 1500)
+		},
+		[navigate]
+	)
+
 	useEffect(() => {
 		if (isConnected) {
-			socketInstance.emit("count", {
-				id: userid
-			})
-			return () => {
-				socketInstance.off("count")
-			}
+			setTimeout(() => {
+				socketInstance.emit("count", {
+					id: userid
+				})
+				return () => {
+					socketInstance.off("count")
+				}
+			}, 100)
 		}
 	}, [isConnected, socketInstance])
-
 
 	useEffect(() => {
 		if (isConnected) {
@@ -55,24 +81,31 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 
 	useEffect(() => {
 		if (userid) {
-			axios
-				.get(`${baseUrl}/chat/${userid}`, {
-					headers: head
-				})
-				.then((res) => {
-					setUserImage(res.data)
-				})
-				.catch((err) => {
-					if (err.response && err.response.status === 401) {
-						setWrongUser(true)
-						setWrongUserData(err.response.data)
-						dispatch(logoutUser())
-					}
-				})
+			setTimeout(() => {
+				axios
+					.get(`${baseUrl}/chat/${userid}`, {
+						headers: head
+					})
+					.then((res) => {
+						setUserImage(res.data)
+					})
+					.catch((err) => {
+						setIsOpen(true)
+						if (err.response.data.msg) {
+							tokenExpired(err.response.data.msg)
+						}
+						else if (err.response.status === 401) {
+							setWrongUser(true)
+							setWrongUserData(err.response.data)
+							dispatch(logoutUser())
+						}
+					})
+			}, 100);
 		}
 	}, [userid, head])
 	return (
 		<>
+			{isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
 			{wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
 			<div className={styles.usersListContainer} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
 				<div className={styles.usersShowHide} onClick={() => setShowUsers(!showUsers)}>
@@ -87,7 +120,9 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 						const userInfo = userImage[index]
 						if (userInfo) {
 							return (
-								<div key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
+								<div key={user.id}
+									className={styles.userCard}
+									onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
 									{user.id === userInfo.id && <span className={styles.unreadMsg}>{user.unread_msg}</span>}
 									<span>{userInfo.username}</span>
 									<img src={userInfo.profile_photo !== null ? userInfo.profile_photo : defaultImage} alt={`Profile of ${userInfo.username}`} />

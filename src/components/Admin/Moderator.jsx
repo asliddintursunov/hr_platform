@@ -48,11 +48,13 @@ function Moderator() {
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {
+      console.log(info);
       setIsOpen(true)
       setErrorOccured(true)
       setPopupInfo(info)
       setTimeout(() => {
         localStorage.removeItem("token")
+        localStorage.clear()
         navigate("/signin")
       }, 1500)
     },
@@ -70,14 +72,15 @@ function Moderator() {
         setDatas(req.data)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        }
+
         setIsPending(false)
       })
   }, [tokenExpired])
@@ -107,14 +110,15 @@ function Moderator() {
         setIsOpen(true)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        }
+
         setErrorOccured(true)
         setPopupInfo('Qandaydir xatolik ro\'y berdi!')
         setIsOpen(true)

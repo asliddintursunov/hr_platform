@@ -24,7 +24,7 @@ export const userDataSlice = createSlice({
       localStorage.removeItem("userRole")
       localStorage.removeItem("userId")
       setTimeout(() => {
-        location.assign('/signin')
+        // location.assign('/signin')
       }, 1000);
 
     }

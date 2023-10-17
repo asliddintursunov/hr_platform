@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import _ChatUserSidebar from "../components/_ChatUserSidebar"
 import _ChatWebsocketPlace from "../components/_ChatWebsocketPlace"
 import styles from "../css/Chat.module.css"
@@ -7,8 +7,11 @@ import { baseUrl } from "../utils/api"
 import { useDispatch, useSelector } from "react-redux"
 import { logoutUser, sendHeaders } from "../features/userDataSlice"
 import { connect } from "../features/socketConnectionSlice"
+import _PopUp from "../components/_PopUp"
+import { useNavigate } from "react-router-dom"
 
 function ChatLayout() {
+  const navigate = useNavigate()
 
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
@@ -19,6 +22,11 @@ function ChatLayout() {
   const [messages, setMessages] = useState([])
 
   const [showUsers, setShowUsers] = useState(false)
+
+  // Pop Up States
+  const [isOpen, setIsOpen] = useState(false)
+  const [popupInfo, setPopupInfo] = useState("")
+  const [errorOccured, setErrorOccured] = useState("")
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState('')
@@ -40,6 +48,21 @@ function ChatLayout() {
     }, [isConnected, socketInstance, userID]
   )
 
+  // Token Expired Validation
+  const tokenExpired = useCallback(
+    (info) => {
+      setIsOpen(true)
+      setErrorOccured(true)
+      setPopupInfo(info)
+      setTimeout(() => {
+        localStorage.removeItem("token")
+        localStorage.clear()
+        // navigate("/signin")
+      }, 1500)
+    },
+    [navigate]
+  )
+
   const GetReceiverUsername = async (id, username) => {
     localStorage.setItem("receiverId", id)
     const senderId = localStorage.getItem("userId")
@@ -54,7 +77,11 @@ function ChatLayout() {
     }, { headers: head })
       .then((res) => setOneUserData(res.data))
       .catch((err) => {
-        if (err.response.status === 401) {
+        console.log(err);
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -68,7 +95,11 @@ function ChatLayout() {
         setMessages(res.data)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        setIsOpen(true)
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -79,6 +110,7 @@ function ChatLayout() {
 
   return (
     <>
+      {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.chatPlace}>

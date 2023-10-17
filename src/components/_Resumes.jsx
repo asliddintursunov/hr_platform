@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from '../css/Resumes.module.css'
 import axios from 'axios'
@@ -6,6 +6,8 @@ import { baseUrl } from '../utils/api'
 import { logoutUser, sendHeaders } from '../features/userDataSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AnotherUser from './modal/AnotherUser'
+import _PopUp from './_PopUp'
+
 function _Resumes() {
   const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
@@ -46,11 +48,27 @@ function _Resumes() {
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [selectedExperience, setSelectedExperience] = useState(null);
 
+  const [isOpen, setIsOpen] = useState(false)
+  const [popupInfo, setPopupInfo] = useState('')
+  const [errorOccured, setErrorOccured] = useState('')
+
   useEffect(
     () => {
       dispatch(sendHeaders())
     }, []
   )
+
+  // Token Expired Validation
+  const tokenExpired = useCallback((info) => {
+    setIsOpen(true)
+    setErrorOccured(true)
+    setPopupInfo(info)
+    setTimeout(() => {
+      localStorage.clear()
+      navigate('/signin')
+    }, 1500);
+  }, [navigate])
+
   const sendData = () => {
     setResumeData([])
     axios.post(`${baseUrl}/search`, {
@@ -64,7 +82,10 @@ function _Resumes() {
         setResumeData(res.data.results)
       })
       .catch(err => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -92,7 +113,11 @@ function _Resumes() {
         setResumeData(res.data.results)
       })
       .catch(err => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          setWrongUser(true)
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -129,13 +154,18 @@ function _Resumes() {
           setResumeData(res.data.results)
         })
         .catch(err => {
-          if (err.response.status === 401) {
+          console.log(err);
+          if (err.response.data.msg) {
+            setWrongUser(true)
+            tokenExpired(err.response.data.msg)
+          }
+          else if (err.response.status === 401) {
             setWrongUser(true)
             setWrongUserData(err.response.data)
             dispatch(logoutUser())
           }
         })
-    }, []
+    }, [tokenExpired]
   )
 
   const seeResumeDetail = (userID) => {
@@ -146,6 +176,7 @@ function _Resumes() {
   return (
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
+      {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <div className={`text-center ${styles.resumesPage} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.header}>
           <div>

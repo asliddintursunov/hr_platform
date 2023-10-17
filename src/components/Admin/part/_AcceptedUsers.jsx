@@ -42,6 +42,7 @@ function _AcceptedUsers() {
       setPopupInfo(info)
       setTimeout(() => {
         localStorage.removeItem("token")
+        localStorage.clear()
         navigate("/signin")
       }, 1500)
     },
@@ -59,14 +60,15 @@ function _AcceptedUsers() {
         setDatas(req.data)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        }
+
         setIsPending(false)
       })
   }, [tokenExpired])
@@ -81,9 +83,6 @@ function _AcceptedUsers() {
     setUser_Id(id)
   }
   const handleDelete = () => {
-    // setDatas(prev => {
-    //   return prev.filter(data => data.id !== user_id)
-    // })
     axios
       .delete(`${baseUrl}/user/${user_id}`, {
         headers: head
@@ -97,20 +96,18 @@ function _AcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
-        }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
         }
         setIsPending(false)
         setErrorOccured(true)
         setPopupInfo("Qandaydir xatolik ro'y berdi!")
         setIsOpen(true)
-
-        console.log(err)
       })
   }
 
@@ -136,13 +133,13 @@ function _AcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
-        }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
         }
         setErrorOccured(true)
         setPopupInfo("Qandaydir xatolik ro'y berdi!")

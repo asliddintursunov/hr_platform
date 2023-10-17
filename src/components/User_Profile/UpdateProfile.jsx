@@ -105,7 +105,7 @@ function UpdateProfile() {
       setPopupInfo(info)
       setTimeout(() => {
         localStorage.removeItem("token")
-        // localStorage.removeItem("accessToken")
+        localStorage.clear()
         navigate("/signin")
       }, 1500)
     },
@@ -181,13 +181,13 @@ function UpdateProfile() {
         setIsPending(false)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
-        }
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
         }
         setIsPending(false)
       })
@@ -223,16 +223,17 @@ function UpdateProfile() {
         setErrorOccured(false)
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        setIsOpen(true)
+
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
-
-        setIsOpen(true)
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        } else {
+        else {
           setErrorOccured(true)
           setPopupInfo(err.response.data)
         }
@@ -258,20 +259,18 @@ function UpdateProfile() {
           navigate("/signin")
         }, 1500)
         localStorage.removeItem("token")
-        // localStorage.removeItem("accessToken")
         localStorage.removeItem("userRole")
         localStorage.removeItem("userId")
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          setWrongUser(true)
-          setWrongUserData(err.response.data)
-          dispatch(logoutUser())
-        }
-        console.log(err);
         setIsOpen(true)
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
+        }
+        else if (err.response.status === 401) {
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
+          dispatch(logoutUser())
         }
       })
   }

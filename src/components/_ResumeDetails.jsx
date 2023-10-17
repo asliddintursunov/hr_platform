@@ -1,24 +1,47 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styles from '../css/ResumeDetails.module.css'
 import axios from 'axios'
 import { baseUrl } from '../utils/api'
 import { useDispatch } from 'react-redux'
 import { logoutUser, sendHeaders } from '../features/userDataSlice'
 import AnotherUser from './modal/AnotherUser'
+import { useNavigate } from 'react-router-dom'
+import _PopUp from './_PopUp'
+
 function _ResumeDetails() {
   const [userResumeData, setUserResumeData] = useState([])
   const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const userID = localStorage.getItem('userResumeID')
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState('')
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [popupInfo, setPopupInfo] = useState('')
+  const [errorOccured, setErrorOccured] = useState('')
 
   useEffect(
     () => {
       dispatch(sendHeaders())
     }, []
   )
+
+  // Token Expired Validation
+  const tokenExpired = useCallback(
+    (info) => {
+      setIsOpen(true)
+      setErrorOccured(true)
+      setPopupInfo(info)
+      setTimeout(() => {
+        localStorage.clear()
+        navigate("/signin")
+      }, 1500)
+    },
+    [navigate]
+  )
+
   useEffect(
     () => {
       axios.get(`${baseUrl}` + '/search/' + userID, {
@@ -28,17 +51,21 @@ function _ResumeDetails() {
           setUserResumeData(res.data)
         })
         .catch(err => {
-          if (err.response.status === 401) {
+          if (err.response.data.msg) {
+            tokenExpired(err.response.data.msg)
+          }
+          else if (err.response.status === 401) {
             setWrongUser(true)
             setWrongUserData(err.response.data)
             dispatch(logoutUser())
           }
         })
-    }, [userID]
+    }, [userID, tokenExpired]
   )
 
   return (
     <>
+      {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={styles.resumeDetailsContainer} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.resumeDetailsWrapper}>
