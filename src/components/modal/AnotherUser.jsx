@@ -1,4 +1,13 @@
+import { useNavigate } from "react-router-dom"
+
 function AnotherUser({ wrongUserData }) {
+  const navigate = useNavigate()
+  if (wrongUserData) {
+    setTimeout(() => {
+      localStorage.clear()
+      navigate('/signin')
+    }, 1500);
+  }
   return (
     <div>
       <div className="popupContainer open">

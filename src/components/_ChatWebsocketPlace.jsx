@@ -182,7 +182,9 @@ const sendingStyle = {
 	display: "flex",
 	justifyContent: "end",
 	position: "relative",
-	marginLeft: "10rem"
+	marginLeft: "10rem",
+	wordWrap: 'break-word',
+	maxWidth: '125rem'
 }
 
 const receivingStyle = {
@@ -193,13 +195,18 @@ const receivingStyle = {
 	display: "flex",
 	justifyContent: "start",
 	position: "relative",
-	marginRight: "10rem"
+	marginRight: "10rem",
+	wordWrap: 'break-word',
+	maxWidth: '125rem'
 }
 
 const messageStyle = {
 	padding: "0.3rem 1rem 2.5rem 1rem",
 	borderRadius: "4px",
 	border: "none",
+
+
+
 	minWidth: "11rem"
 }
 

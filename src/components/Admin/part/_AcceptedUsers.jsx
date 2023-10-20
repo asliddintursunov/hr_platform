@@ -53,7 +53,11 @@ function _AcceptedUsers() {
     setIsPending(true)
     axios
       .get(`${baseUrl}/users`, {
-        headers: head
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
       })
       .then((req) => {
         setIsPending(false)
@@ -85,7 +89,11 @@ function _AcceptedUsers() {
   const handleDelete = () => {
     axios
       .delete(`${baseUrl}/user/${user_id}`, {
-        headers: head
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
       })
       .then((res) => {
         setDatas((prev) => {
@@ -124,7 +132,11 @@ function _AcceptedUsers() {
           role: userRole
         },
         {
-          headers: head
+          // headers: head
+          headers: {
+            'X-UserRole': localStorage.getItem('userRole'),
+            'X-UserId': localStorage.getItem('userId')
+          }
         }
       )
       .then((res) => {
@@ -181,7 +193,7 @@ function _AcceptedUsers() {
             {datas &&
               datas.map((data) => {
                 return (
-                  data.accepted && (
+                  data.accepted && data.approved && (
                     <div key={data.id} className={`form-control ${styles.userDataContainerDiv}`}>
                       <div className="col-2 text-center">
                         <b>#{data.id}</b>

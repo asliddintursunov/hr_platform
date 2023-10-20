@@ -65,7 +65,11 @@ function Moderator() {
     setIsPending(true)
     axios
       .get(`${baseUrl}/users`, {
-        headers: head
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
       })
       .then((req) => {
         setIsPending(false)
@@ -102,7 +106,11 @@ function Moderator() {
     })
 
     axios.delete(`${baseUrl}/user/${user_id}`, {
-      headers: head
+      // headers: head
+      headers: {
+        'X-UserRole': localStorage.getItem('userRole'),
+        'X-UserId': localStorage.getItem('userId')
+      }
     })
       .then((res) => {
         setErrorOccured(false)

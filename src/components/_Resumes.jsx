@@ -76,7 +76,11 @@ function _Resumes() {
       major: major === '' ? undefined : major,
       experience: experience === '' ? undefined : experience,
     }, {
-      headers: head
+      // headers: head
+      headers: {
+        'X-UserRole': localStorage.getItem('userRole'),
+        'X-UserId': localStorage.getItem('userId')
+      }
     })
       .then(res => {
         setResumeData(res.data.results)
@@ -107,7 +111,11 @@ function _Resumes() {
       major: undefined,
       experience: undefined
     }, {
-      headers: head
+      // headers: head
+      headers: {
+        'X-UserRole': localStorage.getItem('userRole'),
+        'X-UserId': localStorage.getItem('userId')
+      }
     })
       .then(res => {
         setResumeData(res.data.results)
@@ -148,7 +156,11 @@ function _Resumes() {
         major: undefined,
         experience: undefined
       }, {
-        headers: head
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
       })
         .then(res => {
           setResumeData(res.data.results)

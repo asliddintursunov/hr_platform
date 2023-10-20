@@ -67,7 +67,11 @@ function _Birthdays() {
   const getBday = useCallback(() => {
     setIsPending(true)
     axios.get(`${baseUrl}/users`, {
-      headers: head
+      // headers: head
+      headers: {
+        'X-UserRole': localStorage.getItem('userRole'),
+        'X-UserId': localStorage.getItem('userId')
+      }
     })
       .then(res => {
         setIsPending(false)
@@ -139,7 +143,7 @@ function _Birthdays() {
       }
 
       setUserBdayToDays.push(userBdayInDate.current - 30);
-      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current) - 1);
+      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current));
     }
   };
 

@@ -74,7 +74,13 @@ function ChatLayout() {
 
     axios.post(`${baseUrl}/chat/${senderId}`, {
       username: username,
-    }, { headers: head })
+    }, {
+      // headers: head
+      headers: {
+        'X-UserRole': localStorage.getItem('userRole'),
+        'X-UserId': localStorage.getItem('userId')
+      }
+    })
       .then((res) => setOneUserData(res.data))
       .catch((err) => {
         console.log(err);
@@ -90,7 +96,14 @@ function ChatLayout() {
 
 
     await axios
-      .get(`${baseUrl}/chat/room`, { params: { user_id1: senderId, user_id2: id }, headers: head })
+      .get(`${baseUrl}/chat/room`, {
+        params: { user_id1: senderId, user_id2: id },
+        // headers: head 
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
+      })
       .then((res) => {
         setMessages(res.data)
       })

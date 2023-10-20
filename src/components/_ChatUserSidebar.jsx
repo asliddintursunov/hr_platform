@@ -84,7 +84,11 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 			setTimeout(() => {
 				axios
 					.get(`${baseUrl}/chat/${userid}`, {
-						headers: head
+						// headers: head
+						headers: {
+							'X-UserRole': localStorage.getItem('userRole'),
+							'X-UserId': localStorage.getItem('userId')
+						}
 					})
 					.then((res) => {
 						setUserImage(res.data)

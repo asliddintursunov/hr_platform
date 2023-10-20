@@ -162,7 +162,11 @@ function UpdateProfile() {
     setIsPending(true)
     axios
       .get(`${baseUrl}/user/${localStorage.getItem("userId")}`, {
-        headers: head
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
       })
       .then((res) => {
         set_data(res.data)
@@ -215,7 +219,11 @@ function UpdateProfile() {
         experience: data.experience !== experience ? experience : undefined,
         skills: data.skills !== skills ? skills : undefined
       }, {
-        headers: head
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
       })
       .then((res) => {
         setIsOpen(true)
@@ -245,7 +253,11 @@ function UpdateProfile() {
     googleLogout()
     axios
       .get(`${baseUrl}/logout/${localStorage.getItem('userId')}`, {
-        headers: head
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
       })
       .then((res) => {
         console.log(res)

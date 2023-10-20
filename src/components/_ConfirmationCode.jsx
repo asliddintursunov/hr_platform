@@ -22,6 +22,7 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
     },
     )
       .then(req => {
+        console.log(req);
         setRemindEmailCode(false)
         if (req.status === 202) {
           console.log(202, req);
@@ -53,6 +54,7 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
         }
       })
       .catch(err => {
+        console.log(err);
         if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)

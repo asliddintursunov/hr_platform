@@ -54,8 +54,15 @@ function _NotAcceptedUsers() {
   const fetchData = useCallback(() => {
     setIsPending(true)
     axios
-      .get(`${baseUrl}/users`, { headers: head })
+      .get(`${baseUrl}/users`, {
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
+      })
       .then((req) => {
+
         console.log(req.data);
         setDatas(req.data)
         setIsPending(false)
@@ -93,7 +100,13 @@ function _NotAcceptedUsers() {
         {
           accepted: true
         },
-        { headers: head }
+        {
+          //  headers: head
+          headers: {
+            'X-UserRole': localStorage.getItem('userRole'),
+            'X-UserId': localStorage.getItem('userId')
+          }
+        }
       )
       .then((res) => {
         setPopupInfo(res.data)
@@ -126,7 +139,13 @@ function _NotAcceptedUsers() {
     })
 
     axios
-      .delete(`${baseUrl}/user/${user_id}`, { headers: head })
+      .delete(`${baseUrl}/user/${user_id}`, {
+        // headers: head
+        headers: {
+          'X-UserRole': localStorage.getItem('userRole'),
+          'X-UserId': localStorage.getItem('userId')
+        }
+      })
       .then((res) => {
         console.log(res)
         setPopupInfo(res.data)

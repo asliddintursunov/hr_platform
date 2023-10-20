@@ -3,7 +3,6 @@ import { allMajors } from "../../features/chartsSlice"
 
 export function useLineGraph() {
   const allMajorsData = useSelector(allMajors)
-
   const lineGraph = {
     chart: {
       type: 'spline',
@@ -26,7 +25,7 @@ export function useLineGraph() {
     },
     tooltip: {
       style: {
-        fontSize: '1.2rem' // Adjust the font size for tooltip text
+        fontSize: '1.2rem'
       }
     },
     xAxis: {
