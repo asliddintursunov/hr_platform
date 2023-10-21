@@ -1,0 +1,203 @@
+@import url(https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;600;800;900&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@100;200;300;400;500;600;700&display=swap);
+
+.sign-in-addition {
+  height: 103.3vh;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background: linear-gradient(135deg, #2b8bca, royalblue);
+  text-align: center;
+}
+
+.sign-in-addition>h1 {
+  font-family: 'IBM Plex Sans Condensed', sans-serif;
+}
+
+.sign-in-form-container {
+  height: 103.3vh;
+  background: var(--white);
+  flex: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Inconsolata', monospace;
+  font-family: 'Raleway', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.sign-in-form-container>form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  width: 460px;
+  height: 600px;
+  font-family: 'Roboto', Arial;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: -1px 1px 2px #4040404e;
+}
+
+.h3-heading {
+  font-family: "Roboto", Arial;
+  font-size: 48px;
+  font-weight: 300;
+  color: #000000;
+}
+
+.sub-heading {
+  font-family: "Roboto", Arial;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.sign-in-form-container .input-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3rem;
+}
+
+.sign-in-form-container input[type="text"],
+.sign-in-form-container input[type="password"] {
+  font-size: large;
+  width: 35vh;
+  padding: 0.6rem;
+
+  font-family: Roboto-Light_wgt300, Arial;
+  font-size: large;
+  font-weight: 400;
+  color: #000000;
+  border: none;
+  background-color: #ffffff;
+  border-radius: 4px 4px 0px 0px;
+  padding: 16px 15px 0px 0px;
+  border-bottom: 1px solid #c4c4c4;
+  outline: none;
+
+  transition: all .15s;
+}
+
+.sign-in-form-container input[type="text"]:hover,
+.sign-in-form-container input[type="password"]:hover {
+  border-bottom: 1px solid rgb(50, 50, 50);
+}
+
+.sign-in-form-container input[type="text"]:focus,
+.sign-in-form-container input[type="password"]:focus {
+  border-bottom: 2px solid royalblue;
+}
+
+@media (max-width: 768px) {
+  .sign-in-form-container>form {
+    padding: 2.5rem 3.5rem;
+  }
+
+  .sign-in-form-container {
+    padding-top: 2rem;
+  }
+
+  .sign-in-form-container input[type="text"],
+  .sign-in-form-container input[type="password"] {
+    font-size: medium;
+    width: 25vh;
+    padding: 0.4rem;
+  }
+
+  .sign-in-form-container .input-container {
+    gap: 1.5rem;
+  }
+}
+
+
+hr:nth-child(2) {
+  color: royalblue;
+}
+
+.show-password {
+  font-size: large;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  padding: 0.5rem;
+  color: royalblue;
+}
+
+.sign-in-btn {
+  width: 100%;
+  font-family: "Roboto", Arial;
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+  background-color: #1976d2;
+  border-radius: 4px;
+  filter: drop-shadow(#404040 (25%) -1.22465e-16px 2px 1px);
+  padding: 6px 0px;
+}
+
+.sign-in-form-container a {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.overline-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.overline-container .line {
+  font-weight: 200;
+  color: lightgray;
+}
+
+.overline-container .access-quick {
+  font-family: "Roboto", Arial;
+  font-size: 11.84px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #686868;
+}
+
+.sign-in-form-container button {
+  font-size: medium;
+}
+
+.no-account {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.no-account>span {
+  font-family: "Roboto", Arial;
+  font-size: 14px;
+  font-weight: 400;
+  color: #686868;
+}
+
+.no-account .sign-in-ahref {
+  font-family: "Roboto", Arial;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: underline;
+  color: #1976d2;
+}
+
+.sign-in-form-container a {
+  font-size: 1.2rem;
+  font-weight: bold;
+}

@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import styles from '../../css/Admin.module.css'
+import styles from '../../styles/Admin.module.css'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
 function Admin() {

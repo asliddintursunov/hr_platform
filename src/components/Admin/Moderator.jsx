@@ -1,15 +1,15 @@
 import axios from "axios"
 import "./Admin.css"
-import styles from "../../css/Moderator.module.css"
+import styles from "../../styles/Moderator.module.css"
 import { useCallback, useEffect, useState } from "react"
-import _PopUp from "../_PopUp"
+import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
 import useURL from "../../hooks/useURL"
 import { baseUrl } from "../../utils/api"
 import { useDispatch, useSelector } from "react-redux"
-import { logoutUser, sendHeaders } from "../../features/userDataSlice"
-import ConfirmModal from '../modal/ConfirmModal'
-import AnotherUser from "../modal/AnotherUser"
+import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
+import ConfirmModal from '../Modals/ConfirmModal'
+import AnotherUser from "../Modals/AnotherUser"
 
 function Moderator() {
   const head = useSelector((state) => state.headers)
@@ -166,7 +166,7 @@ function Moderator() {
               </div>
             </div>
             {isPending && <div className="loaderr"></div>}
-            {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
+            {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
             {!isPending && (
               <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
                 <hr style={{ width: "100%" }} />

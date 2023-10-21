@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { allMajors } from "../../features/chartsSlice"
+import { allMajors } from "../../redux/features/chartsSlice"
 
 export function useLineGraph() {
   const allMajorsData = useSelector(allMajors)

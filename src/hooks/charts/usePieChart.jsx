@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
-import { allMajors } from "../../features/chartsSlice";
-
+import { allMajors } from "../../redux/features/chartsSlice";
 
 export function usePieChart() {
   const allMajorsData = useSelector(allMajors)

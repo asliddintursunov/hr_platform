@@ -5,16 +5,14 @@ header {
   width: 100%;
   box-shadow: 1px 1px 5px rgb(110, 109, 109);
   color: #fff;
-  /* background-color: var(--mainDarkBackground); */
-  /* background: linear-gradient(135deg, #2b8bca, #121e2a); */
   padding: 1rem 0;
 }
 
-nav{
+nav {
   padding: 0 1rem;
 }
 
-nav > div {
+nav>div {
   column-gap: 3rem;
 }
 
@@ -29,12 +27,13 @@ nav > div {
   text-align: center;
   color: #fff;
 
-  font-family: 'Inconsolata', monospace;
-  font-family: 'Raleway', sans-serif;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: "Inconsolata", monospace;
+  font-family: "Raleway", sans-serif;
+  font-family: "Ubuntu", sans-serif;
 }
-.link-container a{
-  padding: .2rem .6rem;
+
+.link-container a {
+  padding: 0.2rem 0.6rem;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -44,6 +43,7 @@ nav > div {
   color: #fff;
   text-decoration: none;
 }
-.link-container a:hover{
+
+.link-container a:hover {
   background-color: rgba(65, 105, 225, 0.621);
 }

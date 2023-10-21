@@ -1,0 +1,25 @@
+import { Fragment } from 'react'
+import "../../styles/User_Profile.css"
+
+function LogOutModal({ toggleModal, logOut }) {
+  return (
+    <Fragment>
+      <div className='modal-backdrop'>
+        <div className=" modal">
+          <div>
+            <h3>Do You Really Want To Log Out?</h3>
+            <div className='modal-options'>
+              <button onClick={toggleModal} className="btn btn-success">No</button>
+              <button onClick={() => {
+                logOut()
+                toggleModal()
+              }} className="btn btn-danger">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  )
+}
+
+export default LogOutModal

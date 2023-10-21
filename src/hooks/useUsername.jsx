@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from "react"
 
 export function useUsername() {
   // =========== Variables for Username Input ===========
-  const [usernameValue, setUsernameValue] = useState('')
+  const [usernameValue, setUsernameValue] = useState("")
   const [emptyCharacter, setEmptyCharacter] = useState([])
-  const [validUsernameChecker, setValidUsernameChecker] = useState('')
+  const [validUsernameChecker, setValidUsernameChecker] = useState("")
   const [usernameFocus, setUsernameFocus] = useState(false)
   const [usernameTrue, setUsernameTrue] = useState(false)
   // ====================================================
@@ -12,7 +12,7 @@ export function useUsername() {
   // =========== Username Input Validation ===========
   const usernameValidation = useCallback(() => {
     if (/[^a-zA-Z0-9]/.test(usernameValue)) {
-      setEmptyCharacter(prev => [...prev, false])
+      setEmptyCharacter((prev) => [...prev, false])
     } else if (!/[^a-zA-Z0-9]/.test(usernameValue)) {
       setEmptyCharacter([])
     }
@@ -21,19 +21,29 @@ export function useUsername() {
   useEffect(() => {
     usernameValidation()
   }, [usernameValidation])
-  const usernameChecker = () => !/^[0-9]/.test(usernameValue.split('')[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1 ? setValidUsernameChecker('Valid Username') : setValidUsernameChecker('Birinchi belgi harfdan iborat bo\'lishi va faqat harf va raqamlar qatnashishi kerak')
+  const usernameChecker = () =>
+    !/^[0-9]/.test(usernameValue.split("")[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1
+      ? setValidUsernameChecker("Valid Username")
+      : setValidUsernameChecker("Birinchi belgi harfdan iborat bo'lishi va faqat harf va raqamlar qatnashishi kerak")
   // =================================================
 
   // =========== Username Input Style ===========
   const usernameInputStyle = {
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: !/^[0-9]/.test(usernameValue.split('')[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1 ? 'green' : 'red',
+    border: "none",
+    borderBottom: "1px solid",
+    borderColor: !/^[0-9]/.test(usernameValue.split("")[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1 ? "green" : "red"
   }
   // ============================================
 
   return {
-    usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
-    usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle
+    usernameValue,
+    setUsernameValue,
+    validUsernameChecker,
+    usernameFocus,
+    setUsernameFocus,
+    usernameTrue,
+    setUsernameTrue,
+    usernameChecker,
+    usernameInputStyle
   }
 }
