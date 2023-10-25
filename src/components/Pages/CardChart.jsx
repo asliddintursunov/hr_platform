@@ -6,7 +6,7 @@ function CardChart() {
   const allMajorsData = useSelector(allMajors)
 
   return (
-    <div className="container mt-4">
+    <div className="mt-4">
       {allMajorsData.backendDev.length > 0 && <div className={styles.majorCardContainer}>
         <div className={styles.majorType}>
           <h3>Backend</h3>

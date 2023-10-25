@@ -8,24 +8,37 @@ export function useLineGraph() {
       type: 'spline',
     },
     title: {
-      text: 'Added Users',
+      text: 'Registered Users',
+      align: 'left',
+      style: {
+        fontSize: '2rem',
+        fontFamily: 'Arial, sans-serif',
+        fontWeight: 400
+      }
+    },
+    subtitle: {
+      text: 'By Date',
+      align: 'left',
       style: {
         fontSize: '1.6rem',
+        fontWeight: 500
       }
     },
     plotOptions: {
-      line: {
-        dataLables: {
-          enabled: true,
-          style: {
-            fontSize: '1.6rem'
-          }
-        }
+      series: {
+        cursor: 'pointer',
+        color: 'darkblue',
+      },
+    },
+    accessibility: {
+      announceNewData: {
+        enabled: true
       },
     },
     tooltip: {
       style: {
-        fontSize: '1.2rem'
+        fontSize: '1.2rem',
+        cursor: 'pointer',
       }
     },
     xAxis: {
@@ -65,7 +78,8 @@ export function useLineGraph() {
         data: allMajorsData.userCount
       }
     ]
-  }
+  };
+
   return { lineGraph }
 }
 

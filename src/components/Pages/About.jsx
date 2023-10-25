@@ -9,6 +9,7 @@ import CardChart from './CardChart';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMajors } from '../../redux/features/chartsSlice';
 import { useEffect } from 'react';
+import { useBarChart } from '../../hooks/charts/useBarChart';
 
 function About() {
   const dispatch = useDispatch()
@@ -33,17 +34,24 @@ function About() {
 
   const { lineGraph } = useLineGraph()
   const { pieChartSecond } = usePieChart()
+  const { barChart } = useBarChart()
 
   return (
     <div className={`text-center ${styles.aboutPage} pageAnimation`}>
-      <div>
-        <h1 className="display-3 text-dark text-center">About Page</h1>
+      <div style={{ gap: '2rem' }}>
         <div className={styles.basicStatsContainer}>
-          <HighchartsReact highcharts={Highcharts} options={lineGraph} />
-          <HighchartsReact highcharts={Highcharts} options={pieChartSecond} />
+          <div className={styles.lineGraphContainer}>
+            <HighchartsReact highcharts={Highcharts} options={lineGraph} />
+          </div>
+          <div className={styles.pieChartGraphContainer} >
+            <HighchartsReact highcharts={Highcharts} options={pieChartSecond} />
+          </div>
         </div>
         <div className={styles.detailsContainer}>
-          <CardChart />
+          {/* <CardChart /> */}
+          <div className={styles.barChartDetailsContainer}>
+            <HighchartsReact highcharts={Highcharts} options={barChart} />
+          </div>
         </div>
       </div>
     </div>

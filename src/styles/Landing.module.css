@@ -130,6 +130,7 @@
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-around;
+  gap: 2rem;
 }
 
 @media (max-width: 1140px) {
@@ -137,4 +138,29 @@
     flex-direction: column;
     gap: 2rem;
   }
+
+  .pieChartGraphContainer,
+  .lineGraphContainer {
+    flex: 1;
+  }
+}
+
+/** =============== NEW DESIGN =============== */
+
+.pieChartGraphContainer {
+  flex: 1;
+}
+
+.lineGraphContainer {
+  flex: 2;
+}
+
+.pieChartGraphContainer,
+.lineGraphContainer,
+.barChartDetailsContainer {
+  box-shadow: 0 0 10px rgb(163, 163, 163);
+}
+
+.detailsContainer {
+  width: 100%;
 }

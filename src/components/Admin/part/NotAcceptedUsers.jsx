@@ -6,14 +6,19 @@ import { useNavigate } from "react-router-dom"
 import useURL from "../../../hooks/useURL"
 import styles from "../../../styles/Admin.module.css"
 import { baseUrl } from "../../../utils/api"
-import { useDispatch, useSelector } from "react-redux"
-import { logoutUser, sendHeaders } from "../../../redux/features/userDataSlice"
+import { useDispatch } from "react-redux"
+import { logoutUser } from "../../../redux/features/userDataSlice"
 import AcceptUserModal from "../../Modals/AcceptUserModal"
 import RejectUserModal from "../../Modals/RejectUserModal"
 import AnotherUser from "../../Modals/AnotherUser"
 
+import { Table, Strong, Button } from "@radix-ui/themes"
+import "@radix-ui/themes/styles.css"
+import * as Avatar from "@radix-ui/react-avatar"
+
 function NotAcceptedUsers() {
-  const head = useSelector((state) => state.headers)
+  const memberRole = localStorage.getItem("userRole")
+  const memberId = localStorage.getItem("userId")
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { defaultImage } = useURL()
@@ -29,11 +34,6 @@ function NotAcceptedUsers() {
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
-
-  useEffect(() => {
-    dispatch(sendHeaders())
-    // console.clear()
-  }, [])
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -54,23 +54,20 @@ function NotAcceptedUsers() {
     setIsPending(true)
     axios
       .get(`${baseUrl}/users`, {
-        // headers: head
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
         }
       })
       .then((req) => {
-
-        console.log(req.data);
+        console.log(req.data)
         setDatas(req.data)
         setIsPending(false)
       })
       .catch((err) => {
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -100,10 +97,9 @@ function NotAcceptedUsers() {
           accepted: true
         },
         {
-          //  headers: head
           headers: {
-            'X-UserRole': localStorage.getItem('userRole'),
-            'X-UserId': localStorage.getItem('userId')
+            "X-UserRole": memberRole,
+            "X-UserId": memberId
           }
         }
       )
@@ -115,8 +111,7 @@ function NotAcceptedUsers() {
       .catch((err) => {
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -139,14 +134,13 @@ function NotAcceptedUsers() {
 
     axios
       .delete(`${baseUrl}/user/${user_id}`, {
-        // headers: head
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
         }
       })
       .then((res) => {
-        console.log(res)
+        console.log(res.data)
         setPopupInfo(res.data)
         setIsOpen(true)
         setErrorOccured(false)
@@ -154,8 +148,7 @@ function NotAcceptedUsers() {
       .catch((err) => {
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -172,67 +165,64 @@ function NotAcceptedUsers() {
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {showAcceptModal && <AcceptUserModal toggleAcceptModal={toggleAcceptModal} AddUser={AddUser} />}
       {showRejectModal && <RejectUserModal toggleRejectModal={toggleRejectModal} RejectUser={RejectUser} />}
-      <div className={`form-control container ${styles.acceptedUsersContainer}`} style={{ filter: showRejectModal || showAcceptModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
-        <div className="text-center d-flex align-items-center justify-content-center">
-          <div className="col-1">
-            <h4>ID</h4>
-          </div>
-          <div className="col-3">
-            <h4>Full Name</h4>
-          </div>
-          <div className="col-3">
-            <h4>Username</h4>
-          </div>
-          <div className="col-3">
-            <h4>E-mail</h4>
-          </div>
-          <div className="col-2">
-            <h4>Accepted</h4>
-          </div>
-        </div>
+      {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
+      <div className={`${styles.acceptedUsersContainer}`} style={{ filter: showRejectModal || showAcceptModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
         {isPending && <div className="loaderr"></div>}
-        {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-        {!isPending && (
-          <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
-            <hr style={{ width: "100%" }} />
-            {datas &&
-              datas.map((data) => {
-                return (
-                  !data.accepted && data.approved && (
-                    <div key={data.id} className={`form-control ${styles.userDataContainerDiv}`}>
-                      <div className="col-1 text-center">
-                        <b>#{data.id}</b>
-                      </div>
-                      <div className={`col-3 ${styles.userImgName}`}>
-                        {data.profile_photo ? <img className="user-image" src={data.profile_photo} /> : <img className="user-image" src={defaultImage} />}
-                        <p className="text-wrap">{data.fullname}</p>
-                      </div>
-                      <div className="col-3 text-center">
-                        <p>{data.username}</p>
-                      </div>
-                      <div className="col-3 text-center">
-                        <p>{data.email}</p>
-                      </div>
-                      {
-                        <div className={`col-2 ${styles.changeDeleteBtn}`}>
+
+        <Table.Root variant="surface">
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Accept</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          {!isPending && (
+            <Table.Body>
+              {datas &&
+                datas.map((data) => {
+                  return (
+                    !data.accepted &&
+                    data.approved && (
+                      <Table.Row key={data.id}>
+                        <Table.RowHeaderCell>
+                          <Strong>{data.id}</Strong>
+                        </Table.RowHeaderCell>
+                        <Table.Cell>
+                          <Avatar.Root className={styles.AvatarRoot}>
+                            <Avatar.Image className={styles.AvatarImage} src={defaultImage} alt="Colm Tuite" />
+                            <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
+                              CT
+                            </Avatar.Fallback>
+                          </Avatar.Root>
+                        </Table.Cell>
+                        <Table.Cell>{data.username}</Table.Cell>
+                        <Table.Cell>{data.email}</Table.Cell>
+                        <Table.Cell>
                           {!data.accepted && (
-                            <button className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
+                            <Button color="grass" variant="soft" className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
                               <i className="bi bi-check-square-fill"></i>
-                            </button>
+                            </Button>
                           )}
+                        </Table.Cell>
+                        <Table.Cell>
                           {!data.accepted && (
-                            <button className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
+                            <Button color="red" variant="soft" className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
                               <i className="bi bi-trash3-fill"></i>
-                            </button>
+                            </Button>
                           )}
-                        </div>
-                      }
-                    </div>
+                        </Table.Cell>
+                      </Table.Row>
+                    )
                   )
-                )
-              })}
-          </div>
-        )}
+                })}
+            </Table.Body>
+          )}
+        </Table.Root>
       </div>
     </Fragment>
   )

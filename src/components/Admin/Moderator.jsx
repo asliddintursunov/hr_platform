@@ -11,8 +11,14 @@ import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
 import ConfirmModal from '../Modals/ConfirmModal'
 import AnotherUser from "../Modals/AnotherUser"
 
+import { Select, Table, Strong, Button } from "@radix-ui/themes"
+import "@radix-ui/themes/styles.css"
+import * as Avatar from "@radix-ui/react-avatar"
+
 function Moderator() {
-  const head = useSelector((state) => state.headers)
+  const memberRole = localStorage.getItem("userRole")
+  const memberId = localStorage.getItem("userId")
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -34,7 +40,6 @@ function Moderator() {
   useEffect(
     () => {
       if (isConnected) {
-        console.log(isConnected + " Disconnected");
         socketInstance.disconnect();
       }
     }, []
@@ -65,10 +70,9 @@ function Moderator() {
     setIsPending(true)
     axios
       .get(`${baseUrl}/users`, {
-        // headers: head
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          'X-UserRole': memberRole,
+          'X-UserId': memberId
         }
       })
       .then((req) => {
@@ -106,10 +110,9 @@ function Moderator() {
     })
 
     axios.delete(`${baseUrl}/user/${user_id}`, {
-      // headers: head
       headers: {
-        'X-UserRole': localStorage.getItem('userRole'),
-        'X-UserId': localStorage.getItem('userId')
+        'X-UserRole': memberRole,
+        'X-UserId': memberId
       }
     })
       .then((res) => {
@@ -136,79 +139,67 @@ function Moderator() {
   return (
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
+      {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
+      {showModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}
       <div className={`container pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
-        {showModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}
         <div style={{ filter: showModal ? "blur(4px)" : "blur(0)" }}>
-          <div className="text-center">
-            <h1 className="display-3">Moderator Page</h1>
-            <hr />
-            <br />
-          </div>
-          <div className={`container form-control ${styles.ModeratorContainer}`}>
-            <div className="text-center d-flex align-items-center justify-content-center">
-              <div className="col-2">
-                <h4>ID</h4>
-              </div>
-              <div className="col-2">
-                <h4>User</h4>
-              </div>
-              <div className="col-2">
-                <h4>Username</h4>
-              </div>
-              <div className="col-2">
-                <h4>E-mail</h4>
-              </div>
-              <div className="col-2">
-                <h4>Role</h4>
-              </div>
-              <div className="col-2">
-                <h4>Delete</h4>
-              </div>
-            </div>
-            {isPending && <div className="loaderr"></div>}
-            {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-            {!isPending && (
-              <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
-                <hr style={{ width: "100%" }} />
-                {datas &&
-                  datas.map((data) => {
-                    return (
-                      data.accepted && (
-                        <div key={data.id} className={`form-control ${styles.userDataContainerDiv}`}>
-                          <div className="col-2 text-center">
-                            <p>#{data.id}</p>
-                          </div>
-                          <div className={`col-2 ${styles.userImgName}`}>
-                            {data.profile_photo ? <img className="user-image" src={data.profile_photo} /> : <img className="user-image" src={defaultImage} />}
-                            <p className="text-wrap">{data.fullname}</p>
-                          </div>
-                          <div className="col-2 text-center">
-                            <p>{data.username}</p>
-                          </div>
-                          <div className="col-2 text-center">
-                            <p>{data.email}</p>
-                          </div>
-                          <div className="col-2 d-flex align-items-center justify-content-around">
-                            <p>{data.role}</p>
-                          </div>
-                          <div className={`col-2 ${styles.changeDeleteBtn}`}>
-                            {data.role === "user" && (
-                              <button
-                                className="btn btn-outline-danger"
-                                onClick={() => {
-                                  toggleRemoveUserModal(data.id)
-                                }}
-                              >
-                                <i className="bi bi-trash3-fill"></i>
-                              </button>
-                            )}
-                          </div>
-                        </div>
+          {isPending && <div className="loaderr"></div>}
+          <div className={`container ${styles.ModeratorContainer}`}>
+            <Table.Root variant="surface">
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              {!isPending && (
+                <Table.Body>
+                  {datas &&
+                    datas.map((data) => {
+                      return (
+                        data.accepted &&
+                        data.approved && (
+                          <Table.Row key={data.id}>
+                            <Table.RowHeaderCell>
+                              <Strong>{data.id}</Strong>
+                            </Table.RowHeaderCell>
+                            <Table.Cell>
+                              <Avatar.Root className={styles.AvatarRoot}>
+                                <Avatar.Image className={styles.AvatarImage} src={data.profile_photo ? data.profile_photo : defaultImage} alt="Colm Tuite" />
+                                <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
+                                  CT
+                                </Avatar.Fallback>
+                              </Avatar.Root>
+                            </Table.Cell>
+                            <Table.Cell>{data.username}</Table.Cell>
+                            <Table.Cell>{data.email}</Table.Cell>
+                            <Table.Cell>{data.role}</Table.Cell>
+                            <Table.Cell>
+                              {data.role == "user" && (
+                                <Button
+                                  variant="soft"
+                                  color="red"
+                                  className="btn btn-outline-danger"
+                                  onClick={() => {
+                                    toggleRemoveUserModal(data.id)
+                                  }}
+                                >
+                                  <i className="bi bi-trash3-fill"></i>
+                                </Button>
+                              )}
+                            </Table.Cell>
+                          </Table.Row>
+                        )
                       )
-                    )
-                  })}
-              </div>
-            )}
+                    })}
+                </Table.Body>
+              )}
+            </Table.Root>
           </div>
         </div>
       </div>

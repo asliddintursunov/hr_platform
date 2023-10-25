@@ -1,25 +1,26 @@
 import axios from "axios"
 import styles from "../../../styles/Admin.module.css"
 import { Fragment, useCallback, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../../Modals/PopUp"
 import useURL from "../../../hooks/useURL"
 import { baseUrl } from "../../../utils/api"
-import { logoutUser, sendHeaders } from "../../../redux/features/userDataSlice"
+import { logoutUser } from "../../../redux/features/userDataSlice"
 import ConfirmModal from "../../Modals/ConfirmModal"
-import EditRoleModal from "../../Modals/EditRoleModal"
 import AnotherUser from "../../Modals/AnotherUser"
 
+import { Select, Table, Strong, Button } from "@radix-ui/themes"
+import "@radix-ui/themes/styles.css"
+import * as Avatar from "@radix-ui/react-avatar"
+
 function AcceptedUsers() {
-  const head = useSelector((state) => state.headers)
-  const dispatch = useDispatch()
+  const memberRole = localStorage.getItem("userRole")
+  const memberId = localStorage.getItem("userId")
   const navigate = useNavigate()
   const { defaultImage } = useURL()
 
   const [user_id, setUser_Id] = useState(null)
   const [datas, setDatas] = useState(null)
-  const [userRole, setUserRole] = useState("user")
   const [isPending, setIsPending] = useState(false)
 
   // Pop Up States
@@ -28,11 +29,7 @@ function AcceptedUsers() {
   const [errorOccured, setErrorOccured] = useState("")
 
   const [wrongUser, setWrongUser] = useState(false)
-  const [wrongUserData, setWrongUserData] = useState('')
-
-  useEffect(() => {
-    dispatch(sendHeaders())
-  }, [])
+  const [wrongUserData, setWrongUserData] = useState("")
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -53,10 +50,9 @@ function AcceptedUsers() {
     setIsPending(true)
     axios
       .get(`${baseUrl}/users`, {
-        // headers: head
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
         }
       })
       .then((req) => {
@@ -66,8 +62,7 @@ function AcceptedUsers() {
       .catch((err) => {
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -83,16 +78,16 @@ function AcceptedUsers() {
 
   const [showRemoveModal, setShowRemoveModal] = useState(false)
   const toggleRemoveUserModal = (id) => {
-    setShowRemoveModal(prev => !prev)
+    setShowRemoveModal((prev) => !prev)
     setUser_Id(id)
   }
+
   const handleDelete = () => {
     axios
       .delete(`${baseUrl}/user/${user_id}`, {
-        // headers: head
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
         }
       })
       .then((res) => {
@@ -106,8 +101,7 @@ function AcceptedUsers() {
       .catch((err) => {
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -119,23 +113,17 @@ function AcceptedUsers() {
       })
   }
 
-  const [showEditRoleModal, setShowEditRoleModal] = useState(false)
-  const toggleEditRoleModal = (id) => {
-    setShowEditRoleModal(prev => !prev)
-    setUser_Id(id)
-  }
-  const handleEdit = () => {
+  const handleEditRole = (id, role) => {
     axios
       .patch(
-        `${baseUrl}/user/${user_id}`,
+        `${baseUrl}/user/${id}`,
         {
-          role: userRole
+          role: role
         },
         {
-          // headers: head
           headers: {
-            'X-UserRole': localStorage.getItem('userRole'),
-            'X-UserId': localStorage.getItem('userId')
+            "X-UserRole": memberRole,
+            "X-UserId": memberId
           }
         }
       )
@@ -147,8 +135,7 @@ function AcceptedUsers() {
       .catch((err) => {
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -162,96 +149,77 @@ function AcceptedUsers() {
   return (
     <Fragment>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
-      {showEditRoleModal && <EditRoleModal toggleEditRoleModal={toggleEditRoleModal} handleEdit={handleEdit} />}
       {showRemoveModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}
-      <div className={`form-control container ${styles.acceptedUsersContainer}`} style={{ filter: showEditRoleModal || showRemoveModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
-        <div className="text-center d-flex align-items-center">
-          <div className="col-2">
-            <h4>ID</h4>
-          </div>
-          <div className="col-2">
-            <h4>User</h4>
-          </div>
-          <div className="col-2">
-            <h4>Username</h4>
-          </div>
-          <div className="col-2">
-            <h4>E-mail</h4>
-          </div>
-          <div className="col-2">
-            <h4>Role</h4>
-          </div>
-          <div className="col-2">
-            <h4>Edit</h4>
-          </div>
-        </div>
+      {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
+      <div className={`${styles.acceptedUsersContainer}`} style={{ filter: showRemoveModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
         {isPending && <div className="loaderr"></div>}
-        {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-        {!isPending && (
-          <div className="row-6 d-flex flex-column align-items-center justift-content-center gap-3 mb-4">
-            <hr style={{ width: "100%" }} />
-            {datas &&
-              datas.map((data) => {
-                return (
-                  data.accepted && data.approved && (
-                    <div key={data.id} className={`form-control ${styles.userDataContainerDiv}`}>
-                      <div className="col-2 text-center">
-                        <b>#{data.id}</b>
-                      </div>
-                      <div className={`col-2 ${styles.userImgName}`}>
-                        {data.profile_photo ? <img className="user-image" src={data.profile_photo} /> : <img className="user-image" src={defaultImage} />}
-                        <p className="text-wrap">{data.fullname}</p>
-                      </div>
-                      <div className="col-2 text-center">
-                        <p>{data.username}</p>
-                      </div>
-                      <div className="col-2 text-center">
-                        <p>{data.email}</p>
-                      </div>
-                      <div className={`col-2 ${styles.changeRoleContainer}`}>
+
+        <Table.Root variant="surface">
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          {!isPending && (
+            <Table.Body>
+              {datas &&
+                datas.map((data) => {
+                  return (
+                    data.accepted &&
+                    data.approved && (
+                      <Table.Row key={data.id}>
+                        <Table.RowHeaderCell>
+                          <Strong>{data.id}</Strong>
+                        </Table.RowHeaderCell>
+                        <Table.Cell>
+                          <Avatar.Root className={styles.AvatarRoot}>
+                            <Avatar.Image className={styles.AvatarImage} src={data.profile_photo ? data.profile_photo : defaultImage} alt="Colm Tuite" />
+                            <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
+                              CT
+                            </Avatar.Fallback>
+                          </Avatar.Root>
+                        </Table.Cell>
+                        <Table.Cell>{data.username}</Table.Cell>
+                        <Table.Cell>{data.email}</Table.Cell>
                         {data.role !== "admin" && (
-                          <select
-                            className={`form-select ${styles.selectRole}`}
-                            onChange={(e) => {
-                              setUserRole(e.target.value)
-                            }}
-                          >
-                            <option selected={data.role === "user" && true} value="user">
-                              User
-                            </option>
-                            <option selected={data.role === "moderator" && true} value="moderator">
-                              Moderator
-                            </option>
-                          </select>
+                          <Table.Cell>
+                            <Select.Root defaultValue={data.role} onValueChange={() => handleEditRole(data.id, data.role === "user" ? "moderator" : "user")}>
+                              <Select.Trigger />
+                              <Select.Content position="popper">
+                                <Select.Item value="user">User</Select.Item>
+                                <Select.Item value="moderator">Moderator</Select.Item>
+                              </Select.Content>
+                            </Select.Root>
+                          </Table.Cell>
                         )}
-                        {data.role === "admin" && <b>{data.role}</b>}
-                      </div>
-                      <div className={`col-2 ${styles.changeDeleteBtn}`}>
-                        <button
-                          disabled={data.role === "admin"}
-                          className="btn btn-outline-success"
-                          onClick={() => {
-                            toggleEditRoleModal(data.id)
-                          }}
-                        >
-                          <i className="bi bi-pen-fill"></i>
-                        </button>
-                        <button
-                          disabled={data.role === "admin"}
-                          className="btn btn-outline-danger"
-                          onClick={() => {
-                            toggleRemoveUserModal(data.id)
-                          }}
-                        >
-                          <i className="bi bi-trash3-fill"></i>
-                        </button>
-                      </div>
-                    </div>
+                        {data.role === "admin" && <Table.Cell>Admin</Table.Cell>}
+                        <Table.Cell>
+                          {data.role !== "admin" && (
+                            <Button
+                              variant="soft"
+                              color="red"
+                              className="btn btn-outline-danger"
+                              onClick={() => {
+                                toggleRemoveUserModal(data.id)
+                              }}
+                            >
+                              <i className="bi bi-trash3-fill"></i>
+                            </Button>
+                          )}
+                        </Table.Cell>
+                      </Table.Row>
+                    )
                   )
-                )
-              })}
-          </div>
-        )}
+                })}
+            </Table.Body>
+          )}
+        </Table.Root>
       </div>
     </Fragment>
   )
