@@ -5,11 +5,20 @@ import PopUp from "../Modals/PopUp"
 import styles from '../../styles/Birthdays.module.css'
 import { baseUrl } from "../../utils/api"
 import { useDispatch, useSelector } from "react-redux"
-import { sendHeaders, logoutUser } from "../../redux/features/userDataSlice"
+import { logoutUser } from "../../redux/features/userDataSlice"
 import AnotherUser from "../Modals/AnotherUser"
 
+import { Table, Strong, Button, Heading, Blockquote, Code } from "@radix-ui/themes"
+import "@radix-ui/themes/styles.css"
+import * as Avatar from "@radix-ui/react-avatar"
+import { defaultOptions } from "highcharts"
+import useURL from "../../hooks/useURL"
+
 function _Birthdays() {
-  const head = useSelector((state) => state.headers)
+  const memberRole = localStorage.getItem("userRole")
+  const memberId = localStorage.getItem("userId")
+  const { defaultImage } = useURL()
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -22,15 +31,8 @@ function _Birthdays() {
   useEffect(
     () => {
       if (isConnected) {
-        console.log(isConnected + " Disconnected");
         socketInstance.disconnect();
       }
-    }, []
-  )
-
-  useEffect(
-    () => {
-      dispatch(sendHeaders())
     }, []
   )
 
@@ -67,10 +69,9 @@ function _Birthdays() {
   const getBday = useCallback(() => {
     setIsPending(true)
     axios.get(`${baseUrl}/users`, {
-      // headers: head
       headers: {
-        'X-UserRole': localStorage.getItem('userRole'),
-        'X-UserId': localStorage.getItem('userId')
+        'X-UserRole': memberRole,
+        'X-UserId': memberId
       }
     })
       .then(res => {
@@ -157,40 +158,51 @@ function _Birthdays() {
   return (
     <Fragment>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
+      {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <div className={`container pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
-        <br />
         <h1 className="display-3 text-center">Birthdays</h1>
         <br />
+        <br />
         {isPending && <div className="loaderr"></div>}
+
         {!isPending &&
-          <div className={`form-control container ${styles.birthdaysContainer}`} >
-            {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-            <div className="text-center d-flex align-items-center justify-content-between">
+          <div className={`${styles.birthdaysContainer}`} >
+            <Table.Root variant="surface">
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Date Of Birth</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Day Left</Table.ColumnHeaderCell>
+                </Table.Row>
+              </Table.Header>
 
-
-              <div className="col-2"><h4>Image</h4></div>
-              <div className="col-2"><h4>Username</h4></div>
-              <div className="col-2"><h4>Date Of Birth</h4></div>
-              <div className="col-2"><h4>Day Left</h4></div>
-            </div>
-            <div className={`row-7 ${styles.userCardContainer}`}>
-              <hr style={{ width: '100%' }} />
-              {userBday && userBday.map((user, index) => {
-                return user.accepted &&
-                  <div key={user.id} className={`form-control ${styles.userCard}`} style={leftDays[index] == 0 ? greenBackground : null}>
-                    <div className="col-2">
-                      {user.profile_photo ? <img className="user-image" src={user.profile_photo} /> : <img className="user-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI3vvVZ-pOGsyhaNEm9s-tm96lh7OGxJrpPQ&usqp=CAU" alt="Selected" />}
-                    </div>
-                    <div className="col-2">{user.username}</div>
-                    <div className="col-2">{user.date_birth}</div>
-                    <div className={`col-2 ${styles.bDayInfoContainer}`}>
-                      <h5>Birthday!</h5>
-                      {leftDays[index] <= 30 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
-                        leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay}`}>Happy Birthday 🎉</h5> : <h5 className="text-warning">long days</h5>}
-                    </div>
-                  </div>
-              })}
-            </div>
+              <Table.Body>
+                {userBday && userBday.map((user, index) => {
+                  return (
+                    user.accepted && (
+                      <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
+                        <Table.Cell>
+                          <Avatar.Root className={styles.AvatarRoot}>
+                            <Avatar.Image className={styles.AvatarImage} src={user.profile_photo ? user.profile_photo : defaultImage} alt="Colm Tuite" />
+                            <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
+                              CT
+                            </Avatar.Fallback>
+                          </Avatar.Root>
+                        </Table.Cell>
+                        <Table.Cell>{user.username}</Table.Cell>
+                        <Table.Cell>{user.date_birth}</Table.Cell>
+                        <Table.Cell>
+                          <Code>Birthday!</Code>
+                          {leftDays[index] <= 30 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
+                            leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay} text-center`}>Happy Birthday 🎉</h5> : <h5 className="text-warning">long days</h5>}
+                        </Table.Cell>
+                      </Table.Row>
+                    )
+                  )
+                })}
+              </Table.Body>
+            </Table.Root>
           </div>}
       </div>
     </Fragment>

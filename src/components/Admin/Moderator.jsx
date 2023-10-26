@@ -145,19 +145,19 @@ function Moderator() {
         <div style={{ filter: showModal ? "blur(4px)" : "blur(0)" }}>
           {isPending && <div className="loaderr"></div>}
           <div className={`container ${styles.ModeratorContainer}`}>
-            <Table.Root variant="surface">
-              <Table.Header>
-                <Table.Row>
-                  <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
-                </Table.Row>
-              </Table.Header>
+            {!isPending && (
+              <Table.Root variant="surface">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
 
-              {!isPending && (
                 <Table.Body>
                   {datas &&
                     datas.map((data) => {
@@ -198,8 +198,8 @@ function Moderator() {
                       )
                     })}
                 </Table.Body>
-              )}
-            </Table.Root>
+              </Table.Root>
+            )}
           </div>
         </div>
       </div>

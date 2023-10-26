@@ -24,18 +24,20 @@
   justify-content: space-between;
 }
 
-.userCard:nth-child(even){
+.userCard:nth-child(even) {
   color: var(--dark);
   background-color: var(--oddUserGray);
 }
-.userCard:nth-child(odd){
+
+.userCard:nth-child(odd) {
   color: var(--dark);
 }
-.bDayInfoContainer h5:nth-child(odd){
+
+.bDayInfoContainer h5:nth-child(odd) {
   color: var(--dark);
 }
-.TodayBirthDay{
-  /* background-color: rgb(23, 172, 23); */
+
+.TodayBirthDay {
   padding: 0.5rem 0;
   background-color: var(--white);
   color: limegreen;
@@ -44,5 +46,42 @@
   -moz-border-radius: 2rem;
   -ms-border-radius: 2rem;
   -o-border-radius: 2rem;
-  /* background: linear-gradient(135deg,yellowgreen, lime, green); */
+}
+
+/* ============= AVATAR STYLE ============= */
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/violet.css';
+
+.AvatarRoot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  overflow: hidden;
+  user-select: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 100%;
+  background-color: var(--black-a3);
+}
+
+.AvatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: center;
+  border-radius: inherit;
+}
+
+.AvatarFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: var(--violet-11);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 500;
 }

@@ -169,7 +169,7 @@ function NotAcceptedUsers() {
       <div className={`${styles.acceptedUsersContainer}`} style={{ filter: showRejectModal || showAcceptModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
         {isPending && <div className="loaderr"></div>}
 
-        <Table.Root variant="surface">
+        {!isPending && (<Table.Root variant="surface">
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
@@ -181,48 +181,47 @@ function NotAcceptedUsers() {
             </Table.Row>
           </Table.Header>
 
-          {!isPending && (
-            <Table.Body>
-              {datas &&
-                datas.map((data) => {
-                  return (
-                    !data.accepted &&
-                    data.approved && (
-                      <Table.Row key={data.id}>
-                        <Table.RowHeaderCell>
-                          <Strong>{data.id}</Strong>
-                        </Table.RowHeaderCell>
-                        <Table.Cell>
-                          <Avatar.Root className={styles.AvatarRoot}>
-                            <Avatar.Image className={styles.AvatarImage} src={defaultImage} alt="Colm Tuite" />
-                            <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
-                              CT
-                            </Avatar.Fallback>
-                          </Avatar.Root>
-                        </Table.Cell>
-                        <Table.Cell>{data.username}</Table.Cell>
-                        <Table.Cell>{data.email}</Table.Cell>
-                        <Table.Cell>
-                          {!data.accepted && (
-                            <Button color="grass" variant="soft" className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
-                              <i className="bi bi-check-square-fill"></i>
-                            </Button>
-                          )}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {!data.accepted && (
-                            <Button color="red" variant="soft" className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
-                              <i className="bi bi-trash3-fill"></i>
-                            </Button>
-                          )}
-                        </Table.Cell>
-                      </Table.Row>
-                    )
+          <Table.Body>
+            {datas &&
+              datas.map((data) => {
+                return (
+                  !data.accepted &&
+                  data.approved && (
+                    <Table.Row key={data.id}>
+                      <Table.RowHeaderCell>
+                        <Strong>{data.id}</Strong>
+                      </Table.RowHeaderCell>
+                      <Table.Cell>
+                        <Avatar.Root className={styles.AvatarRoot}>
+                          <Avatar.Image className={styles.AvatarImage} src={defaultImage} alt="Colm Tuite" />
+                          <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
+                            CT
+                          </Avatar.Fallback>
+                        </Avatar.Root>
+                      </Table.Cell>
+                      <Table.Cell>{data.username}</Table.Cell>
+                      <Table.Cell>{data.email}</Table.Cell>
+                      <Table.Cell>
+                        {!data.accepted && (
+                          <Button color="grass" variant="soft" className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
+                            <i className="bi bi-check-square-fill"></i>
+                          </Button>
+                        )}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {!data.accepted && (
+                          <Button color="red" variant="soft" className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
+                            <i className="bi bi-trash3-fill"></i>
+                          </Button>
+                        )}
+                      </Table.Cell>
+                    </Table.Row>
                   )
-                })}
-            </Table.Body>
-          )}
+                )
+              })}
+          </Table.Body>
         </Table.Root>
+        )}
       </div>
     </Fragment>
   )

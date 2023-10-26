@@ -9,3 +9,5 @@ axios.interceptors.request.use((config) => {
 })
 
 export const baseUrl = "http://192.168.5.150:1000"
+// export const baseUrl = "http://146.190.136.129:1000"
+

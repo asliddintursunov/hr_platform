@@ -1,6 +1,5 @@
-import { Fragment } from 'react'
+import { Fragment } from "react"
 import "../../styles/User_Profile.css"
-
 function LogOutModal({ toggleModal, logOut }) {
   return (
     <Fragment>

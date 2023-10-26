@@ -2,6 +2,7 @@ import { Fragment, useCallback, useRef, useState } from "react"
 // import '../User_Profile.css'
 import styles from '../../../styles/EditProfile.module.css'
 import useURL from "../../../hooks/useURL"
+import { Avatar } from "@radix-ui/themes"
 function UploadImage({ selectedImage, handleImageChange, changeProfile }) {
 
   const { defaultImage } = useURL()
@@ -42,7 +43,7 @@ function UploadImage({ selectedImage, handleImageChange, changeProfile }) {
     <Fragment>
       <div className={styles.EditImgComponentContainer}>
         <div className={styles.uploadImageComponent}>
-          {selectedImage ? <img src={selectedImage} alt="Selected" /> : <img src={defaultImage} alt="Selected" />}
+          <Avatar size='9' src={selectedImage} alt="Selected" fallback='A' />
           <input className="form-control btn btn-secondary" type="file" accept="image/*"
             onChange={(file) => {
               handleImageChange(file)

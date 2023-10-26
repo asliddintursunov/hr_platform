@@ -37,11 +37,7 @@
   width: 3.5rem;
   object-fit: cover;
   object-position: center;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
+  border-radius: 8px;
 }
 
 .btnStyles {
@@ -183,16 +179,11 @@
 }
 
 .uploadImageComponent img {
-  width: 25rem;
-  height: 25rem;
-  object-fit: cover;
+  width: 15rem;
+  height: 15rem;
+  object-fit: fill;
   object-position: center;
-  border: 1px solid lightblue;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
+  border-radius: 8px;
 }
 
 .uploadImageComponent input {
@@ -297,30 +288,24 @@
   border: 1px solid red;
   color: red;
   border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  -ms-border-radius: 6px;
-  -o-border-radius: 6px;
   cursor: pointer;
   transition: .25s;
-  -webkit-transition: .25s;
-  -moz-transition: .25s;
-  -ms-transition: .25s;
-  -o-transition: .25s;
 }
 
 .deleteBtn:hover {
   background-color: rgb(230, 13, 13);
   color: #fff;
 }
-.uploadResumeComponent{
+
+.uploadResumeComponent {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.6rem;
   gap: 0.6rem;
 }
-.uploadResumeComponent > p {
+
+.uploadResumeComponent>p {
   font-size: 1.2rem;
   margin-left: -11rem;
   margin-top: 1rem;

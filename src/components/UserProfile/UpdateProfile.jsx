@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { googleLogout } from "@react-oauth/google"
 import axios from "axios"
-import styles from '../../styles/EditProfile.module.css'
+import styles from "../../styles/EditProfile.module.css"
 
 // Custon Hooks
 import { useUsername } from "../../hooks/useUsername"
@@ -28,13 +28,17 @@ import EditExperience from "./part/EditExperience"
 import EditResume from "./part/EditResume"
 import useURL from "../../hooks/useURL"
 import AnotherUser from "../Modals/AnotherUser"
-import { sendHeaders, logoutUser } from "../../redux/features/userDataSlice"
+import { logoutUser } from "../../redux/features/userDataSlice"
+import { Tabs, Box, Heading, Text, Code, Table } from "@radix-ui/themes"
+
 
 function UpdateProfile() {
+  const memberRole = localStorage.getItem("userRole")
+  const memberId = localStorage.getItem("userId")
+
   // Redirect user to another page
   const navigate = useNavigate()
 
-  const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
 
   // Custom URL hook
@@ -77,25 +81,16 @@ function UpdateProfile() {
   const [errorOccured, setErrorOccured] = useState("")
 
   const [wrongUser, setWrongUser] = useState(false)
-  const [wrongUserData, setWrongUserData] = useState('')
+  const [wrongUserData, setWrongUserData] = useState("")
 
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
 
-  useEffect(
-    () => {
-      if (isConnected) {
-        console.log(isConnected + " Disconnected");
-        socketInstance.disconnect();
-      }
-    }, []
-  )
-
-  useEffect(
-    () => {
-      dispatch(sendHeaders())
-    }, []
-  )
+  useEffect(() => {
+    if (isConnected) {
+      socketInstance.disconnect()
+    }
+  }, [])
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -104,7 +99,6 @@ function UpdateProfile() {
       setErrorOccured(true)
       setPopupInfo(info)
       setTimeout(() => {
-        localStorage.removeItem("token")
         localStorage.clear()
         navigate("/signin")
       }, 1500)
@@ -161,11 +155,10 @@ function UpdateProfile() {
   const CancleEdition = useCallback(() => {
     setIsPending(true)
     axios
-      .get(`${baseUrl}/user/${localStorage.getItem("userId")}`, {
-        // headers: head
+      .get(`${baseUrl}/user/${memberId}`, {
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
         }
       })
       .then((res) => {
@@ -187,8 +180,7 @@ function UpdateProfile() {
       .catch((err) => {
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -204,27 +196,30 @@ function UpdateProfile() {
   // Save Edition === Working
   const saveEdition = useCallback(() => {
     axios
-      .patch(`${baseUrl}/update_profile/${localStorage.getItem("userId")}`, {
-        fullname: data.fullname !== fullName ? fullName : undefined,
-        // username: data.username !== usernameValue ? usernameValue : undefined,
-        username: usernameValue,
-        email: data.email !== emailValue ? emailValue : undefined,
-        password: passwordValue !== "" ? passwordValue : undefined,
-        address: data.address !== address ? address : undefined,
-        date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
-        phone_number: data.phone_number !== numbers ? numbers : undefined,
-        profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
-        resume: data.resume !== userResume ? userResume : undefined,
-        major: data.major !== major ? major : undefined,
-        experience: data.experience !== experience ? experience : undefined,
-        skills: data.skills !== skills ? skills : undefined
-      }, {
-        // headers: head
-        headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+      .patch(
+        `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
+        {
+          fullname: data.fullname !== fullName ? fullName : undefined,
+          // username: data.username !== usernameValue ? usernameValue : undefined,
+          username: usernameValue,
+          email: data.email !== emailValue ? emailValue : undefined,
+          password: passwordValue !== "" ? passwordValue : undefined,
+          address: data.address !== address ? address : undefined,
+          date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
+          phone_number: data.phone_number !== numbers ? numbers : undefined,
+          profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
+          resume: data.resume !== userResume ? userResume : undefined,
+          major: data.major !== major ? major : undefined,
+          experience: data.experience !== experience ? experience : undefined,
+          skills: data.skills !== skills ? skills : undefined
+        },
+        {
+          headers: {
+            "X-UserRole": memberRole,
+            "X-UserId": memberId
+          }
         }
-      })
+      )
       .then((res) => {
         setIsOpen(true)
         setPopupInfo(res.data)
@@ -235,32 +230,28 @@ function UpdateProfile() {
 
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
-        }
-        else {
+        } else {
           setErrorOccured(true)
           setPopupInfo(err.response.data)
         }
       })
-  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, tokenExpired, major, experience, skills, userResume])
+  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, major, experience, skills, userResume])
 
   // Log Out === Working
   const logOut = () => {
     googleLogout()
     axios
-      .get(`${baseUrl}/logout/${localStorage.getItem('userId')}`, {
-        // headers: head
+      .get(`${baseUrl}/logout/${memberId}`, {
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
         }
       })
       .then((res) => {
-        console.log(res)
 
         setIsOpen(true)
 
@@ -270,16 +261,13 @@ function UpdateProfile() {
         setTimeout(() => {
           navigate("/signin")
         }, 1500)
-        localStorage.removeItem("token")
-        localStorage.removeItem("userRole")
-        localStorage.removeItem("userId")
+        localStorage.removeItem()
       })
       .catch((err) => {
         setIsOpen(true)
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -318,12 +306,11 @@ function UpdateProfile() {
       {isPending && <div className="loaderr"></div>}
       {!isPending && (
         <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
-          {/* Header, Image ... */}
           <div className={styles.profileUpdateHeader}>
             <h2>My Profile</h2>
             <div>
               <i className="bi bi-bell-fill"></i>
-              {selectedImage ? <img src={selectedImage} /> : <img src={defaultImage} />}
+              <img src={selectedImage ? selectedImage : defaultImage} />
             </div>
           </div>
 
@@ -332,98 +319,121 @@ function UpdateProfile() {
           {/* ============ Update Profile Form ============ */}
           <br />
           <form action="/update_profile/" method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()} className={`form-control ${styles.updateProfileForm}`}>
-            <div className={`${styles.topData} `}>
-              <div className={`${styles.topLeftData}`}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
+              <div style={{ backgroundColor: 'red', flex: 1 }}>
                 <EditUploadImage selectedImage={selectedImage} handleImageChange={handleImageChange} changeProfile={changeProfile} />
-                <div className={styles.additionalInfo}>
-                  <EditMajor major={major} seeMajor={seeMajor} changeProfile={changeProfile} />
-                  <EditExperience experience={experience} seeExperience={seeExperience} changeProfile={changeProfile} />
-                </div>
               </div>
-              <div className={`${styles.topRightData}`}>
-                <EditFullName changeProfile={changeProfile} fullName={fullName} setFullName={setFullName} />
-                <EditUserName
-                  usernameValue={usernameValue}
-                  setUsernameValue={setUsernameValue}
-                  validUsernameChecker={validUsernameChecker}
-                  usernameFocus={usernameFocus}
-                  setUsernameFocus={setUsernameFocus}
-                  usernameTrue={usernameTrue}
-                  setUsernameTrue={setUsernameTrue}
-                  usernameChecker={usernameChecker}
-                  usernameInputStyle={usernameInputStyle}
-                  changeProfile={changeProfile}
-                />
-                <EditEmail
-                  emailValue={emailValue}
-                  setEmailValue={setEmailValue}
-                  validEmailChecker={validEmailChecker}
-                  emailFocus={emailFocus}
-                  setEmailFocus={setEmailFocus}
-                  emailTrue={emailTrue}
-                  setEmailtrue={setEmailtrue}
-                  emailChecker={emailChecker}
-                  emailInputStyle={emailInputStyle}
-                  changeProfile={changeProfile}
-                />
-                <EditPassword
-                  passwordValue={passwordValue}
-                  setPasswordValue={setPasswordValue}
-                  validPasswordChecker={validPasswordChecker}
-                  passwordTrue={passwordTrue}
-                  setPasswordTrue={setPasswordTrue}
-                  passwordType={passwordType}
-                  setPasswordType={setPasswordType}
-                  passwordChecker={passwordChecker}
-                  passwordInputStyle={passwordInputStyle}
-                  changeProfile={changeProfile}
-                />
-                <EditAddress changeProfile={changeProfile} address={address} setAddress={setAddress} />
-                <EditDateOfBirth changeProfile={changeProfile} dateOfBirth={dateOfBirth} setDateOfBirth={setDateOfBirth} />
+              <div style={{ flex: 3, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: '1rem' }}>
+                <Heading size='6'>
+                  {fullName}
+                </Heading>
+                <Text size='3' style={{ color: 'gray' }}>
+                  @{usernameValue}
+                </Text>
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'end', justifyContent: 'start', gap: '1rem' }}>
+                <Code size='4'>{memberRole}</Code>
+                <Text size='4'>Joined 09 Dec 2017</Text>
               </div>
             </div>
-            <div className={`${styles.middleData}`}>
-              <EditSkills changeProfile={changeProfile} skills={skills} setSkills={setSkills} seeSkills={seeSkills} />
-            </div>
-            <div className={`${styles.bottomData}`}>
-              <div className={`${styles.bottomLeftData}`}>
-                <AddPhoneNumber numbers={numbers} newNumber={newNumber} setNewNumber={setNewNumber} handleAddNewNumber={handleAddNewNumber} handleDelete={handleDelete} changeProfile={changeProfile} />
+            <div>
+              <Tabs.Root defaultValue="basic">
+                <Tabs.List>
+                  <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
+                  <Tabs.Trigger value="additional">Additional</Tabs.Trigger>
+                </Tabs.List>
+
+                <Box px="4" pt="3" pb="2">
+                  <Tabs.Content value="basic">
+                    <div className={`${styles.topRightData}`}>
+                      <EditFullName changeProfile={changeProfile} fullName={fullName} setFullName={setFullName} />
+                      <EditUserName
+                        usernameValue={usernameValue}
+                        setUsernameValue={setUsernameValue}
+                        validUsernameChecker={validUsernameChecker}
+                        usernameFocus={usernameFocus}
+                        setUsernameFocus={setUsernameFocus}
+                        usernameTrue={usernameTrue}
+                        setUsernameTrue={setUsernameTrue}
+                        usernameChecker={usernameChecker}
+                        usernameInputStyle={usernameInputStyle}
+                        changeProfile={changeProfile}
+                      />
+                      <EditEmail
+                        emailValue={emailValue}
+                        setEmailValue={setEmailValue}
+                        validEmailChecker={validEmailChecker}
+                        emailFocus={emailFocus}
+                        setEmailFocus={setEmailFocus}
+                        emailTrue={emailTrue}
+                        setEmailtrue={setEmailtrue}
+                        emailChecker={emailChecker}
+                        emailInputStyle={emailInputStyle}
+                        changeProfile={changeProfile}
+                      />
+                      <EditPassword
+                        passwordValue={passwordValue}
+                        setPasswordValue={setPasswordValue}
+                        validPasswordChecker={validPasswordChecker}
+                        passwordTrue={passwordTrue}
+                        setPasswordTrue={setPasswordTrue}
+                        passwordType={passwordType}
+                        setPasswordType={setPasswordType}
+                        passwordChecker={passwordChecker}
+                        passwordInputStyle={passwordInputStyle}
+                        changeProfile={changeProfile}
+                      />
+                      <EditAddress changeProfile={changeProfile} address={address} setAddress={setAddress} />
+                      <EditDateOfBirth changeProfile={changeProfile} dateOfBirth={dateOfBirth} setDateOfBirth={setDateOfBirth} />
+                    </div>
+                  </Tabs.Content>
+                  <Tabs.Content value="additional">
+                    <div className={`${styles.middleData}`}>
+                      <EditSkills changeProfile={changeProfile} skills={skills} setSkills={setSkills} seeSkills={seeSkills} />
+                    </div>
+                    <div className={`${styles.bottomData}`}>
+                      <div className={`${styles.bottomLeftData}`}>
+                        <AddPhoneNumber numbers={numbers} newNumber={newNumber} setNewNumber={setNewNumber} handleAddNewNumber={handleAddNewNumber} handleDelete={handleDelete} changeProfile={changeProfile} />
+                      </div>
+                      <div className={`${styles.bottomRightData} bg-light`}>
+                        <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
+                      </div>
+                    </div>
+                  </Tabs.Content>
+                </Box>
+              </Tabs.Root>
+              <div className={styles.btnStyles}>
+                <button className={`btn ${styles.logOutBtn}`} onClick={() => toggleModal()}>
+                  <i className="bi bi-box-arrow-right"></i> Log Out
+                </button>
+                {!changeProfile && (
+                  <button className={`btn ${styles.editBtn}`} onClick={() => setChangeProfile(true)}>
+                    Edit Profile
+                  </button>
+                )}
+                {changeProfile && (
+                  <button
+                    className={`btn ${styles.saveBtn}`}
+                    onClick={() => {
+                      setChangeProfile(false)
+                      saveEdition()
+                    }}
+                  >
+                    Save Changes
+                  </button>
+                )}
+                {changeProfile && (
+                  <button
+                    className={`btn ${styles.cancelBtn}`}
+                    onClick={() => {
+                      setChangeProfile(false)
+                      CancleEdition()
+                    }}
+                  >
+                    Cancel Edition
+                  </button>
+                )}
               </div>
-              <div className={`${styles.bottomRightData} bg-light`}>
-                <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
-              </div>
-            </div>
-            <div className={styles.btnStyles}>
-              <button className={`btn ${styles.logOutBtn}`} onClick={() => toggleModal()}>
-                <i className="bi bi-box-arrow-right"></i> Log Out
-              </button>
-              {!changeProfile && (
-                <button className={`btn ${styles.editBtn}`} onClick={() => setChangeProfile(true)}>
-                  Edit Profile
-                </button>
-              )}
-              {changeProfile && (
-                <button
-                  className={`btn ${styles.saveBtn}`}
-                  onClick={() => {
-                    setChangeProfile(false)
-                    saveEdition()
-                  }}
-                >
-                  Save Changes
-                </button>
-              )}
-              {changeProfile && (
-                <button
-                  className={`btn ${styles.cancelBtn}`}
-                  onClick={() => {
-                    setChangeProfile(false)
-                    CancleEdition()
-                  }}
-                >
-                  Cancel Edition
-                </button>
-              )}
             </div>
           </form>
         </div>
