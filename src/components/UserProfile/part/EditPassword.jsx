@@ -1,5 +1,6 @@
 import { Fragment } from "react"
 import styles from '../../../styles/EditProfile.module.css'
+import { Text } from "@radix-ui/themes"
 
 function EditPassword({ passwordValue, setPasswordValue, validPasswordChecker,
   passwordTrue, setPasswordTrue,
@@ -8,7 +9,7 @@ function EditPassword({ passwordValue, setPasswordValue, validPasswordChecker,
   return (
     <Fragment>
       <div className={`${styles.passwordChanger} ${styles.inputContainer}`}>
-        <label htmlFor="password"><b>Password</b></label>
+        <label htmlFor="password"><Text>Password</Text></label>
         <div onClick={() => {
           passwordType ? setPasswordType(false) : setPasswordType(true)
         }}>
@@ -16,11 +17,10 @@ function EditPassword({ passwordValue, setPasswordValue, validPasswordChecker,
         </div>
         <input
           disabled={!changeProfile}
-          className='form-control'
           style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null}
           value={passwordValue}
           type={passwordType ? "password" : "text"}
-          placeholder='Password'
+          placeholder='••••••••'
           onChange={e => setPasswordValue(e.target.value)}
           onKeyUp={() => {
             passwordChecker()

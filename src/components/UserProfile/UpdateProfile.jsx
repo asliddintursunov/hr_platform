@@ -20,6 +20,7 @@ import EditAddress from "./part/EditAddress"
 import EditDateOfBirth from "./part/EditDateOfBirth"
 import EditUploadImage from "./part/EditUploadImage"
 import AddPhoneNumber from "./part/AddPhoneNumber"
+import EditBio from "./part/EditBio"
 import LogOutModal from "../Modals/LogOutModal"
 import PopUp from "../Modals/PopUp"
 import EditMajor from "./part/EditMajor"
@@ -29,8 +30,7 @@ import EditResume from "./part/EditResume"
 import useURL from "../../hooks/useURL"
 import AnotherUser from "../Modals/AnotherUser"
 import { logoutUser } from "../../redux/features/userDataSlice"
-import { Tabs, Box, Heading, Text, Code, Table } from "@radix-ui/themes"
-
+import { Tabs, Box, Heading, Text, Code, Table, Avatar } from "@radix-ui/themes"
 
 function UpdateProfile() {
   const memberRole = localStorage.getItem("userRole")
@@ -40,9 +40,6 @@ function UpdateProfile() {
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
-
-  // Custom URL hook
-  const { defaultImage } = useURL()
 
   // Custom useUsername Hook
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus, usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
@@ -252,7 +249,6 @@ function UpdateProfile() {
         }
       })
       .then((res) => {
-
         setIsOpen(true)
 
         setErrorOccured(false)
@@ -298,147 +294,153 @@ function UpdateProfile() {
 
   // ###########################################################333
   return (
-    <div className={`container ${styles.userProfileContainer} pageAnimation`}>
-      <br />
+    <>
+      {isPending && <div className="loaderr"></div>}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
-      {isPending && <div className="loaderr"></div>}
       {!isPending && (
-        <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
-          <div className={styles.profileUpdateHeader}>
-            <h2>My Profile</h2>
+        <div className={`container ${styles.userProfileContainer} pageAnimation`}>
+          <div className={styles.right}>
             <div>
-              <i className="bi bi-bell-fill"></i>
-              <img src={selectedImage ? selectedImage : defaultImage} />
+              <button className={`btn ${styles.logOutBtn}`} onClick={() => toggleModal()}>
+                <i className="bi bi-box-arrow-right"></i> Log Out
+              </button>
             </div>
           </div>
 
-          <hr />
-
-          {/* ============ Update Profile Form ============ */}
-          <br />
-          <form action="/update_profile/" method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()} className={`form-control ${styles.updateProfileForm}`}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem' }}>
-              <div style={{ backgroundColor: 'red', flex: 1 }}>
-                <EditUploadImage selectedImage={selectedImage} handleImageChange={handleImageChange} changeProfile={changeProfile} />
-              </div>
-              <div style={{ flex: 3, display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', gap: '1rem' }}>
-                <Heading size='6'>
-                  {fullName}
-                </Heading>
-                <Text size='3' style={{ color: 'gray' }}>
-                  @{usernameValue}
-                </Text>
-              </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'end', justifyContent: 'start', gap: '1rem' }}>
-                <Code size='4'>{memberRole}</Code>
-                <Text size='4'>Joined 09 Dec 2017</Text>
+          <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
+            <div className={styles.profileUpdateHeader}>
+              <h2>My Profile</h2>
+              <div>
+                <i className="bi bi-bell-fill"></i>
+                <Avatar src={selectedImage} alt="Selected" fallback="A" />
               </div>
             </div>
-            <div>
-              <Tabs.Root defaultValue="basic">
-                <Tabs.List>
-                  <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
-                  <Tabs.Trigger value="additional">Additional</Tabs.Trigger>
-                </Tabs.List>
 
-                <Box px="4" pt="3" pb="2">
-                  <Tabs.Content value="basic">
-                    <div className={`${styles.topRightData}`}>
-                      <EditFullName changeProfile={changeProfile} fullName={fullName} setFullName={setFullName} />
-                      <EditUserName
-                        usernameValue={usernameValue}
-                        setUsernameValue={setUsernameValue}
-                        validUsernameChecker={validUsernameChecker}
-                        usernameFocus={usernameFocus}
-                        setUsernameFocus={setUsernameFocus}
-                        usernameTrue={usernameTrue}
-                        setUsernameTrue={setUsernameTrue}
-                        usernameChecker={usernameChecker}
-                        usernameInputStyle={usernameInputStyle}
-                        changeProfile={changeProfile}
-                      />
-                      <EditEmail
-                        emailValue={emailValue}
-                        setEmailValue={setEmailValue}
-                        validEmailChecker={validEmailChecker}
-                        emailFocus={emailFocus}
-                        setEmailFocus={setEmailFocus}
-                        emailTrue={emailTrue}
-                        setEmailtrue={setEmailtrue}
-                        emailChecker={emailChecker}
-                        emailInputStyle={emailInputStyle}
-                        changeProfile={changeProfile}
-                      />
-                      <EditPassword
-                        passwordValue={passwordValue}
-                        setPasswordValue={setPasswordValue}
-                        validPasswordChecker={validPasswordChecker}
-                        passwordTrue={passwordTrue}
-                        setPasswordTrue={setPasswordTrue}
-                        passwordType={passwordType}
-                        setPasswordType={setPasswordType}
-                        passwordChecker={passwordChecker}
-                        passwordInputStyle={passwordInputStyle}
-                        changeProfile={changeProfile}
-                      />
-                      <EditAddress changeProfile={changeProfile} address={address} setAddress={setAddress} />
-                      <EditDateOfBirth changeProfile={changeProfile} dateOfBirth={dateOfBirth} setDateOfBirth={setDateOfBirth} />
-                    </div>
-                  </Tabs.Content>
-                  <Tabs.Content value="additional">
-                    <div className={`${styles.middleData}`}>
-                      <EditSkills changeProfile={changeProfile} skills={skills} setSkills={setSkills} seeSkills={seeSkills} />
-                    </div>
-                    <div className={`${styles.bottomData}`}>
-                      <div className={`${styles.bottomLeftData}`}>
-                        <AddPhoneNumber numbers={numbers} newNumber={newNumber} setNewNumber={setNewNumber} handleAddNewNumber={handleAddNewNumber} handleDelete={handleDelete} changeProfile={changeProfile} />
-                      </div>
-                      <div className={`${styles.bottomRightData} bg-light`}>
-                        <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
-                      </div>
-                    </div>
-                  </Tabs.Content>
-                </Box>
-              </Tabs.Root>
-              <div className={styles.btnStyles}>
-                <button className={`btn ${styles.logOutBtn}`} onClick={() => toggleModal()}>
-                  <i className="bi bi-box-arrow-right"></i> Log Out
-                </button>
-                {!changeProfile && (
-                  <button className={`btn ${styles.editBtn}`} onClick={() => setChangeProfile(true)}>
-                    Edit Profile
-                  </button>
-                )}
-                {changeProfile && (
-                  <button
-                    className={`btn ${styles.saveBtn}`}
-                    onClick={() => {
-                      setChangeProfile(false)
-                      saveEdition()
-                    }}
-                  >
-                    Save Changes
-                  </button>
-                )}
-                {changeProfile && (
-                  <button
-                    className={`btn ${styles.cancelBtn}`}
-                    onClick={() => {
-                      setChangeProfile(false)
-                      CancleEdition()
-                    }}
-                  >
-                    Cancel Edition
-                  </button>
-                )}
+            <hr style={{ color: 'gray' }} />
+
+            {/* ============ Update Profile Form ============ */}
+            <br />
+            <form action="/update_profile/" method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()} className={`${styles.updateProfileForm}`}>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "2rem" }}>
+                <div className={styles.profileImgContainer}>
+                  <Avatar size="9" src={selectedImage} alt="Selected" fallback="A" />
+                </div>
+                <div className={styles.mainTopLeft}>
+                  <Heading size="6">{fullName}</Heading>
+                  <Text size="3" style={{ color: "gray" }}>
+                    @{usernameValue}
+                  </Text>
+                  <EditUploadImage handleImageChange={handleImageChange} changeProfile={changeProfile} />
+                </div>
+                <div className={styles.mainTopRight}>
+                  <Code size="4">{memberRole}</Code>
+                  <Text size="3" color="gray">Joined 09 Dec 2017</Text>
+                </div>
               </div>
-            </div>
-          </form>
+              <div>
+                <Tabs.Root defaultValue="basic">
+                  <Tabs.List>
+                    <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
+                    <Tabs.Trigger value="additional">Additional</Tabs.Trigger>
+                  </Tabs.List>
+
+                  <Box px="4" pt="3" pb="2">
+                    <Tabs.Content value="basic">
+                      <div className={styles.NamesContainer}>
+                        <EditFullName changeProfile={changeProfile} fullName={fullName} setFullName={setFullName} />
+                        <EditUserName
+                          usernameValue={usernameValue}
+                          setUsernameValue={setUsernameValue}
+                          validUsernameChecker={validUsernameChecker}
+                          usernameInputStyle={usernameInputStyle}
+                          changeProfile={changeProfile}
+                        />
+                      </div>
+                      <div className={styles.EmailBioAddressContainer}>
+                        <EditEmail
+                          emailValue={emailValue}
+                          setEmailValue={setEmailValue}
+                          validEmailChecker={validEmailChecker}
+                          emailFocus={emailFocus}
+                          setEmailFocus={setEmailFocus}
+                          emailTrue={emailTrue}
+                          setEmailtrue={setEmailtrue}
+                          emailChecker={emailChecker}
+                          emailInputStyle={emailInputStyle}
+                          changeProfile={changeProfile}
+                        />
+                        <EditBio changeProfile={changeProfile} />
+                        <EditPassword
+                          passwordValue={passwordValue}
+                          setPasswordValue={setPasswordValue}
+                          validPasswordChecker={validPasswordChecker}
+                          passwordTrue={passwordTrue}
+                          setPasswordTrue={setPasswordTrue}
+                          passwordType={passwordType}
+                          setPasswordType={setPasswordType}
+                          passwordChecker={passwordChecker}
+                          passwordInputStyle={passwordInputStyle}
+                          changeProfile={changeProfile}
+                        />
+                        <EditAddress changeProfile={changeProfile} address={address} setAddress={setAddress} />
+                        <EditDateOfBirth changeProfile={changeProfile} dateOfBirth={dateOfBirth} setDateOfBirth={setDateOfBirth} />
+                      </div>
+                    </Tabs.Content>
+                    <Tabs.Content value="additional">
+                      <div className={styles.MajorExperienceTechnalogiesContainer}>
+                        <EditMajor major={major} seeMajor={seeMajor} changeProfile={changeProfile} />
+                        <EditExperience experience={experience} seeExperience={seeExperience} changeProfile={changeProfile} />
+                        <EditSkills changeProfile={changeProfile} skills={skills} setSkills={setSkills} seeSkills={seeSkills} />
+                      </div>
+                      <AddPhoneNumber
+                        numbers={numbers}
+                        newNumber={newNumber}
+                        setNewNumber={setNewNumber}
+                        handleAddNewNumber={handleAddNewNumber}
+                        handleDelete={handleDelete}
+                        changeProfile={changeProfile}
+                      />
+                      <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
+                    </Tabs.Content>
+                  </Box>
+                </Tabs.Root>
+                <div className={styles.btnStyles}>
+                  {!changeProfile && (
+                    <button className={`btn ${styles.editBtn}`} onClick={() => setChangeProfile(true)}>
+                      Edit Profile
+                    </button>
+                  )}
+                  {changeProfile && (
+                    <button
+                      className={`btn ${styles.saveBtn}`}
+                      onClick={() => {
+                        setChangeProfile(false)
+                        saveEdition()
+                      }}
+                    >
+                      Save Changes
+                    </button>
+                  )}
+                  {changeProfile && (
+                    <button
+                      className={`btn ${styles.cancelBtn}`}
+                      onClick={() => {
+                        setChangeProfile(false)
+                        CancleEdition()
+                      }}
+                    >
+                      Cancel Edition
+                    </button>
+                  )}
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
 export default UpdateProfile

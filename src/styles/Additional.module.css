@@ -9,15 +9,15 @@
 }
 
 /* ======== Major ======== */
-
 .majorContainer {
   margin: 2rem auto;
   padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
 }
+
 
 .radioInput {
   width: 100%;
@@ -248,4 +248,18 @@
 
 .checkboxContainer>div>label {
   cursor: pointer;
+}
+
+/* ============== NEW STYLE ============== */
+.experienceContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.mappedExperiences {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3rem;
 }

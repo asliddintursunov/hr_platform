@@ -1,22 +1,19 @@
 import { Fragment } from "react"
 import styles from '../../../styles/EditProfile.module.css'
+import { Text } from "@radix-ui/themes"
 
 function EditEmail({ emailValue, setEmailValue, validEmailChecker,
   emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle, changeProfile }) {
   return (
     <Fragment>
       <div className={`${styles.emailChanger} ${styles.inputContainer}`}>
-        <label htmlFor="email"><b>Email</b></label>
-        <div>
-          <i className="bi bi-envelope-at-fill"></i>
-        </div>
+        <label htmlFor="email"><Text>Email</Text></label>
         <input
           disabled={!changeProfile}
-          className='form-control'
           style={emailValue.length >= 1 && emailTrue ? emailInputStyle : null}
           value={emailValue}
           type="email"
-          placeholder='Email'
+          placeholder='user@example.com'
           onChange={e => setEmailValue(e.target.value)}
           onKeyUp={() => {
             emailChecker()

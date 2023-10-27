@@ -19,8 +19,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
   ]
 
   return (
-    <div className={`form-control ${styles.skillsContainier}`}>
-      {/* className={styles.frontendContainer} */}
+    <div className={styles.skillsContainier}>
       <div>
         <h3>Frontend</h3>
         {frontend && frontend.map(skill => (
@@ -41,7 +40,6 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
           </div>
         ))}
       </div>
-      {/* className={styles.backendContainer} */}
       <div>
         <h3>Backend</h3>
         {backend && backend.map(skill => (
@@ -62,7 +60,6 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
           </div>
         ))}
       </div>
-      {/* className={styles.mobileContainer} */}
       <div>
         <h3>Mobile</h3>
         {mobile && mobile.map(skill => (
@@ -83,7 +80,6 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
           </div>
         ))}
       </div>
-      {/* className={styles.desktopContainer} */}
       <div>
         <h3>Desktop</h3>
         {desktop && desktop.map(skill => (
@@ -104,7 +100,6 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
           </div>
         ))}
       </div>
-      {/* className={styles.designContainer} */}
       <div>
         <h3>Design</h3>
         {ui_ux && ui_ux.map(skill => (

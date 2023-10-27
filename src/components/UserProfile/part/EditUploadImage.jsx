@@ -1,19 +1,16 @@
 import { Fragment, useCallback, useRef, useState } from "react"
 // import '../User_Profile.css'
-import styles from '../../../styles/EditProfile.module.css'
-import useURL from "../../../hooks/useURL"
-import { Avatar } from "@radix-ui/themes"
-function UploadImage({ selectedImage, handleImageChange, changeProfile }) {
+import styles from "../../../styles/EditProfile.module.css"
+import { Button } from "@radix-ui/themes"
+import { CameraIcon } from "@radix-ui/react-icons"
 
-  const { defaultImage } = useURL()
-
+function UploadImage({ handleImageChange, changeProfile }) {
   const [percentage, setPercentage] = useState(0)
   const full = useRef(null)
   const value = useRef(0)
   const [isOnProgress, setIsOnProgress] = useState(false)
 
   const progressBar = useCallback(() => {
-
     let progress = setInterval(() => {
       setIsOnProgress(true)
       full.current = Math.floor(Math.random() * 10 + 1)
@@ -24,13 +21,11 @@ function UploadImage({ selectedImage, handleImageChange, changeProfile }) {
         value.current = 100
         setPercentage(value.current)
         clearInterval(progress)
-        console.log('Progress Done!');
-      }
-      else {
+        console.log("Progress Done!")
+      } else {
         setPercentage(value.current)
       }
-
-    }, 100);
+    }, 100)
 
     return () => {
       if (value.current) {
@@ -43,8 +38,10 @@ function UploadImage({ selectedImage, handleImageChange, changeProfile }) {
     <Fragment>
       <div className={styles.EditImgComponentContainer}>
         <div className={styles.uploadImageComponent}>
-          <Avatar size='9' src={selectedImage} alt="Selected" fallback='A' />
-          <input className="form-control btn btn-secondary" type="file" accept="image/*"
+          <input
+            style={{ width: '14rem' }}
+            type="file"
+            accept="image/*"
             onChange={(file) => {
               handleImageChange(file)
               full.current = null
@@ -54,11 +51,15 @@ function UploadImage({ selectedImage, handleImageChange, changeProfile }) {
               setTimeout(() => {
                 progressBar()
               }, 100)
-            }} disabled={!changeProfile}
+            }}
+            disabled={!changeProfile}
           />
-          {isOnProgress && <div className="p-bar-container">
-            <div className="p-bar" style={{ width: percentage + '%' }}></div>
-          </div>}
+          <Button type="button" disabled={!changeProfile}><CameraIcon />Change Photo</Button>
+          {isOnProgress && (
+            <div className="p-bar-container">
+              <div className="p-bar" style={{ width: percentage + "%" }}></div>
+            </div>
+          )}
         </div>
       </div>
     </Fragment>

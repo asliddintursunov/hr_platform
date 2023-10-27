@@ -1,13 +1,13 @@
 import { Fragment } from "react"
 import styles from '../../../styles/EditProfile.module.css'
+import { Text } from "@radix-ui/themes"
 
 function EditDateOfBirth({ changeProfile, dateOfBirth, setDateOfBirth }) {
   return (
     <Fragment>
       <div className={styles.inputContainer}>
-        <label htmlFor="dateofbirth"><b>Date of Bitrh</b></label>
+        <label htmlFor="dateofbirth"><Text>Date of Bitrh</Text></label>
         <input
-          className='form-control'
           disabled={!changeProfile}
           type="date"
           name="dateofbirth"

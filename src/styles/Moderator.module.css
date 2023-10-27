@@ -19,10 +19,6 @@
   background-color: var(--oddUserGray);
 }
 
-.userDataContainerDiv:nth-child(odd) {
-  /* background-color: var(--evenUserGray); */
-}
-
 .userImgName {
   display: flex;
   align-items: center;

@@ -1,13 +1,14 @@
+import { Text } from '@radix-ui/themes'
 import styles from '../../../styles/Additional.module.css'
 
 function EditMajor({ changeProfile, major, seeMajor }) {
   const majorValues = [
-    'Frontend', 'Backend', 'FullStack', 'Mobile', 'Desktop', 'Design'
+    'Frontend', 'Backend', 'FullStack', 'Mobile', 'Desktop', 'Design', '|', 'Data Science', 'DevOps', 'QA', 'Security', 'Game', 'Other'
   ]
 
   return (
-    <div className={`form-control ${styles.majorContainer}`}>
-      <h3>Major</h3>
+    <div className={`${styles.majorContainer}`}>
+      <Text style={{ fontSize: '1.8rem' }}>Major</Text>
       <div className={styles.radioInput}>
         {majorValues && majorValues.map(majorValue => {
           return (
