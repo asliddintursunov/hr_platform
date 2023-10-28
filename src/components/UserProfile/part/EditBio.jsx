@@ -6,7 +6,7 @@ function EditBio({ changeProfile }) {
   return (
     <Fragment>
       <div className={styles.inputContainer}>
-        <label htmlFor="bio"><Text>About</Text></label>
+        <label htmlFor="bio"><Text className='underlined-label'>About</Text></label>
         <textarea
           placeholder='Write something about yourself...'
           rows='4'

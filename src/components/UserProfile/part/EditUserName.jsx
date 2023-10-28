@@ -8,7 +8,7 @@ function EditUserName({ usernameValue, setUsernameValue, validUsernameChecker, u
   return (
     <Fragment>
       <div className={styles.inputContainer}>
-        <label htmlFor="username"><Text>User Name</Text></label>
+        <label htmlFor="username"><Text className='underlined-label'>User Name</Text></label>
         <input
           disabled={!changeProfile}
           style={usernameValue.length >= 1 && usernameTrue ? usernameInputStyle : null}

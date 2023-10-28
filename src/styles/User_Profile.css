@@ -1,3 +1,8 @@
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/red.css';
+@import '@radix-ui/colors/violet.css';
+
 .modal-backdrop {
   background-color: transparent;
   width: 100%;
@@ -20,52 +25,106 @@
 
 .modal>div {
   z-index: 30;
-
+  width: 45rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--white);
-  padding: 6rem 2rem 2rem 2rem;
-  border-radius: 1rem;
-  -webkit-border-radius: 1rem;
-  -moz-border-radius: 1rem;
-  -ms-border-radius: 1rem;
-  -o-border-radius: 1rem;
+  background-color: #fff;
+  padding: 3rem 3rem 2rem 2rem;
+  border-radius: 8px;
+  gap: 1.5rem;
 }
 
-.modal>div>div {
-  width: 80%;
+.modal-description-2,
+.modal-description,
+.modal-options {
+  width: 100%;
+}
+
+.modal-description {
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: #222;
+}
+
+.modal-description-2 {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--gray-11);
+  margin-top: -0.5rem;
+  word-wrap: break-word;
+}
+
+.modal-options {
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 1rem;
+  justify-content: flex-end;
+  gap: 2rem;
 }
 
-.modal>div>div>button {
+.Button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 0 15px;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 500;
+  height: 35px;
+}
+
+.Button.red {
+  border: 2px solid var(--red-7);
+  background-color: var(--red-4);
+  color: var(--red-11);
+}
+
+.Button.red:hover {
+  background-color: var(--red-5);
+}
+
+.Button.red:focus {
+  box-shadow: 0 0 0 2px var(--red-7);
+}
+
+.Button.green {
+  border: 2px solid var(--green-7);
+  background-color: var(--green-4);
+  color: var(--green-11);
+}
+
+.Button.green:hover {
+  background-color: var(--green-5);
+}
+
+.Button.green:focus {
+  box-shadow: 0 0 0 2px var(--green-7);
+}
+
+/* .modal-options>button {
   font-size: medium;
   padding: 0.3rem 1.5rem;
-}
+} */
 
-.modal-options a {
-  color: var(--white);
-  text-decoration: none;
-}
-
-.p-bar-container{
+.p-bar-container {
   border: 1px solid lightgray;
   width: 100%;
   height: 1rem;
 }
 
-.p-bar-container, .p-bar {
+.p-bar-container,
+.p-bar {
   border-radius: 1rem;
   -webkit-border-radius: 1rem;
   -moz-border-radius: 1rem;
   -ms-border-radius: 1rem;
   -o-border-radius: 1rem;
 }
-.p-bar{ 
+
+.p-bar {
   height: 100%;
   background: linear-gradient(135deg, lightblue, royalblue, blue);
 }

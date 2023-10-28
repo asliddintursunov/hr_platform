@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { Text } from '@radix-ui/themes'
 import styles from '../../../styles/Additional.module.css'
 function EditSkills({ changeProfile, skills, seeSkills }) {
 
@@ -21,7 +22,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
   return (
     <div className={styles.skillsContainier}>
       <div>
-        <h3>Frontend</h3>
+        <Text className='underlined-label'>Frontend</Text>
         {frontend && frontend.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -41,7 +42,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <h3>Backend</h3>
+        <Text className='underlined-label'>Backend</Text>
         {backend && backend.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -61,7 +62,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <h3>Mobile</h3>
+        <Text className='underlined-label'>Mobile</Text>
         {mobile && mobile.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -81,7 +82,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <h3>Desktop</h3>
+        <Text className='underlined-label'>Desktop</Text>
         {desktop && desktop.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -101,7 +102,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <h3>Design</h3>
+        <Text className='underlined-label'>Design</Text >
         {ui_ux && ui_ux.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>

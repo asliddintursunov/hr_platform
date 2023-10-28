@@ -3,7 +3,6 @@ import "../Admin.css"
 import { Fragment, useCallback, useEffect, useState } from "react"
 import _PopUp from "../../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
-import useURL from "../../../hooks/useURL"
 import styles from "../../../styles/Admin.module.css"
 import { baseUrl } from "../../../utils/api"
 import { useDispatch } from "react-redux"
@@ -21,7 +20,6 @@ function NotAcceptedUsers() {
   const memberId = localStorage.getItem("userId")
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { defaultImage } = useURL()
 
   const [user_id, setId] = useState(null)
   const [datas, setDatas] = useState("")
@@ -193,9 +191,9 @@ function NotAcceptedUsers() {
                       </Table.RowHeaderCell>
                       <Table.Cell>
                         <Avatar.Root className={styles.AvatarRoot}>
-                          <Avatar.Image className={styles.AvatarImage} src={defaultImage} alt="Colm Tuite" />
-                          <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
-                            CT
+                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                          <Avatar.Fallback className={styles.AvatarFallback}>
+                            A
                           </Avatar.Fallback>
                         </Avatar.Root>
                       </Table.Cell>

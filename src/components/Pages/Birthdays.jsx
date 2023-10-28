@@ -184,9 +184,9 @@ function _Birthdays() {
                       <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
                         <Table.Cell>
                           <Avatar.Root className={styles.AvatarRoot}>
-                            <Avatar.Image className={styles.AvatarImage} src={user.profile_photo ? user.profile_photo : defaultImage} alt="Colm Tuite" />
-                            <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
-                              CT
+                            <Avatar.Image className={styles.AvatarImage} src={user.profile_photo} />
+                            <Avatar.Fallback className={styles.AvatarFallback}>
+                              A
                             </Avatar.Fallback>
                           </Avatar.Root>
                         </Table.Cell>

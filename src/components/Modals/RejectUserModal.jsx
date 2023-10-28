@@ -1,3 +1,4 @@
+import { Text } from "@radix-ui/themes"
 import { Fragment } from "react"
 
 function RejectUserModal({ toggleRejectModal, RejectUser }) {
@@ -5,14 +6,19 @@ function RejectUserModal({ toggleRejectModal, RejectUser }) {
     <Fragment>
       <div className='modal-backdrop'>
         <div className="modal">
-          <div style={modalStyle}>
-            <h3 className="text-center">Are you sure you want to reject this user?</h3>
+          <div>
+            <div className="modal-description">
+              <Text>Are you absolutely sure?</Text>
+            </div>
+            <div className="modal-description-2">
+              <Text>This action cannot be undone. This user will be removed from the list.</Text>
+            </div>
             <div className='modal-options'>
-              <button onClick={toggleRejectModal} className="btn btn-success">No</button>
+              <button onClick={toggleRejectModal} className="Button red">Cancle</button>
               <button onClick={() => {
                 toggleRejectModal()
                 RejectUser()
-              }} className="btn btn-danger">Yes</button>
+              }} className="Button green">Yes, remove user</button>
             </div>
           </div>
         </div>
@@ -22,6 +28,3 @@ function RejectUserModal({ toggleRejectModal, RejectUser }) {
 }
 
 export default RejectUserModal
-const modalStyle = {
-  width: '30rem',
-}

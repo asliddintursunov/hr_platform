@@ -10,7 +10,7 @@
 
 /* ======== Major ======== */
 .majorContainer {
-  margin: 2rem auto;
+  margin-top: 2rem;
   padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
@@ -31,9 +31,11 @@
 
 .radioInput input[type="radio"] {
   display: none;
+  width: 100%;
 }
 
 .radioInput label {
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 10px;
@@ -262,4 +264,8 @@
   align-items: center;
   justify-content: flex-start;
   gap: 3rem;
+}
+
+.radioInput>div {
+  width: 12rem;
 }

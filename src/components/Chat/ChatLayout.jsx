@@ -21,8 +21,6 @@ function ChatLayout() {
   const [oneUserData, setOneUserData] = useState({})
   const [messages, setMessages] = useState([])
 
-  const [showUsers, setShowUsers] = useState(false)
-
   // Pop Up States
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
@@ -127,11 +125,11 @@ function ChatLayout() {
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.chatPlace}>
-          {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} showUsers={showUsers} />}
+          {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} />}
           {!chatSelected && <h1 className="display-2 text-center">Select A Chat to have a conversation!</h1>}
         </div>
-        <div className={styles.usersSidebar} style={showUsers ? usersSideBarStyle : null}>
-          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} showUsers={showUsers} setShowUsers={setShowUsers} />
+        <div className={styles.usersSidebar}>
+          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} />
         </div>
       </div>
     </>
@@ -139,8 +137,3 @@ function ChatLayout() {
 }
 
 export default ChatLayout
-
-const usersSideBarStyle = {
-  transform: 'translateX(78%)',
-  flex: 0.5,
-}

@@ -28,8 +28,8 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 15px 30px 25px 30px;
-  
-  width: 60%;
+
+  padding: 2rem 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,11 +65,12 @@
     -ms-transform: scale(0.2);
     -o-transform: scale(0.2);
     opacity: 0;
-}
-to{
-  transform: scale(1);
-  opacity: 1;
-}
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Optional: Styles for the popup content */
@@ -91,7 +92,8 @@ to{
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
 }
-.popup .closeBtn{
+
+.popup .closeBtn {
   color: var(--white);
   background-color: rgb(235, 60, 60);
   position: absolute;
@@ -104,20 +106,22 @@ to{
   -ms-transform: all 0.2s;
   -o-transform: all 0.2s;
 }
-.popup .closeBtn:hover{
+
+.popup .closeBtn:hover {
   color: rgb(235, 60, 60);
   background-color: rgb(240, 237, 237);
 }
 
- .reject{
+.reject {
   padding: 0;
   margin: 0;
   font-size: xx-large;
   color: red;
- }
- .confirm{
+}
+
+.confirm {
   padding: 0;
   margin: 0;
   font-size: xx-large;
   color: green;
- }
+}

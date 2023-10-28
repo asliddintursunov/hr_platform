@@ -9,7 +9,7 @@ function EditPassword({ passwordValue, setPasswordValue, validPasswordChecker,
   return (
     <Fragment>
       <div className={`${styles.passwordChanger} ${styles.inputContainer}`}>
-        <label htmlFor="password"><Text>Password</Text></label>
+        <label htmlFor="password"><Text className='underlined-label'>Password</Text></label>
         <div onClick={() => {
           passwordType ? setPasswordType(false) : setPasswordType(true)
         }}>

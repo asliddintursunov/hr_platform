@@ -35,34 +35,30 @@ function UploadImage({ handleImageChange, changeProfile }) {
     }
   }, [])
   return (
-    <Fragment>
-      <div className={styles.EditImgComponentContainer}>
-        <div className={styles.uploadImageComponent}>
-          <input
-            style={{ width: '14rem' }}
-            type="file"
-            accept="image/*"
-            onChange={(file) => {
-              handleImageChange(file)
-              full.current = null
-              value.current = 0
-              setIsOnProgress(false)
-              setPercentage(0)
-              setTimeout(() => {
-                progressBar()
-              }, 100)
-            }}
-            disabled={!changeProfile}
-          />
-          <Button type="button" disabled={!changeProfile}><CameraIcon />Change Photo</Button>
-          {isOnProgress && (
-            <div className="p-bar-container">
-              <div className="p-bar" style={{ width: percentage + "%" }}></div>
-            </div>
-          )}
+    <div className={styles.uploadImageComponent}>
+      <input
+        style={{ width: '14rem' }}
+        type="file"
+        accept="image/*"
+        onChange={(file) => {
+          handleImageChange(file)
+          full.current = null
+          value.current = 0
+          setIsOnProgress(false)
+          setPercentage(0)
+          setTimeout(() => {
+            progressBar()
+          }, 100)
+        }}
+        disabled={!changeProfile}
+      />
+      <Button type="button" disabled={!changeProfile}><CameraIcon />Change Photo</Button>
+      {isOnProgress && (
+        <div className="p-bar-container">
+          <div className="p-bar" style={{ width: percentage + "%" }}></div>
         </div>
-      </div>
-    </Fragment>
+      )}
+    </div>
   )
 }
 

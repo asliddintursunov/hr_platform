@@ -1,10 +1,11 @@
-import { Fragment, useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react"
 import styles from "../../styles/Chat.module.css"
 import useURL from "../../hooks/useURL"
 import { useSelector } from "react-redux"
 
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
 	const socketInstance = useSelector((state) => state.connection.socketInstance)
+	const conversationPathRef = useRef(null)
 
 	const { defaultImage } = useURL()
 	const [senderText, setSenderText] = useState("")
@@ -35,18 +36,6 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	useEffect(() => {
 		scrollToBottom()
 	}, [messages])
-
-	// const handleNewMessage = () => {
-	// 	socketInstance.on("new_message", (data) => {
-	// 		const id_rec = localStorage.getItem("receiverId")
-	// 		if (Number(id_rec) === data[0].sender_id || Number(id_rec) === data[0].receiver_id) {
-
-	// 			setMessages(data)
-	// 			scrollToBottom()
-	// 		}
-	// 	})
-	// 	return () => socketInstance.off('new_message')
-	// }
 
 	const textSend = async () => {
 		if (senderText.trim() !== "") {
@@ -99,8 +88,6 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 		}
 	}
 
-	const conversationPathRef = useRef(null)
-
 	const observer = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
@@ -136,7 +123,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 	}, [conversationPathRef, messages])
 
 	return (
-		<Fragment>
+		<>
 			<div className={styles.receiverHeader}>
 				<span>{oneUserData.username}</span>
 				<img src={oneUserData.profile_photo || defaultImage} alt={oneUserData.username} />
@@ -168,7 +155,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 					Send
 				</button>
 			</form>
-		</Fragment>
+		</>
 	)
 }
 

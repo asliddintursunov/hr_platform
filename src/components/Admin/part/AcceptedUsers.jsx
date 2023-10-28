@@ -3,7 +3,6 @@ import styles from "../../../styles/Admin.module.css"
 import { Fragment, useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../../Modals/PopUp"
-import useURL from "../../../hooks/useURL"
 import { baseUrl } from "../../../utils/api"
 import { logoutUser } from "../../../redux/features/userDataSlice"
 import ConfirmModal from "../../Modals/ConfirmModal"
@@ -17,7 +16,6 @@ function AcceptedUsers() {
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
   const navigate = useNavigate()
-  const { defaultImage } = useURL()
 
   const [user_id, setUser_Id] = useState(null)
   const [datas, setDatas] = useState(null)
@@ -179,9 +177,9 @@ function AcceptedUsers() {
                       </Table.RowHeaderCell>
                       <Table.Cell>
                         <Avatar.Root className={styles.AvatarRoot}>
-                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo ? data.profile_photo : defaultImage} alt="Colm Tuite" />
-                          <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
-                            CT
+                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                          <Avatar.Fallback className={styles.AvatarFallback}>
+                            A
                           </Avatar.Fallback>
                         </Avatar.Root>
                       </Table.Cell>

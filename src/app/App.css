@@ -108,3 +108,9 @@ body {
     -o-transform: translateY(0);
   }
 }
+
+.underlined-label {
+  text-decoration: gray underline;
+  font-size: 1.8rem;
+  text-underline-offset: 3px;
+}

@@ -7,9 +7,9 @@ import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
 import { useDispatch, useSelector } from "react-redux"
 import AnotherUser from "../Modals/AnotherUser"
 import PopUp from "../Modals/PopUp"
+import { Button } from "@radix-ui/themes"
 
 function Resumes() {
-  const head = useSelector((state) => state.headers)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -18,10 +18,10 @@ function Resumes() {
 
   useEffect(() => {
     if (isConnected) {
-      console.log(isConnected + " Disconnected")
       socketInstance.disconnect()
     }
   }, [])
+
   const [skills, setSkills] = useState([])
   const [experience, setExperience] = useState("")
   const [major, setMajor] = useState("")
@@ -41,10 +41,6 @@ function Resumes() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
-
-  useEffect(() => {
-    dispatch(sendHeaders())
-  }, [])
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -71,7 +67,6 @@ function Resumes() {
           experience: experience === "" ? undefined : experience
         },
         {
-          // headers: head
           headers: {
             "X-UserRole": localStorage.getItem("userRole"),
             "X-UserId": localStorage.getItem("userId")
@@ -109,7 +104,6 @@ function Resumes() {
           experience: undefined
         },
         {
-          // headers: head
           headers: {
             "X-UserRole": localStorage.getItem("userRole"),
             "X-UserId": localStorage.getItem("userId")
@@ -157,7 +151,6 @@ function Resumes() {
           experience: undefined
         },
         {
-          // headers: head
           headers: {
             "X-UserRole": localStorage.getItem("userRole"),
             "X-UserId": localStorage.getItem("userId")
@@ -224,7 +217,7 @@ function Resumes() {
                       </div>
                       <div className={styles.resumeCVCard}>
                         <span>Full Resume</span>
-                        <button onClick={() => seeResumeDetail(resume.id)}>See</button>
+                        <Button onClick={() => seeResumeDetail(resume.id)} variant="surface">See</Button>
                       </div>
                     </div>
                   </div>

@@ -6,7 +6,7 @@ function EditExperience({ changeProfile, experience, seeExperience }) {
 
   return (
     <div className={styles.experienceContainer}>
-      <Text style={{ fontSize: "1.8rem" }}>Expericence</Text>
+      <Text className='underlined-label'>Expericence</Text>
       <div className={styles.mappedExperiences}>
         {experienceValue &&
           experienceValue.map((exValue) => {

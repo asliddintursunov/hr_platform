@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
 import styles from "../../styles/Chat.module.css"
-import useURL from "../../hooks/useURL"
 import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
@@ -8,6 +7,7 @@ import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
 import AnotherUser from "../Modals/AnotherUser"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
+import { Avatar, Card, Code, Flex, Text } from "@radix-ui/themes"
 
 
 // import { setUsersData, setUsersImage } from "../features/chatWebSocketPlaceSlicer"
@@ -17,8 +17,7 @@ import PopUp from "../Modals/PopUp"
 // dispatch(setUsersData(data)) -> Count
 // dispatch(setUsersImage(res.data)) -> GET
 
-function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
-	const { defaultImage } = useURL()
+function ChatUserSidebar({ GetReceiverUsername }) {
 	const userid = localStorage.getItem("userId")
 	const navigate = useNavigate()
 
@@ -112,10 +111,7 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 			{isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
 			{wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
 			<div className={styles.usersListContainer} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
-				<div className={styles.usersShowHide} onClick={() => setShowUsers(!showUsers)}>
-					<i className="bi bi-list"></i>
-				</div>
-				<h2 className="text-center" style={showUsers ? { color: "transparent", userSelect: "none" } : null}>
+				<h2 className="text-center">
 					Users List
 				</h2>
 				{userData.length === 0 && userImage.length === 0
@@ -124,13 +120,15 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 						const userInfo = userImage[index]
 						if (userInfo) {
 							return (
-								<div key={user.id}
+								<Card key={user.id}
 									className={styles.userCard}
 									onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
-									{user.id === userInfo.id && <span className={styles.unreadMsg}>{user.unread_msg}</span>}
-									<span>{userInfo.username}</span>
-									<img src={userInfo.profile_photo !== null ? userInfo.profile_photo : defaultImage} alt={`Profile of ${userInfo.username}`} />
-								</div>
+									<Flex gap='3' align='center'>
+										<Avatar src={userInfo.profile_photo} radius="full" fallback="A" />
+										{user.id === userInfo.id && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>}
+										<Text as="div" size='2' weight='bold'>{userInfo.username}</Text>
+									</Flex>
+								</Card>
 							)
 						}
 						return null
@@ -141,3 +139,10 @@ function ChatUserSidebar({ GetReceiverUsername, showUsers, setShowUsers }) {
 }
 
 export default ChatUserSidebar
+{/* <div key={user.id}
+className={styles.userCard}
+onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
+{user.id === userInfo.id && <span className={styles.unreadMsg}>{user.unread_msg}</span>}
+<span>{userInfo.username}</span>
+<img src={userInfo.profile_photo !== null ? userInfo.profile_photo : defaultImage} alt={`Profile of ${userInfo.username}`} />
+</div> */}

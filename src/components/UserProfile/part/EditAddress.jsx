@@ -6,7 +6,7 @@ function EditAddress({ changeProfile, address, setAddress }) {
   return (
     <Fragment>
       <div className={styles.inputContainer}>
-        <label htmlFor="address"><Text>Address</Text></label>
+        <label htmlFor="address"><Text className='underlined-label'>Address</Text></label>
         <input
           disabled={!changeProfile}
           type="text"

@@ -27,10 +27,50 @@ import EditMajor from "./part/EditMajor"
 import EditSkills from "./part/EditSkills"
 import EditExperience from "./part/EditExperience"
 import EditResume from "./part/EditResume"
-import useURL from "../../hooks/useURL"
 import AnotherUser from "../Modals/AnotherUser"
 import { logoutUser } from "../../redux/features/userDataSlice"
-import { Tabs, Box, Heading, Text, Code, Table, Avatar } from "@radix-ui/themes"
+import { Tabs, Box, Heading, Text, Code, Avatar } from "@radix-ui/themes"
+
+const ButtonFunction = (props) => {
+  return (
+    <div className={styles.right}>
+      <div>
+        <button className={`btn ${styles.logOutBtn}`} onClick={() => props.toggleModal()}>
+          <i className="bi bi-box-arrow-right"></i> Log Out
+        </button>
+      </div>
+      <div className={styles.btnStyles}>
+        {!props.changeProfile && (
+          <button className={`btn ${styles.editBtn}`} onClick={() => props.setChangeProfile(true)}>
+            Edit Profile
+          </button>
+        )}
+        {props.changeProfile && (
+          <button
+            className={`btn ${styles.saveBtn}`}
+            onClick={() => {
+              props.setChangeProfile(false)
+              props.saveEdition()
+            }}
+          >
+            Save Changes
+          </button>
+        )}
+        {props.changeProfile && (
+          <button
+            className={`btn ${styles.cancelBtn}`}
+            onClick={() => {
+              props.setChangeProfile(false)
+              props.CancleEdition()
+            }}
+          >
+            Cancel Edition
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
 
 function UpdateProfile() {
   const memberRole = localStorage.getItem("userRole")
@@ -257,7 +297,7 @@ function UpdateProfile() {
         setTimeout(() => {
           navigate("/signin")
         }, 1500)
-        localStorage.removeItem()
+        localStorage.clear()
       })
       .catch((err) => {
         setIsOpen(true)
@@ -301,13 +341,43 @@ function UpdateProfile() {
       {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
       {!isPending && (
         <div className={`container ${styles.userProfileContainer} pageAnimation`}>
-          <div className={styles.right}>
+          <ButtonFunction toggleModal={toggleModal} changeProfile={changeProfile} setChangeProfile={setChangeProfile} saveEdition={saveEdition} CancleEdition={CancleEdition} />
+          {/* <div className={styles.right}>
             <div>
               <button className={`btn ${styles.logOutBtn}`} onClick={() => toggleModal()}>
                 <i className="bi bi-box-arrow-right"></i> Log Out
               </button>
             </div>
-          </div>
+            <div className={styles.btnStyles}>
+              {!changeProfile && (
+                <button className={`btn ${styles.editBtn}`} onClick={() => setChangeProfile(true)}>
+                  Edit Profile
+                </button>
+              )}
+              {changeProfile && (
+                <button
+                  className={`btn ${styles.saveBtn}`}
+                  onClick={() => {
+                    setChangeProfile(false)
+                    saveEdition()
+                  }}
+                >
+                  Save Changes
+                </button>
+              )}
+              {changeProfile && (
+                <button
+                  className={`btn ${styles.cancelBtn}`}
+                  onClick={() => {
+                    setChangeProfile(false)
+                    CancleEdition()
+                  }}
+                >
+                  Cancel Edition
+                </button>
+              )}
+            </div>
+          </div> */}
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
             <div className={styles.profileUpdateHeader}>
@@ -318,7 +388,7 @@ function UpdateProfile() {
               </div>
             </div>
 
-            <hr style={{ color: 'gray' }} />
+            <hr style={{ color: "gray" }} />
 
             {/* ============ Update Profile Form ============ */}
             <br />
@@ -336,13 +406,16 @@ function UpdateProfile() {
                 </div>
                 <div className={styles.mainTopRight}>
                   <Code size="4">{memberRole}</Code>
-                  <Text size="3" color="gray">Joined 09 Dec 2017</Text>
+                  <Text size="3" color="gray">
+                    Joined 09 Dec 2017
+                  </Text>
                 </div>
               </div>
               <div>
                 <Tabs.Root defaultValue="basic">
                   <Tabs.List>
                     <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
+                    <Tabs.Trigger value="technalogies">Technalogies</Tabs.Trigger>
                     <Tabs.Trigger value="additional">Additional</Tabs.Trigger>
                   </Tabs.List>
 
@@ -388,53 +461,28 @@ function UpdateProfile() {
                         <EditDateOfBirth changeProfile={changeProfile} dateOfBirth={dateOfBirth} setDateOfBirth={setDateOfBirth} />
                       </div>
                     </Tabs.Content>
-                    <Tabs.Content value="additional">
+                    <Tabs.Content value="technalogies">
                       <div className={styles.MajorExperienceTechnalogiesContainer}>
                         <EditMajor major={major} seeMajor={seeMajor} changeProfile={changeProfile} />
                         <EditExperience experience={experience} seeExperience={seeExperience} changeProfile={changeProfile} />
                         <EditSkills changeProfile={changeProfile} skills={skills} setSkills={setSkills} seeSkills={seeSkills} />
                       </div>
-                      <AddPhoneNumber
-                        numbers={numbers}
-                        newNumber={newNumber}
-                        setNewNumber={setNewNumber}
-                        handleAddNewNumber={handleAddNewNumber}
-                        handleDelete={handleDelete}
-                        changeProfile={changeProfile}
-                      />
-                      <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
+                    </Tabs.Content>
+                    <Tabs.Content value="additional">
+                      <div className={styles.PhoneNumberResumesContainer}>
+                        <AddPhoneNumber
+                          numbers={numbers}
+                          newNumber={newNumber}
+                          setNewNumber={setNewNumber}
+                          handleAddNewNumber={handleAddNewNumber}
+                          handleDelete={handleDelete}
+                          changeProfile={changeProfile}
+                        />
+                        <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
+                      </div>
                     </Tabs.Content>
                   </Box>
                 </Tabs.Root>
-                <div className={styles.btnStyles}>
-                  {!changeProfile && (
-                    <button className={`btn ${styles.editBtn}`} onClick={() => setChangeProfile(true)}>
-                      Edit Profile
-                    </button>
-                  )}
-                  {changeProfile && (
-                    <button
-                      className={`btn ${styles.saveBtn}`}
-                      onClick={() => {
-                        setChangeProfile(false)
-                        saveEdition()
-                      }}
-                    >
-                      Save Changes
-                    </button>
-                  )}
-                  {changeProfile && (
-                    <button
-                      className={`btn ${styles.cancelBtn}`}
-                      onClick={() => {
-                        setChangeProfile(false)
-                        CancleEdition()
-                      }}
-                    >
-                      Cancel Edition
-                    </button>
-                  )}
-                </div>
               </div>
             </form>
           </div>

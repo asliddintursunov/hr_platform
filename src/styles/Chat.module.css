@@ -21,13 +21,11 @@
 .usersSidebar {
 	flex: 1;
 	padding: 2rem 1rem;
-	background-color: var(--white);
+	background-color: #fff;
 	box-shadow: 0 0 10px lightgray;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	transition: all 0.2s;
-
 	position: sticky;
 	top: 1rem;
 }
@@ -40,36 +38,19 @@
 
 }
 
-.usersListContainer>h2 {
-	transition: all .15s;
-}
-
 .usersShowHide {
 	position: absolute;
 	color: orangered;
 	cursor: pointer;
 	font-size: 4rem;
-	/* left: 1rem; */
 	top: -1.4rem;
 	z-index: 2;
 }
 
 .userCard {
 	position: relative;
-	padding: 0.4rem;
-	padding-top: 0.8rem;
 	display: flex;
-	flex-direction: row-reverse;
-	align-items: center;
-	justify-content: start;
-	background-color: rgb(237, 237, 237);
-	gap: 1rem;
 	cursor: pointer;
-	border-radius: 6px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	-ms-border-radius: 6px;
-	-o-border-radius: 6px;
 	transition: all 0.2s;
 	-webkit-transition: all 0.2s;
 	-moz-transition: all 0.2s;
@@ -81,30 +62,18 @@
 	background-color: rgb(220, 220, 220);
 }
 
-.userCard>img {
-	width: 4.5rem;
-	height: 4.5rem;
-	border-radius: 50%;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
-	-o-border-radius: 50%;
-	object-fit: cover;
-}
-
-.userCard>span:last-child {
-	font-size: 1.7rem;
-	color: var(--dark);
+.userCard img {
+	object-fit: fill;
 }
 
 .unreadMsg {
+	font-size: 1.6rem;
 	position: absolute;
 	right: 1rem;
 	top: 0.3rem;
-	background-color: orange;
 	padding: 0rem 0.8rem;
 	text-align: center;
-	color: #fff;
+	color: royalblue;
 	border-radius: 50%;
 }
 

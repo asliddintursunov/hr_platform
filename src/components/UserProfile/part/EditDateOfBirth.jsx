@@ -6,7 +6,7 @@ function EditDateOfBirth({ changeProfile, dateOfBirth, setDateOfBirth }) {
   return (
     <Fragment>
       <div className={styles.inputContainer}>
-        <label htmlFor="dateofbirth"><Text>Date of Bitrh</Text></label>
+        <label htmlFor="dateofbirth"><Text className='underlined-label'>Date of Bitrh</Text></label>
         <input
           disabled={!changeProfile}
           type="date"

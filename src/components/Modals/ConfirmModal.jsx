@@ -1,18 +1,31 @@
+import { Text } from "@radix-ui/themes"
 import { Fragment } from "react"
 
 function ConfirmModal({ toggleRemoveUserModal, handleDelete }) {
   return (
     <Fragment>
-      <div className='modal-backdrop'>
+      <div className="modal-backdrop">
         <div className="modal">
-          <div style={modalStyle}>
-            <h3 className="text-center">Are you sure you want to remove this user?</h3>
-            <div className='modal-options'>
-              <button onClick={toggleRemoveUserModal} className="btn btn-success">No</button>
-              <button onClick={() => {
-                handleDelete()
-                toggleRemoveUserModal()
-              }} className="btn btn-danger">Yes</button>
+          <div>
+            <div className="modal-description">
+              <Text>Are you absolutely sure?</Text>
+            </div>
+            <div className="modal-description-2">
+              <Text>This action cannot be undone. This user will be deleted.</Text>
+            </div>
+            <div className="modal-options">
+              <button onClick={toggleRemoveUserModal} className="Button red">
+                No
+              </button>
+              <button
+                onClick={() => {
+                  handleDelete()
+                  toggleRemoveUserModal()
+                }}
+                className="Button green"
+              >
+                Yes, delete user
+              </button>
             </div>
           </div>
         </div>
@@ -22,7 +35,3 @@ function ConfirmModal({ toggleRemoveUserModal, handleDelete }) {
 }
 
 export default ConfirmModal
-
-const modalStyle = {
-  width: '30rem',
-}

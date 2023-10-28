@@ -7,7 +7,7 @@ function EditEmail({ emailValue, setEmailValue, validEmailChecker,
   return (
     <Fragment>
       <div className={`${styles.emailChanger} ${styles.inputContainer}`}>
-        <label htmlFor="email"><Text>Email</Text></label>
+        <label htmlFor="email"><Text className='underlined-label'>Email</Text></label>
         <input
           disabled={!changeProfile}
           style={emailValue.length >= 1 && emailTrue ? emailInputStyle : null}

@@ -6,7 +6,7 @@ function EditFullName({ changeProfile, fullName, setFullName }) {
   return (
     <Fragment>
       <div className={styles.inputContainer}>
-        <label htmlFor="fullname"><Text>Full Name</Text></label>
+        <label htmlFor="fullname"><Text className='underlined-label'>Full Name</Text></label>
         <input
           disabled={!changeProfile}
           type='text'
