@@ -134,13 +134,13 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 						<div key={index} id={message.msg_id} value={message.is_read}>
 							{message.sender_id === Number(senderId) && message.receiver_id === Number(receiverId) ? (
 								<div style={sendingStyle}>
-									<p style={{ ...messageStyle, backgroundColor: "green" }}>{message.message}</p>
+									<p style={{ ...messageStyle, backgroundColor: "royalblue" }}>{message.message}</p>
 									<i style={timeStyle}>{message.timestamp}</i>
 									{!message.is_read ? <i className="bi bi-check2" style={tickStyle}></i> : <i className="bi bi-check2-all" style={tickStyle}></i>}
 								</div>
 							) : message.sender_id === Number(receiverId) ? (
 								<div style={receivingStyle}>
-									<p style={{ ...messageStyle, backgroundColor: "royalblue" }}>{message.message}</p>
+									<p style={{ ...messageStyle, backgroundColor: "darkgray" }}>{message.message}</p>
 									<i style={timeStyle}>{message.timestamp}</i>
 								</div>
 							) : null}
@@ -191,9 +191,6 @@ const messageStyle = {
 	padding: "0.3rem 1rem 2.5rem 1rem",
 	borderRadius: "4px",
 	border: "none",
-
-
-
 	minWidth: "11rem"
 }
 

@@ -7,6 +7,7 @@ import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
 import AnotherUser from '../Modals/AnotherUser'
 import { useNavigate } from 'react-router-dom'
 import PopUp from '../Modals/PopUp'
+import { Code } from '@radix-ui/themes'
 
 function _ResumeDetails() {
   const [userResumeData, setUserResumeData] = useState([])
@@ -72,27 +73,31 @@ function _ResumeDetails() {
           <h1 className='display-3'>Resume Details</h1>
           <div className={styles.userGeneralData}>
             <h1>General Information</h1>
-            <div>Full Name: <code>{userResumeData.fullname}</code></div>
-            <div>Username: <code>{userResumeData.username}</code></div>
-            <div>Email: <code>{userResumeData.email}</code></div>
-            <div>Address: <code>{userResumeData.address}</code></div>
-            <div>Date of Birth: <code>{userResumeData.date_birth}</code></div>
+            <div>Full Name: <Code>{userResumeData.fullname}</Code></div>
+            <div>Username: <Code>{userResumeData.username}</Code></div>
+            <div>Email: <Code>
+              <a href={`mailto:${userResumeData.email}`} className='text-decoration-none'>{userResumeData.email}</a>
+            </Code></div>
+            <div>Address: <Code>{userResumeData.address}</Code></div>
+            <div>Date of Birth: <Code>{userResumeData.date_birth}</Code></div>
             <div className={styles.userPhoneNumber}>Phone Numbers:
               {userResumeData.phone_number && userResumeData.phone_number.map((num, index) => (
-                <code key={index}>{num}</code>
+                <Code key={index}>
+                  <a href={`tel:+${num}`} className='text-decoration-none'>{num}</a>
+                </Code>
               ))}
             </div>
           </div>
           <div className={styles.userExperience}>
             <h1>Work Experience</h1>
-            <div>Major: <code>{userResumeData.major}</code></div>
-            <div>Experience: <code>{userResumeData.experience} years</code></div>
+            <div>Major: <Code>{userResumeData.major}</Code></div>
+            <div>Experience: <Code>{userResumeData.experience} years</Code></div>
           </div>
           <div className={styles.userSkills}>
             <h1>Technologies, Skills</h1>
             <div>
               {userResumeData.skills && userResumeData.skills.map((skill, index) => (
-                <code key={index}>{skill}</code>
+                <Code key={index}>{skill}</Code>
               ))}
             </div>
           </div>

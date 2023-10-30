@@ -41,7 +41,6 @@
   gap: 2rem;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   padding: 1.5rem 0.2rem;
 }
 
@@ -56,10 +55,12 @@
   font-size: 1.7rem;
   color: gray;
 }
-.userSkills>div{
+
+.userSkills>div {
   display: flex;
   flex-wrap: wrap;
 }
+
 .userGeneralData>div>code,
 .userExperience>div>code,
 .userSkills>div>code,

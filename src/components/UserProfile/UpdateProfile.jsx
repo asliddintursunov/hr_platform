@@ -95,6 +95,7 @@ function UpdateProfile() {
   const [address, setAddress] = useState("")
   const [dateOfBirth, setDateOfBirth] = useState("")
   const [data, set_data] = useState({})
+  const [joined, setJoined] = useState("")
 
   // Disable && Enable inputs
   const [changeProfile, setChangeProfile] = useState(false)
@@ -199,6 +200,7 @@ function UpdateProfile() {
         }
       })
       .then((res) => {
+        setJoined(res.data.joined)
         set_data(res.data)
         setFullName(res.data.fullname)
         setUsernameValue(res.data.username)
@@ -342,42 +344,6 @@ function UpdateProfile() {
       {!isPending && (
         <div className={`container ${styles.userProfileContainer} pageAnimation`}>
           <ButtonFunction toggleModal={toggleModal} changeProfile={changeProfile} setChangeProfile={setChangeProfile} saveEdition={saveEdition} CancleEdition={CancleEdition} />
-          {/* <div className={styles.right}>
-            <div>
-              <button className={`btn ${styles.logOutBtn}`} onClick={() => toggleModal()}>
-                <i className="bi bi-box-arrow-right"></i> Log Out
-              </button>
-            </div>
-            <div className={styles.btnStyles}>
-              {!changeProfile && (
-                <button className={`btn ${styles.editBtn}`} onClick={() => setChangeProfile(true)}>
-                  Edit Profile
-                </button>
-              )}
-              {changeProfile && (
-                <button
-                  className={`btn ${styles.saveBtn}`}
-                  onClick={() => {
-                    setChangeProfile(false)
-                    saveEdition()
-                  }}
-                >
-                  Save Changes
-                </button>
-              )}
-              {changeProfile && (
-                <button
-                  className={`btn ${styles.cancelBtn}`}
-                  onClick={() => {
-                    setChangeProfile(false)
-                    CancleEdition()
-                  }}
-                >
-                  Cancel Edition
-                </button>
-              )}
-            </div>
-          </div> */}
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
             <div className={styles.profileUpdateHeader}>
@@ -407,7 +373,7 @@ function UpdateProfile() {
                 <div className={styles.mainTopRight}>
                   <Code size="4">{memberRole}</Code>
                   <Text size="3" color="gray">
-                    Joined 09 Dec 2017
+                    Joined {joined}
                   </Text>
                 </div>
               </div>
