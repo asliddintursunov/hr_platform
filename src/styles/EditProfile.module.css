@@ -427,3 +427,67 @@
   flex-direction: column;
   gap: 2rem;
 }
+
+/** =============== NEW STYLE =============== */
+.AddUniversityContainer {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 3px gray;
+  padding: 3rem;
+  position: relative;
+}
+
+.AddEducationButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.UniversityDegreeYearContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 4rem;
+}
+
+.SelectDegree {
+  width: fit-content;
+}
+
+.SelectMajor {
+  flex: 1;
+}
+
+.SelectDegree {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.SelectMajor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+.SelectStudiedYear {
+  flex: 1;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.UniversityNameLocation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.UniversityNameLocation label {
+  width: 100%;
+}

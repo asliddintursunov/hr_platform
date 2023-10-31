@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { googleLogout } from "@react-oauth/google"
 import axios from "axios"
 import styles from "../../styles/EditProfile.module.css"
+import { logoutUser } from "../../redux/features/userDataSlice"
+import { Tabs, Box, Heading, Text, Code, Avatar } from "@radix-ui/themes"
 
 // Custon Hooks
 import { useUsername } from "../../hooks/useUsername"
@@ -28,8 +30,7 @@ import EditSkills from "./part/EditSkills"
 import EditExperience from "./part/EditExperience"
 import EditResume from "./part/EditResume"
 import AnotherUser from "../Modals/AnotherUser"
-import { logoutUser } from "../../redux/features/userDataSlice"
-import { Tabs, Box, Heading, Text, Code, Avatar } from "@radix-ui/themes"
+import EditUniversity from "./part/EditUniversity"
 
 const ButtonFunction = (props) => {
   return (
@@ -76,6 +77,9 @@ function UpdateProfile() {
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
 
+  const socketInstance = useSelector((state) => state.connection.socketInstance)
+  const isConnected = useSelector((state) => state.connection.isConnected)
+
   // Redirect user to another page
   const navigate = useNavigate()
 
@@ -83,10 +87,8 @@ function UpdateProfile() {
 
   // Custom useUsername Hook
   const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus, usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
-
   // Custom usePassword Hook
   const { passwordValue, setPasswordValue, validPasswordChecker, passwordTrue, setPasswordTrue, passwordType, setPasswordType, passwordChecker, passwordInputStyle } = usePassword()
-
   // Custom Email Hook
   const { emailValue, setEmailValue, validEmailChecker, emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle } = useEmail()
 
@@ -109,6 +111,7 @@ function UpdateProfile() {
   const [experience, setExperience] = useState("")
   const [skills, setSkills] = useState([])
   const [userResume, setUserResume] = useState(null)
+  const [education, setEducation] = useState([])
 
   // Loader
   const [isPending, setIsPending] = useState(false)
@@ -120,9 +123,6 @@ function UpdateProfile() {
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
-
-  const socketInstance = useSelector((state) => state.connection.socketInstance)
-  const isConnected = useSelector((state) => state.connection.isConnected)
 
   useEffect(() => {
     if (isConnected) {
@@ -378,7 +378,7 @@ function UpdateProfile() {
                 </div>
               </div>
               <div>
-                <Tabs.Root defaultValue="basic">
+                <Tabs.Root defaultValue="additional">
                   <Tabs.List>
                     <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
                     <Tabs.Trigger value="technalogies">Technalogies</Tabs.Trigger>
@@ -445,6 +445,7 @@ function UpdateProfile() {
                           changeProfile={changeProfile}
                         />
                         <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
+                        <EditUniversity education={education} setEducation={setEducation} />
                       </div>
                     </Tabs.Content>
                   </Box>
