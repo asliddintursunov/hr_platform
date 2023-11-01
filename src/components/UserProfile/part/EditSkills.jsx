@@ -22,7 +22,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
   return (
     <div className={styles.skillsContainier}>
       <div>
-        <Text className='underlined-label'>Frontend</Text>
+        <Text as='label' className='underlined-label'>Frontend</Text>
         {frontend && frontend.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -42,7 +42,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <Text className='underlined-label'>Backend</Text>
+        <Text as='label' className='underlined-label'>Backend</Text>
         {backend && backend.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -62,7 +62,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <Text className='underlined-label'>Mobile</Text>
+        <Text as='label' className='underlined-label'>Mobile</Text>
         {mobile && mobile.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -82,7 +82,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <Text className='underlined-label'>Desktop</Text>
+        <Text as='label' className='underlined-label'>Desktop</Text>
         {desktop && desktop.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>
@@ -102,7 +102,7 @@ function EditSkills({ changeProfile, skills, seeSkills }) {
         ))}
       </div>
       <div>
-        <Text className='underlined-label'>Design</Text >
+        <Text as='label' className='underlined-label'>Design</Text >
         {ui_ux && ui_ux.map(skill => (
           <div key={skill} className={styles.skillWrapper}>
             <label>

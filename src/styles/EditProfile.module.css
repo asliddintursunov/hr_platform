@@ -435,6 +435,7 @@
   box-shadow: 0 0 3px gray;
   padding: 3rem;
   position: relative;
+  background-color: rgb(223, 231, 255);
 }
 
 .AddEducationButton {
@@ -490,4 +491,36 @@
 
 .UniversityNameLocation label {
   width: 100%;
+}
+
+.CustomTechContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.TechListContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.2rem;
+  margin-top: 1rem;
+}
+
+.techCard {
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  border: 1px solid royalblue;
+  position: relative;
+}
+
+.CustomTechDeleteButton {
+  position: absolute;
+  width: 2.2rem;
+  right: -0.8rem;
+  top: -0.8rem;
+  background-color: blue;
+  border-radius: 50%;
 }

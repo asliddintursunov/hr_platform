@@ -31,6 +31,7 @@ import EditExperience from "./part/EditExperience"
 import EditResume from "./part/EditResume"
 import AnotherUser from "../Modals/AnotherUser"
 import EditUniversity from "./part/EditUniversity"
+import EditCustonTech from "./part/EditCustonTech"
 
 const ButtonFunction = (props) => {
   return (
@@ -98,6 +99,7 @@ function UpdateProfile() {
   const [dateOfBirth, setDateOfBirth] = useState("")
   const [data, set_data] = useState({})
   const [joined, setJoined] = useState("")
+  const [bio, setBio] = useState("")
 
   // Disable && Enable inputs
   const [changeProfile, setChangeProfile] = useState(false)
@@ -110,6 +112,7 @@ function UpdateProfile() {
   const [major, setMajor] = useState("")
   const [experience, setExperience] = useState("")
   const [skills, setSkills] = useState([])
+  const [customTechList, setCustomTechList] = useState([])
   const [userResume, setUserResume] = useState(null)
   const [education, setEducation] = useState([])
 
@@ -378,7 +381,7 @@ function UpdateProfile() {
                 </div>
               </div>
               <div>
-                <Tabs.Root defaultValue="additional">
+                <Tabs.Root defaultValue="technalogies">
                   <Tabs.List>
                     <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
                     <Tabs.Trigger value="technalogies">Technalogies</Tabs.Trigger>
@@ -410,7 +413,7 @@ function UpdateProfile() {
                           emailInputStyle={emailInputStyle}
                           changeProfile={changeProfile}
                         />
-                        <EditBio changeProfile={changeProfile} />
+                        <EditBio changeProfile={changeProfile} bio={bio} setBio={setBio} />
                         <EditPassword
                           passwordValue={passwordValue}
                           setPasswordValue={setPasswordValue}
@@ -432,6 +435,7 @@ function UpdateProfile() {
                         <EditMajor major={major} seeMajor={seeMajor} changeProfile={changeProfile} />
                         <EditExperience experience={experience} seeExperience={seeExperience} changeProfile={changeProfile} />
                         <EditSkills changeProfile={changeProfile} skills={skills} setSkills={setSkills} seeSkills={seeSkills} />
+                        <EditCustonTech changeProfile={changeProfile} customTechList={customTechList} setCustomTechList={setCustomTechList} />
                       </div>
                     </Tabs.Content>
                     <Tabs.Content value="additional">
@@ -445,7 +449,7 @@ function UpdateProfile() {
                           changeProfile={changeProfile}
                         />
                         <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
-                        <EditUniversity education={education} setEducation={setEducation} />
+                        <EditUniversity education={education} setEducation={setEducation} changeProfile={changeProfile} />
                       </div>
                     </Tabs.Content>
                   </Box>
