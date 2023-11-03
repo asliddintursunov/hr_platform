@@ -21,6 +21,7 @@ import About from "../components/Pages/About"
 import Resumes from "../components/Resumes/Resumes"
 import ResumeDetails from "../components/Resumes/ResumeDetails"
 import { useEffect } from "react"
+import HR_Register from "../components/HR_Register/HR_Register"
 
 function App() {
   const userRole = localStorage.getItem("userRole")
@@ -70,6 +71,7 @@ function App() {
               </>
             )}
             <Route path="chat" element={<ChatLayout />} />
+            {userRole === 'admin' && <Route path="hr_register" element={<HR_Register />} />}
           </Route>
         ) : (
           <Route path="/signin" element={<SignInLayout />} />

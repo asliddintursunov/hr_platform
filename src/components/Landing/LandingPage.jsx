@@ -93,6 +93,13 @@ function _LandingPage() {
                 <i className="bi bi-chat-dots-fill"></i>
                 &#160; Chat
               </NavLink>
+
+              {userRole === "admin" && (
+                <NavLink style={location.pathname === defaultPath + "hr_register" ? navbarColor : null} to="hr_register">
+                  <i className="bi bi-clipboard-plus-fill"></i>
+                  &#160; HR Register
+                </NavLink>
+              )}
             </div>
             <div className={styles.logout}>
               <button className="btn btn-dark">HR Platform</button>

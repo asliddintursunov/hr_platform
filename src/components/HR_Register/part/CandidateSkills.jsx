@@ -1,9 +1,8 @@
 import { PlusIcon } from "@radix-ui/react-icons"
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes"
-import styles from "../../../styles/EditProfile.module.css"
-import React, { useState } from "react"
-
-function EditCustonTech({ changeProfile, customTechList, setCustomTechList }) {
+import styles from '../../../styles/EditProfile.module.css'
+import { useState } from "react"
+function CandidateSkills({ customTechList, setCustomTechList }) {
   const [customTech, setCustomTech] = useState("Pascal")
 
   const handleAddCustomTech = () => {
@@ -17,12 +16,12 @@ function EditCustonTech({ changeProfile, customTechList, setCustomTechList }) {
 
   return (
     <div className={styles.CustomTechContainer}>
-      <Text as="label" className="underlined-label">
+      <Text as="label" style={{ fontSize: '1.8rem' }}>
         Custom Technalogies
       </Text>
       <Dialog.Root>
         <Dialog.Trigger>
-          <Button radius="full" variant="outline" disabled={!changeProfile}>
+          <Button radius="full" variant="outline">
             <PlusIcon style={PlusIconStyle} width="18" height="18" /> Create Custom Skill
           </Button>
         </Dialog.Trigger>
@@ -30,7 +29,7 @@ function EditCustonTech({ changeProfile, customTechList, setCustomTechList }) {
         <Dialog.Content style={{ maxWidth: 450 }}>
           <Dialog.Title>More technalogy</Dialog.Title>
           <Dialog.Description size="2" mb="4">
-            Make additional changes to your skills.
+            Make additional changes to the candidate's skills.
           </Dialog.Description>
 
           <Flex direction="column" gap="3">
@@ -65,7 +64,6 @@ function EditCustonTech({ changeProfile, customTechList, setCustomTechList }) {
                 {tech}
               </Text>
               <Button
-                disabled={!changeProfile}
                 color="red"
                 size="small"
                 className={styles.CustomTechDeleteButton}
@@ -82,7 +80,7 @@ function EditCustonTech({ changeProfile, customTechList, setCustomTechList }) {
   )
 }
 
-export default EditCustonTech
+export default CandidateSkills
 
 const PlusIconStyle = {
   backgroundColor: "royalblue",
