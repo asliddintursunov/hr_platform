@@ -149,6 +149,7 @@ function _Birthdays() {
   };
 
   dayTillBirthday()
+  console.log();
 
   const greenBackground = {
     background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
@@ -180,7 +181,7 @@ function _Birthdays() {
               <Table.Body>
                 {userBday && userBday.map((user, index) => {
                   return (
-                    user.accepted && (
+                    user.accepted && leftDays[index] <= 30 && leftDays[index] >= 1 && (
                       <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
                         <Table.Cell>
                           <Avatar.Root className={styles.AvatarRoot}>
@@ -194,8 +195,8 @@ function _Birthdays() {
                         <Table.Cell>{user.date_birth}</Table.Cell>
                         <Table.Cell>
                           <Code>Birthday!</Code>
-                          {leftDays[index] <= 30 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
-                            leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay} text-center`}>Happy Birthday 🎉</h5> : <h5 className="text-warning">long days</h5>}
+                          {leftDays[index] <= 15 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
+                            leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay} text-center`}>Happy Birthday 🎉</h5> : null}
                         </Table.Cell>
                       </Table.Row>
                     )

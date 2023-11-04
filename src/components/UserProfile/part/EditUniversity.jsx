@@ -15,23 +15,27 @@ function EditUniversity({ education, setEducation, changeProfile }) {
   const [universityLocation, setUniversityLocation] = useState("")
 
   const addEducation = () => {
-    setEducation([
-      ...education,
-      {
-        degree,
-        universityMajor,
-        fromYear,
-        toYear,
-        universityName,
-        universityLocation
-      }
-    ])
-    setDegree("bacheloer")
-    setUniversityMajor("")
-    setFromYear(0)
-    setToYear(0)
-    setUniversityName("")
-    setUniversityLocation("")
+    if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
+      setEducation([
+        ...education,
+        {
+          degree,
+          universityMajor,
+          fromYear,
+          toYear,
+          universityName,
+          universityLocation
+        }
+      ])
+      setDegree("bacheloer")
+      setUniversityMajor("")
+      setFromYear(0)
+      setToYear(0)
+      setUniversityName("")
+      setUniversityLocation("")
+    } else {
+      alert("Please fill all the fields")
+    }
   }
 
   return (

@@ -381,7 +381,7 @@ function UpdateProfile() {
                 </div>
               </div>
               <div>
-                <Tabs.Root defaultValue="technalogies">
+                <Tabs.Root defaultValue="basic">
                   <Tabs.List>
                     <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
                     <Tabs.Trigger value="technalogies">Technalogies</Tabs.Trigger>

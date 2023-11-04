@@ -28,7 +28,7 @@ function HR_Register() {
               <TextField.Input
                 type="text"
                 variant="classic"
-                placeholder="Candidate's fullname"
+                placeholder="John Doe"
                 value={candidateFullName}
                 onChange={(e) => setCandidateFullName(e.target.value)}
               />
@@ -38,7 +38,7 @@ function HR_Register() {
               <TextField.Input
                 type="email"
                 variant="classic"
-                placeholder="Candidate's email"
+                placeholder="example@gmail.com"
                 value={candidateEmail}
                 onChange={(e) => setCandidateEmail(e.target.value)}
               />
@@ -50,7 +50,7 @@ function HR_Register() {
               <TextField.Input
                 type="text"
                 variant="classic"
-                placeholder="Candidate's address"
+                placeholder="Manhattan, New York"
                 value={candidateAddress}
                 onChange={(e) => setCandidateAddress(e.target.value)}
               />
@@ -60,7 +60,7 @@ function HR_Register() {
               <TextField.Input
                 type="text"
                 variant="classic"
-                placeholder="Candidate's phone number"
+                placeholder="+1 234 567 89 00"
                 value={candidatePhoneNumber}
                 onChange={(e) => setCandidatePhoneNumber(e.target.value)}
               />

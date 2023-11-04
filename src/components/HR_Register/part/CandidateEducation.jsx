@@ -14,23 +14,27 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
   const [universityLocation, setUniversityLocation] = useState("")
 
   const addEducation = () => {
-    setCandidateEducation([
-      ...candidateEducation,
-      {
-        degree,
-        universityMajor,
-        fromYear,
-        toYear,
-        universityName,
-        universityLocation
-      }
-    ])
-    setDegree("bacheloer")
-    setUniversityMajor("")
-    setFromYear(0)
-    setToYear(0)
-    setUniversityName("")
-    setUniversityLocation("")
+    if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
+      setCandidateEducation([
+        ...candidateEducation,
+        {
+          degree,
+          universityMajor,
+          fromYear,
+          toYear,
+          universityName,
+          universityLocation
+        }
+      ])
+      setDegree(degree)
+      setUniversityMajor("")
+      setFromYear(0)
+      setToYear(0)
+      setUniversityName("")
+      setUniversityLocation("")
+    } else {
+      alert("Please fill all the fields")
+    }
   }
 
   return (

@@ -1,24 +1,78 @@
 import { PlusIcon } from "@radix-ui/react-icons"
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes"
 import styles from '../../../styles/EditProfile.module.css'
-import { useState } from "react"
+import hrstyle from '../../../styles/HR_Register.module.css'
+import { useEffect, useState } from "react"
+import * as Checkbox from '@radix-ui/react-checkbox';
+import { CheckIcon } from '@radix-ui/react-icons';
+
 function CandidateSkills({ customTechList, setCustomTechList }) {
   const [customTech, setCustomTech] = useState("Pascal")
+  const CandidateSkills = [
+    'typesctipt', 'javascript', 'react', 'vue', 'angular',
+    'nodeJS', 'php', 'rust', 'go', 'ruby',
+    'cpp', 'java', 'spring', 'swing', 'cSharp', '.net',
+    'pyhton', 'django', 'flask',
+    'kotlin', 'swift', 'figma', 'adobe',
+  ]
+  const [skills, setSkills] = useState([])
+
+  const KnowingSkills = (value) => {
+    if (skills.includes(value)) {
+      setSkills((prev) => prev.filter((skill) => skill !== value))
+    } else {
+      setSkills((prev) => [...prev, value])
+    }
+  }
 
   const handleAddCustomTech = () => {
-    if (customTech && !customTechList.includes(customTech)) {
+    if (customTech && !customTechList.includes(customTech) && !CandidateSkills.includes(customTech.toLowerCase())) {
       setCustomTechList((prev) => [...prev, customTech])
     } else {
       alert('This technology already exists')
     }
-    setCustomTech("Pascal")
+    setCustomTech(customTech)
   }
+
+  const concatArr = () => {
+    if (customTechList.length > 0 && !skills.includes(customTech)) {
+      setSkills((prev) => [...prev, ...customTechList])
+    }
+
+    setTimeout(() => {
+      setCustomTechList([])
+      setSkills([])
+    }, 0);
+
+  }
+  useEffect(
+    () => {
+      console.log(skills);
+    }, [skills]
+  )
 
   return (
     <div className={styles.CustomTechContainer}>
       <Text as="label" style={{ fontSize: '1.8rem' }}>
         Custom Technalogies
       </Text>
+      <Button onClick={concatArr}>Concat</Button>
+      <Flex direction='row' align='center' gap='4' wrap='wrap' >
+        {CandidateSkills.map((skill) => {
+          return (
+            <Flex key={skill} mb='2' style={{ width: '150px' }}>
+              <Checkbox.Root className={hrstyle.CheckboxRoot} id={skill} onClick={(e) => KnowingSkills(e.target.id)} checked={skills.includes(skill)}>
+                <Checkbox.Indicator className={hrstyle.CheckboxIndicator} >
+                  <CheckIcon />
+                </Checkbox.Indicator>
+              </Checkbox.Root>
+              <Text as="label" className={hrstyle.Label} htmlFor={skill} style={{ textTransform: 'capitalize' }}>
+                {skill}
+              </Text>
+            </Flex>
+          )
+        })}
+      </Flex>
       <Dialog.Root>
         <Dialog.Trigger>
           <Button radius="full" variant="outline">
