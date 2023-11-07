@@ -88,7 +88,6 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
             </Text>
           </div>
         </div>
-        <hr />
         <div className={university.UniversityNameLocation}>
           <Text as="label">
             University Name
@@ -99,7 +98,6 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
             <TextField.Input placeholder="Tashkent, Uzbekistan" onChange={(e) => setUniversityLocation(e.target.value)} value={universityLocation} />
           </Text>
         </div>
-        <hr />
         <Button className={university.AddEducationButton} onClick={addEducation}>
           <PlusIcon />
         </Button>

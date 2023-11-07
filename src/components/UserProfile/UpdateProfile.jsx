@@ -31,7 +31,6 @@ import EditExperience from "./part/EditExperience"
 import EditResume from "./part/EditResume"
 import AnotherUser from "../Modals/AnotherUser"
 import EditUniversity from "./part/EditUniversity"
-import EditCustonTech from "./part/EditCustonTech"
 
 const ButtonFunction = (props) => {
   return (
@@ -111,8 +110,12 @@ function UpdateProfile() {
   // Additional Values
   const [major, setMajor] = useState("")
   const [experience, setExperience] = useState("")
-  const [skills, setSkills] = useState([])
+
+  // =========== Custom Technalogies ==========
   const [customTechList, setCustomTechList] = useState([])
+  const [skills, setSkills] = useState([])
+  const [customTech, setCustomTech] = useState("Pascal")
+
   const [userResume, setUserResume] = useState(null)
   const [education, setEducation] = useState([])
 
@@ -203,6 +206,7 @@ function UpdateProfile() {
         }
       })
       .then((res) => {
+        console.log('FROM GET ->', res.data.skills)
         setJoined(res.data.joined)
         set_data(res.data)
         setFullName(res.data.fullname)
@@ -235,52 +239,63 @@ function UpdateProfile() {
     CancleEdition()
   }, [CancleEdition])
 
+
+  useEffect(() => {
+    if (customTechList.length > 0 && !skills.includes(customTech)) {
+      setSkills((prev) => [...prev, ...customTechList])
+    }
+  }, [skills, customTechList])
+
   // Save Edition === Working
   const saveEdition = useCallback(() => {
-    axios
-      .patch(
-        `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
-        {
-          fullname: data.fullname !== fullName ? fullName : undefined,
-          // username: data.username !== usernameValue ? usernameValue : undefined,
-          username: usernameValue,
-          email: data.email !== emailValue ? emailValue : undefined,
-          password: passwordValue !== "" ? passwordValue : undefined,
-          address: data.address !== address ? address : undefined,
-          date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
-          phone_number: data.phone_number !== numbers ? numbers : undefined,
-          profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
-          resume: data.resume !== userResume ? userResume : undefined,
-          major: data.major !== major ? major : undefined,
-          experience: data.experience !== experience ? experience : undefined,
-          skills: data.skills !== skills ? skills : undefined
-        },
-        {
-          headers: {
-            "X-UserRole": memberRole,
-            "X-UserId": memberId
-          }
-        }
-      )
-      .then((res) => {
-        setIsOpen(true)
-        setPopupInfo(res.data)
-        setErrorOccured(false)
-      })
-      .catch((err) => {
-        setIsOpen(true)
 
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        } else if (err.response.status === 401) {
-          setWrongUser(true)
-          setWrongUserData(err.response.data)
-          dispatch(logoutUser())
-        } else {
-          setErrorOccured(true)
-          setPopupInfo(err.response.data)
-        }
-      })
+    setTimeout(() => {
+      console.log('FROM SAVE EDITION ->', skills);
+      axios
+        .patch(
+          `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
+          {
+            fullname: data.fullname !== fullName ? fullName : undefined,
+            // username: data.username !== usernameValue ? usernameValue : undefined,
+            username: usernameValue,
+            email: data.email !== emailValue ? emailValue : undefined,
+            password: passwordValue !== "" ? passwordValue : undefined,
+            address: data.address !== address ? address : undefined,
+            date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
+            phone_number: data.phone_number !== numbers ? numbers : undefined,
+            profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
+            resume: data.resume !== userResume ? userResume : undefined,
+            major: data.major !== major ? major : undefined,
+            experience: data.experience !== experience ? experience : undefined,
+            skills: data.skills !== skills ? skills : undefined
+          },
+          {
+            headers: {
+              "X-UserRole": memberRole,
+              "X-UserId": memberId
+            }
+          }
+        )
+        .then((res) => {
+          setIsOpen(true)
+          setPopupInfo(res.data)
+          setErrorOccured(false)
+        })
+        .catch((err) => {
+          setIsOpen(true)
+
+          if (err.response.data.msg) {
+            tokenExpired(err.response.data.msg)
+          } else if (err.response.status === 401) {
+            setWrongUser(true)
+            setWrongUserData(err.response.data)
+            dispatch(logoutUser())
+          } else {
+            setErrorOccured(true)
+            setPopupInfo(err.response.data)
+          }
+        })
+    }, 0)
   }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, major, experience, skills, userResume])
 
   // Log Out === Working
@@ -319,14 +334,6 @@ function UpdateProfile() {
   const toggleModal = () => setShowModal(!showModal)
 
   // =========== Additional Skills ==========
-  const seeSkills = (value) => {
-    if (skills.includes(value)) {
-      setSkills((prev) => prev.filter((skill) => skill !== value))
-    } else {
-      setSkills((prev) => [...prev, value])
-    }
-  }
-
   // For Major
   const seeMajor = (value) => {
     setMajor(value)
@@ -434,8 +441,15 @@ function UpdateProfile() {
                       <div className={styles.MajorExperienceTechnalogiesContainer}>
                         <EditMajor major={major} seeMajor={seeMajor} changeProfile={changeProfile} />
                         <EditExperience experience={experience} seeExperience={seeExperience} changeProfile={changeProfile} />
-                        <EditSkills changeProfile={changeProfile} skills={skills} setSkills={setSkills} seeSkills={seeSkills} />
-                        <EditCustonTech changeProfile={changeProfile} customTechList={customTechList} setCustomTechList={setCustomTechList} />
+                        <EditSkills
+                          changeProfile={changeProfile}
+                          customTechList={customTechList}
+                          setCustomTechList={setCustomTechList}
+                          skills={skills}
+                          setSkills={setSkills}
+                          customTech={customTech}
+                          setCustomTech={setCustomTech}
+                        />
                       </div>
                     </Tabs.Content>
                     <Tabs.Content value="additional">

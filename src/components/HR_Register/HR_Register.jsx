@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import styles from "../../styles/HR_Register.module.css"
 import "@radix-ui/themes/styles.css"
-import { Text, TextField } from "@radix-ui/themes"
+import { Button, Text, TextField } from "@radix-ui/themes"
 import CandidateEducation from "./part/CandidateEducation"
 import CandidateMajor from "./part/CandidateMajor"
 import CandidateSkills from "./part/CandidateSkills"
@@ -14,9 +14,23 @@ function HR_Register() {
   const [candidatePhoneNumber, setCandidatePhoneNumber] = useState("")
   const [candidateEducation, setCandidateEducation] = useState([])
   const [major, setMajor] = useState("")
-  const [customTechList, setCustomTechList] = useState([])
   const [candidateExperience, setCandidateExperience] = useState("0-1")
 
+  const [customTechList, setCustomTechList] = useState([])
+  const [skills, setSkills] = useState([])
+  const [customTech, setCustomTech] = useState("Pascal")
+
+  const addUser = () => {
+    if (customTechList.length > 0 && !skills.includes(customTech)) {
+      setSkills((prev) => [...prev, ...customTechList])
+    }
+
+    setTimeout(() => {
+      setCustomTechList([])
+      setSkills([])
+    }, 0);
+
+  }
   return (
     <>
       <h1 className="text-center display-3 mb-4">HR Register Title</h1>
@@ -27,7 +41,7 @@ function HR_Register() {
               Full Name
               <TextField.Input
                 type="text"
-                variant="classic"
+                variant="surface"
                 placeholder="John Doe"
                 value={candidateFullName}
                 onChange={(e) => setCandidateFullName(e.target.value)}
@@ -37,7 +51,7 @@ function HR_Register() {
               Email
               <TextField.Input
                 type="email"
-                variant="classic"
+                variant="surface"
                 placeholder="example@gmail.com"
                 value={candidateEmail}
                 onChange={(e) => setCandidateEmail(e.target.value)}
@@ -49,7 +63,7 @@ function HR_Register() {
               Addess
               <TextField.Input
                 type="text"
-                variant="classic"
+                variant="surface"
                 placeholder="Manhattan, New York"
                 value={candidateAddress}
                 onChange={(e) => setCandidateAddress(e.target.value)}
@@ -59,7 +73,7 @@ function HR_Register() {
               Phone Number
               <TextField.Input
                 type="text"
-                variant="classic"
+                variant="surface"
                 placeholder="+1 234 567 89 00"
                 value={candidatePhoneNumber}
                 onChange={(e) => setCandidatePhoneNumber(e.target.value)}
@@ -72,10 +86,13 @@ function HR_Register() {
         </div>
         <div className={styles.MajorSkillsExperienceContainer}>
           <CandidateMajor major={major} setMajor={setMajor} />
-          <hr />
-          <CandidateSkills customTechList={customTechList} setCustomTechList={setCustomTechList} />
-          <hr />
+          <br />
+          <CandidateSkills customTechList={customTechList} setCustomTechList={setCustomTechList}
+            skills={skills} setSkills={setSkills} customTech={customTech} setCustomTech={setCustomTech}
+          />
+          <br />
           <CandidateExperience candidateExperience={candidateExperience} setCandidateExperience={setCandidateExperience} />
+          <Button onClick={addUser} className={styles.AddUser}>Send</Button>
         </div>
         <div className={styles.UploadResumeContainer}></div>
       </div>

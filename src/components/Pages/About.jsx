@@ -76,14 +76,14 @@ function About() {
     <div className={`text-center ${styles.aboutPage} pageAnimation`}>
       <div style={{ gap: '2rem' }}>
         <div className={styles.registeredUsersContiner}>
-          {acceptedUsers !== undefined && (
+          {acceptedUsers !== undefined && acceptedUsers !== 0 && (
             <div>
               <Blockquote>
                 <Link to='/landing/admin/admin/accepted'>{acceptedUsers} users are accepted!</Link>
               </Blockquote>
             </div>
           )}
-          {waitingUsers !== undefined && (
+          {waitingUsers !== undefined && waitingUsers !== 0 && (
             <div>
               <Blockquote>
                 <Link to='/landing/admin/admin/waitingusers'>{waitingUsers} users are waiting for acception!</Link>
