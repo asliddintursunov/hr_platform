@@ -115,6 +115,13 @@ function UpdateProfile() {
   const [customTechList, setCustomTechList] = useState([])
   const [skills, setSkills] = useState([])
   const [customTech, setCustomTech] = useState("Pascal")
+  const UserSkills = [
+    'typesctipt', 'javascript', 'react', 'vue', 'angular',
+    'nodeJS', 'php', 'rust', 'go', 'ruby',
+    'cpp', 'java', 'spring', 'swing', 'cSharp', '.net',
+    'pyhton', 'django', 'flask',
+    'kotlin', 'swift', 'figma', 'adobe',
+  ]
 
   const [userResume, setUserResume] = useState(null)
   const [education, setEducation] = useState([])
@@ -206,7 +213,10 @@ function UpdateProfile() {
         }
       })
       .then((res) => {
-        console.log('FROM GET ->', res.data.skills)
+        const settedSkills = [...new Set(res.data.skills)]
+        const remainigSkills = settedSkills.filter((item) => !UserSkills.includes(item))
+
+        setCustomTechList(remainigSkills)
         setJoined(res.data.joined)
         set_data(res.data)
         setFullName(res.data.fullname)
@@ -220,7 +230,7 @@ function UpdateProfile() {
         setNumbers(res.data.phone_number)
         setMajor(res.data.major)
         setExperience(res.data.experience)
-        setSkills(res.data.skills)
+        setSkills(settedSkills)
         setIsPending(false)
       })
       .catch((err) => {
@@ -239,63 +249,56 @@ function UpdateProfile() {
     CancleEdition()
   }, [CancleEdition])
 
-
-  useEffect(() => {
-    if (customTechList.length > 0 && !skills.includes(customTech)) {
-      setSkills((prev) => [...prev, ...customTechList])
-    }
-  }, [skills, customTechList])
-
   // Save Edition === Working
   const saveEdition = useCallback(() => {
 
-    setTimeout(() => {
-      console.log('FROM SAVE EDITION ->', skills);
-      axios
-        .patch(
-          `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
-          {
-            fullname: data.fullname !== fullName ? fullName : undefined,
-            // username: data.username !== usernameValue ? usernameValue : undefined,
-            username: usernameValue,
-            email: data.email !== emailValue ? emailValue : undefined,
-            password: passwordValue !== "" ? passwordValue : undefined,
-            address: data.address !== address ? address : undefined,
-            date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
-            phone_number: data.phone_number !== numbers ? numbers : undefined,
-            profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
-            resume: data.resume !== userResume ? userResume : undefined,
-            major: data.major !== major ? major : undefined,
-            experience: data.experience !== experience ? experience : undefined,
-            skills: data.skills !== skills ? skills : undefined
-          },
-          {
-            headers: {
-              "X-UserRole": memberRole,
-              "X-UserId": memberId
-            }
+    // setTimeout(() => {
+    console.log('FROM SAVE EDITION ->', skills);
+    axios
+      .patch(
+        `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
+        {
+          fullname: data.fullname !== fullName ? fullName : undefined,
+          // username: data.username !== usernameValue ? usernameValue : undefined,
+          username: usernameValue,
+          email: data.email !== emailValue ? emailValue : undefined,
+          password: passwordValue !== "" ? passwordValue : undefined,
+          address: data.address !== address ? address : undefined,
+          date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
+          phone_number: data.phone_number !== numbers ? numbers : undefined,
+          profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
+          resume: data.resume !== userResume ? userResume : undefined,
+          major: data.major !== major ? major : undefined,
+          experience: data.experience !== experience ? experience : undefined,
+          skills: data.skills !== skills ? skills : undefined
+        },
+        {
+          headers: {
+            "X-UserRole": memberRole,
+            "X-UserId": memberId
           }
-        )
-        .then((res) => {
-          setIsOpen(true)
-          setPopupInfo(res.data)
-          setErrorOccured(false)
-        })
-        .catch((err) => {
-          setIsOpen(true)
+        }
+      )
+      .then((res) => {
+        setIsOpen(true)
+        setPopupInfo(res.data)
+        setErrorOccured(false)
+      })
+      .catch((err) => {
+        setIsOpen(true)
 
-          if (err.response.data.msg) {
-            tokenExpired(err.response.data.msg)
-          } else if (err.response.status === 401) {
-            setWrongUser(true)
-            setWrongUserData(err.response.data)
-            dispatch(logoutUser())
-          } else {
-            setErrorOccured(true)
-            setPopupInfo(err.response.data)
-          }
-        })
-    }, 0)
+        if (err.response.data.msg) {
+          tokenExpired(err.response.data.msg)
+        } else if (err.response.status === 401) {
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
+          dispatch(logoutUser())
+        } else {
+          setErrorOccured(true)
+          setPopupInfo(err.response.data)
+        }
+      })
+    // }, 0)
   }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, major, experience, skills, userResume])
 
   // Log Out === Working
@@ -388,7 +391,7 @@ function UpdateProfile() {
                 </div>
               </div>
               <div>
-                <Tabs.Root defaultValue="basic">
+                <Tabs.Root defaultValue="technalogies">
                   <Tabs.List>
                     <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
                     <Tabs.Trigger value="technalogies">Technalogies</Tabs.Trigger>
@@ -449,6 +452,7 @@ function UpdateProfile() {
                           setSkills={setSkills}
                           customTech={customTech}
                           setCustomTech={setCustomTech}
+                          UserSkills={UserSkills}
                         />
                       </div>
                     </Tabs.Content>

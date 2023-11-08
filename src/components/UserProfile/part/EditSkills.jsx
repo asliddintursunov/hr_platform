@@ -6,34 +6,42 @@ import styles from '../../../styles/EditProfile.module.css'
 import hrstyle from '../../../styles/HR_Register.module.css'
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
+import { useEffect } from 'react'
 
 function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
-  setSkills, customTech, setCustomTech }) {
-
-  const UserSkills = [
-    'typesctipt', 'javascript', 'react', 'vue', 'angular',
-    'nodeJS', 'php', 'rust', 'go', 'ruby',
-    'cpp', 'java', 'spring', 'swing', 'cSharp', '.net',
-    'pyhton', 'django', 'flask',
-    'kotlin', 'swift', 'figma', 'adobe',
-  ]
+  setSkills, customTech, setCustomTech, UserSkills }) {
 
   const seeSkills = (value) => {
     if (skills.includes(value)) {
-      setSkills((prev) => prev.filter((skill) => skill !== value))
+      setSkills((prev) => prev.filter((skill) => skill !== value));
     } else {
-      setSkills((prev) => [...prev, value])
+      setSkills((prev) => [...prev, value]);
     }
-  }
+    console.log(skills);
+  };
 
   const handleAddCustomTech = () => {
     if (customTech && !customTechList.includes(customTech) && !UserSkills.includes(customTech.toLowerCase())) {
-      setCustomTechList((prev) => [...prev, customTech])
+      setCustomTechList((prev) => [...prev, customTech]);
+      setSkills((prev) => [...new Set([...prev, customTech])]);
+      setCustomTech('');
     } else {
-      alert('This technology already exists')
+      alert('This technology already exists or is invalid');
     }
-    setCustomTech(customTech)
-  }
+  };
+
+  const handleDeleteCustomTech = (tech) => {
+    console.log(tech);
+
+    // Remove the technology from customTechList in the state
+    setCustomTechList((prev) => prev.filter((t) => t !== tech));
+
+    // Create a new array of skills with the deleted technology excluded
+    const updatedSkills = skills.filter((skill) => skill !== tech);
+
+    // Update the skills state with the updatedSkills
+    setSkills(updatedSkills);
+  };
 
   return (
     <div className={additional.skillsContainier}>
@@ -113,7 +121,7 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
                   size="small"
                   className={styles.CustomTechDeleteButton}
                   onClick={() => {
-                    setCustomTechList(customTechList.filter((item) => item !== tech))
+                    handleDeleteCustomTech(tech)
                   }}>
                   &times;
                 </Button>
