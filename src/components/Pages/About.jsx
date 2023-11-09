@@ -39,7 +39,7 @@ function About() {
           req.data.map((user) => {
             if (user.accepted) {
               setAcceptedUsers((prev) => prev += 1)
-            } else {
+            } else if (!data.accepted && data.approved) {
               setWaitingUsers((prev) => prev += 1)
             }
           })

@@ -6,7 +6,6 @@ import styles from '../../../styles/EditProfile.module.css'
 import hrstyle from '../../../styles/HR_Register.module.css'
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
-import { useEffect } from 'react'
 
 function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
   setSkills, customTech, setCustomTech, UserSkills }) {
@@ -112,7 +111,7 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
         <Text as='div' mt='4' className={styles.TechListContainer}>
           {customTechList.length > 0 && customTechList.map((tech) => {
             return (
-              <Text as="div" key={tech} className={styles.techCard}>
+              <Text as="div" key={tech} className={styles.techCard} style={{ border: !changeProfile && '1px solid red' }}>
                 <Text as="span" size="3" weight="bold">
                   {tech}
                 </Text>
@@ -122,7 +121,9 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
                   className={styles.CustomTechDeleteButton}
                   onClick={() => {
                     handleDeleteCustomTech(tech)
-                  }}>
+                  }}
+                  disabled={!changeProfile}
+                >
                   &times;
                 </Button>
               </Text>

@@ -252,8 +252,6 @@ function UpdateProfile() {
   // Save Edition === Working
   const saveEdition = useCallback(() => {
 
-    // setTimeout(() => {
-    console.log('FROM SAVE EDITION ->', skills);
     axios
       .patch(
         `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
@@ -298,7 +296,6 @@ function UpdateProfile() {
           setPopupInfo(err.response.data)
         }
       })
-    // }, 0)
   }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, major, experience, skills, userResume])
 
   // Log Out === Working
@@ -391,7 +388,7 @@ function UpdateProfile() {
                 </div>
               </div>
               <div>
-                <Tabs.Root defaultValue="technalogies">
+                <Tabs.Root defaultValue="basic">
                   <Tabs.List>
                     <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
                     <Tabs.Trigger value="technalogies">Technalogies</Tabs.Trigger>

@@ -8,16 +8,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { logoutUser } from "../../redux/features/userDataSlice"
 import AnotherUser from "../Modals/AnotherUser"
 
-import { Table, Strong, Button, Heading, Blockquote, Code } from "@radix-ui/themes"
+import { Table, Code } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
-import { defaultOptions } from "highcharts"
-import useURL from "../../hooks/useURL"
 
 function _Birthdays() {
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
-  const { defaultImage } = useURL()
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -54,7 +51,6 @@ function _Birthdays() {
 
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
-    console.log(info);
     setIsOpen(true)
     setErrorOccured(true)
     setPopupInfo(info)
@@ -143,13 +139,13 @@ function _Birthdays() {
         userBdayInDate.current += birthDay;
       }
 
-      setUserBdayToDays.push(userBdayInDate.current - 30);
+      // setUserBdayToDays.push(userBdayInDate.current - 30 - 1);
+      setUserBdayToDays.push(userBdayInDate.current - daysInMonth[currentMonth] - 1);
       leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current));
     }
   };
 
   dayTillBirthday()
-  console.log();
 
   const greenBackground = {
     background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
@@ -181,7 +177,7 @@ function _Birthdays() {
               <Table.Body>
                 {userBday && userBday.map((user, index) => {
                   return (
-                    user.accepted && leftDays[index] <= 30 && leftDays[index] >= 1 && (
+                    user.accepted && leftDays[index] <= 15 && leftDays[index] >= 0 && (
                       <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
                         <Table.Cell>
                           <Avatar.Root className={styles.AvatarRoot}>
