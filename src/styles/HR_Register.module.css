@@ -80,6 +80,5 @@ button {
 
 .AddUser {
   position: absolute;
-  right: 1rem;
-  bottom: 1rem;
+  left: 2rem;
 }

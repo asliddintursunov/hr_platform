@@ -13,6 +13,12 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
   const [universityName, setUniversityName] = useState("")
   const [universityLocation, setUniversityLocation] = useState("")
 
+  // const currentYear = new Date().getFullYear();
+  // const startYear = currentYear - 50;
+  // const yearsArray = Array.from({ length: currentYear - startYear + 1 }, (_, index) => startYear + index);
+  // console.log(yearsArray);
+
+
   const addEducation = () => {
     if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
       setCandidateEducation([
@@ -32,6 +38,7 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
       setToYear(0)
       setUniversityName("")
       setUniversityLocation("")
+      setStillStudying(false)
     } else {
       alert("Please fill all the fields")
     }
@@ -62,7 +69,22 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
           <div className={university.SelectStudiedYear}>
             <Text as="label">
               From
-              <TextField.Input type="number" placeholder="2017" onChange={(e) => setFromYear(Number(e.target.value))} value={fromYear <= 0 ? "" : fromYear} />
+              <TextField.Input
+                type="number"
+                placeholder="2017"
+                onChange={(e) => setFromYear(Number(e.target.value))}
+                value={fromYear <= 0 ? "" : fromYear} />
+              {/* <Select.Root defaultValue="2017" onValueChange={(e) => setFromYear(e)}>
+                <Text as="label">From</Text>
+                <Select.Trigger />
+                <Select.Content position="popper">
+                  {yearsArray.map((year) => {
+                    return (
+                      <Select.Item value={year}>{year}</Select.Item>
+                    )
+                  })}
+                </Select.Content>
+              </Select.Root> */}
             </Text>
             <Text as="label">
               To
@@ -113,7 +135,6 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
               <Table.ColumnHeaderCell>University Location</Table.ColumnHeaderCell>
             </Table.Row>
           </Table.Header>
-
           <Table.Body>
             {candidateEducation.map((edu, index) => (
               <Table.Row key={index}>
