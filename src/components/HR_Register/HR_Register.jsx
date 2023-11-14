@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react"
-import styles from "../../styles/HR_Register.module.css"
 import '../Admin/Admin.css'
+import styles from "../../styles/HR_Register.module.css"
 import "@radix-ui/themes/styles.css"
+import axios from "axios"
+import React, { useCallback, useEffect, useState } from "react"
 import { Button, Text, TextField } from "@radix-ui/themes"
 import CandidateEducation from "./part/CandidateEducation"
 import CandidateMajor from "./part/CandidateMajor"
 import CandidateSkills from "./part/CandidateSkills"
 import CandidateExperience from "./part/CandidateExperience"
-import axios from "axios"
 import { baseUrl } from "../../utils/api"
 import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
@@ -40,6 +40,8 @@ function HR_Register() {
   const [isPending, setIsPending] = useState(false)
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
+  const [emptyFields, setEmptyFields] = useState(false)
+
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {
@@ -89,38 +91,49 @@ function HR_Register() {
   }
 
   const sendCandidateData = () => {
-    setIsPending(true)
-    console.log(candidateEducation);
-    axios.post(`${baseUrl + '/resumes'}`, {
-      fullname: candidateFullName,
-      email: candidateEmail,
-      address: candidateAddress,
-      phone_number: candidatePhoneNumber,
-      degree_general: candidateEducation,
-      major: major,
-      skills: skills,
-      experience: candidateExperience,
-    }, {
-      headers: {
-        'X-UserRole': memberRole,
-        'X-UserId': memberId
-      }
-    })
-      .then((res) => {
-        console.log(res);
-        success(res.data)
-      })
-      .catch((err) => {
-        console.log(err)
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        } else if (err.response.status === 401) {
-          setWrongUser(true)
-          setWrongUserData(err.response.data)
-          dispatch(logoutUser())
+    if (candidateFullName &&
+      candidateEmail &&
+      candidateAddress &&
+      candidatePhoneNumber &&
+      candidateEducation &&
+      major &&
+      skills &&
+      candidateExperience) {
+      setIsPending(true)
+      setEmptyFields(false)
+      axios.post(`${baseUrl + '/resumes'}`, {
+        fullname: candidateFullName,
+        email: candidateEmail,
+        address: candidateAddress,
+        phone_number: candidatePhoneNumber,
+        degree_general: candidateEducation,
+        major: major,
+        skills: skills,
+        experience: candidateExperience,
+      }, {
+        headers: {
+          'X-UserRole': memberRole,
+          'X-UserId': memberId
         }
-        error(err.response.data)
       })
+        .then((res) => {
+          console.log(res);
+          success(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err.response.data.msg) {
+            tokenExpired(err.response.data.msg)
+          } else if (err.response.status === 401) {
+            setWrongUser(true)
+            setWrongUserData(err.response.data)
+            dispatch(logoutUser())
+          }
+          error(err.response.data)
+        })
+    } else {
+      setEmptyFields(true)
+    }
   }
 
   useEffect(
@@ -150,6 +163,7 @@ function HR_Register() {
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp popupInfo={popupInfo} setIsOpen={setIsOpen} errorOccured={errorOccured} />}
+      {emptyFields && <PopUp popupInfo={"Make Sure You Filled All Fields!"} setIsOpen={setEmptyFields} errorOccured={true} />}
       {isPending && <div className="loaderr"></div>}
       <h1 className="text-center display-3 mb-4">HR Register Title</h1>
       {!isPending &&
@@ -219,11 +233,18 @@ function HR_Register() {
               <CandidateExperience candidateExperience={candidateExperience} setCandidateExperience={setCandidateExperience} />
               <Button onClick={sendCandidateData} className={styles.AddUser}>Send</Button>
             </div>
-            <div className={styles.UploadResumeContainer}></div>
+            <div className={styles.UploadResumeContainer}>
+              <Text as="label">
+                Upload Resume
+                <TextField.Input
+                  type="file"
+                  variant="surface"
+                />
+              </Text>
+            </div>
           </div>
         )}
     </>
   )
 }
-
 export default HR_Register

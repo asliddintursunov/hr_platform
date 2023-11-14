@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import styles from "../../../styles/EditProfile.module.css"
 import "@radix-ui/themes/styles.css"
 import { Button, Checkbox, Flex, Select, Table, Text, TextField } from "@radix-ui/themes"

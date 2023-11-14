@@ -7,7 +7,9 @@ import { logoutUser } from "../../redux/features/userDataSlice"
 import { useDispatch, useSelector } from "react-redux"
 import AnotherUser from "../Modals/AnotherUser"
 import PopUp from "../Modals/PopUp"
-import { Button } from "@radix-ui/themes"
+import { Button, Text, Flex } from "@radix-ui/themes"
+import * as Checkbox from '@radix-ui/react-checkbox';
+import { CheckIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
 function Resumes() {
   const dispatch = useDispatch()
@@ -25,18 +27,32 @@ function Resumes() {
   const [skills, setSkills] = useState([])
   const [experience, setExperience] = useState("")
   const [major, setMajor] = useState("")
+  const [optn, setOptn] = useState("all")
 
   const [resumeData, setResumeData] = useState([])
 
-  const Skills = ["typesctipt", "javascript", "react", "vue", "angular", "java", "cSharp", "pyhton", "nodeJS", "php", "kotlin", "swift", "cpp", "figma"]
-  const WorkExperience = ["1-3", "3-6", "6+"]
-  const Specializations = ["FullStack-developer", "Frontend-developer", "Backend-developer", "Mobile-developer", "Desktop-developer", "Design-UI/UX"]
+  const Skills = [
+    'typesctipt', 'javascript', 'react', 'vue', 'angular',
+    'nodeJS', 'php', 'rust', 'go', 'ruby',
+    'cpp', 'java', 'spring', 'swing', 'cSharp', '.net',
+    'pyhton', 'django', 'flask',
+    'kotlin', 'swift', 'figma', 'adobe',
+  ]
+  const WorkExperience = ["0-1", "1-3", "3-6", "6+"]
+  const Specializations = ["FullStack-developer", "Frontend-developer", "Backend-developer", "Mobile-developer", "Desktop-developer", "Design-UI/UX",
+    'Data Science-developer', 'DevOps-developer', 'QA-developer', 'Security-developer', 'Intern-developer', 'Other-developer'
+  ]
+  const SearchOptions = [
+    "all", 'registered', 'notregistered'
+  ]
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
 
   const [selectedSkill, setSelectedSkill] = useState(null)
   const [selectedExperience, setSelectedExperience] = useState(null)
+  const [selectedOption, setSelectedOption] = useState("all")
+
 
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
@@ -90,10 +106,12 @@ function Resumes() {
   const seeAllResumes = () => {
     setSelectedSkill(null)
     setSelectedExperience(null)
+    setSelectedOption("all")
     setSkills([])
     setMajor("")
     setResumeData([])
     setExperience("")
+    setOptn("all")
 
     axios
       .post(
@@ -227,97 +245,143 @@ function Resumes() {
           <aside className={styles.rightAside}>
             <form method="GET" onSubmit={(e) => e.preventDefault()}>
               <div className={styles.filterWrapper}>
-                <button type="submit" onClick={sendData}>
-                  Filter
-                </button>
-                <button type="submit" onClick={seeAllResumes}>
-                  All
-                </button>
+                <div className={styles.searchByName}>
+                  <input type="text" />
+                  <button><MagnifyingGlassIcon /></button>
+                </div>
+
+                {/* ========= HERE THE API CHANGES ========= */}
+                <div className={styles.filterOptionsContainer}>
+                  {SearchOptions && (
+                    SearchOptions.map((option) => {
+                      return (
+                        <div key={option}>
+                          <label>
+                            <input
+                              style={{
+                                cursor: "pointer",
+                                marginRight: "5px",
+                                display: "none"
+                              }}
+                              type="radio"
+                              name="searchOptions"
+                              value={option}
+                              onChange={(e) => {
+                                console.log(selectedOption, option)
+                                setOptn(e.target.value)
+                                setSelectedOption(e.target.value)
+                              }}
+                              checked={selectedOption === option}
+                            />
+                            <h4>{option}</h4>
+                            <span className={`${styles.radioCheckmark}`}></span>
+                          </label>
+                        </div>
+                      )
+                    })
+                  )}
+                </div>
+
+                <div className={styles.filterByButton}>
+                  <button type="submit" onClick={sendData}>
+                    Filter
+                  </button>
+                  <button type="submit" onClick={seeAllResumes}>
+                    All
+                  </button>
+                </div>
+              </div>
+              <div className={`${styles.filterWrapper}`}>
+                <h3 className="mb-4">Specializations</h3>
+                <div className={styles.majorContainer}>
+                  {Specializations &&
+                    Specializations.map((type) => {
+                      return (
+                        <div key={type} className={styles.radioWrapper}>
+                          <label style={{ display: "flex", flexDirection: 'row-reverse', alignItems: "center", marginBottom: "10px" }}>
+                            <input
+                              className={styles.InputRadio}
+                              style={{
+                                cursor: "pointer",
+                                marginRight: "5px",
+                                display: "none"
+                              }}
+                              type="radio"
+                              name="skills"
+                              value={type.split("-")[0]}
+                              onChange={(e) => {
+                                console.log(selectedSkill, type.split("-")[0])
+                                MajorStudy(e.target.value)
+                                setSelectedSkill(e.target.value)
+                              }}
+                              checked={selectedSkill === type.split("-")[0]}
+                            />
+                            <h4>{type.split("-")[0]}</h4>
+                            <span className={`${styles.radioCheckmark}`}></span>
+                          </label>
+                        </div>
+                      )
+                    })}
+                </div>
               </div>
               <div className={styles.filterWrapper}>
-                <h3>Specializations</h3>
-                {Specializations &&
-                  Specializations.map((type) => {
-                    return (
-                      <div key={type} className={styles.radioWrapper}>
-                        <label style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-                          <input
-                            className={styles.InputRadio}
-                            style={{
-                              cursor: "pointer",
-                              marginRight: "5px"
-                            }}
-                            type="radio"
-                            name="skills"
-                            value={type.split("-")[0]}
-                            onChange={(e) => {
-                              MajorStudy(e.target.value)
-                              setSelectedSkill(e.target.value)
-                              console.log(e.target.value)
-                            }}
-                            checked={selectedSkill === type.split("-")[0]}
-                          />
-                          <h4>{type.split("-")[0]}</h4>
-                          {/* <span className={`${styles.radioCheckmark}`}></span> */}
-                        </label>
-                      </div>
-                    )
-                  })}
+                <h3 className="mb-4">Work Experience</h3>
+                <div className={styles.workExperienceContainer}>
+                  {WorkExperience &&
+                    WorkExperience.map((type) => {
+                      return (
+                        <div key={type}>
+                          <label style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+                            <input
+                              style={{
+                                cursor: "pointer",
+                                marginRight: "5px",
+                                display: "none"
+                              }}
+                              className={styles.InputRadio}
+                              type="radio"
+                              name="workexperience"
+                              value={type}
+                              onChange={(e) => {
+                                console.log(selectedExperience, type)
+                                ExperienceYears(e.target.value)
+                                setSelectedExperience(e.target.value)
+                              }}
+                              checked={selectedExperience === type}
+                            />
+                            <span className={`${styles.radioCheckmark}`}></span>
+                            <h4>{type} years</h4>
+                          </label>
+                        </div>
+                      )
+                    })}
+                </div>
+
               </div>
-              <div className={styles.filterWrapper}>
-                <h3>Work Experience</h3>
-                {WorkExperience &&
-                  WorkExperience.map((type) => {
-                    return (
-                      <div key={type}>
-                        <label style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-                          <input
-                            style={{
-                              cursor: "pointer",
-                              marginRight: "5px"
-                            }}
-                            className={styles.InputRadio}
-                            type="radio"
-                            name="workexperience"
-                            value={type}
-                            onChange={(e) => {
-                              ExperienceYears(e.target.value)
-                              setSelectedExperience(e.target.value)
-                            }}
-                            checked={selectedExperience === type}
-                          />
-                          {/* <span className={`${styles.radioCheckmark}`}></span> */}
-                          <h4>{type} years</h4>
-                        </label>
-                      </div>
-                    )
-                  })}
-              </div>
-              <div className={styles.filterWrapper}>
-                <h3>Languages / Technologies</h3>
-                {Skills &&
-                  Skills.map((type) => {
-                    return (
-                      <div key={type} style={{ marginBottom: "10px" }}>
-                        <label style={{ display: "flex", alignItems: "center" }}>
-                          <input
-                            type="checkbox"
-                            value={type.split("-").join("").toLowerCase()}
-                            onChange={(e) => {
-                              KnowingSkills(e.target.value)
-                            }}
+              <div className={`${styles.filterWrapper}`}>
+                <h3 className="mb-4">Languages / Technologies</h3>
+                <div className={styles.technalogyContainer}>
+                  {Skills &&
+                    Skills.map((type) => {
+                      return (
+                        <Flex key={type} mb='2' style={{ width: '120px' }}>
+                          <Checkbox.Root
+                            className={styles.CheckboxRoot}
+                            id={type}
+                            onClick={(e) => KnowingSkills(e.target.id)}
                             checked={skills.includes(type.split("-").join("").toLowerCase())}
-                            style={{
-                              cursor: "pointer",
-                              marginRight: "5px"
-                            }}
-                          />
-                          <h4>{type.split("-").join(" ")}</h4>
-                          {/* <span className={styles.checkboxSpan}></span> */}
-                        </label>
-                      </div>
-                    )
-                  })}
+                          >
+                            <Checkbox.Indicator className={styles.CheckboxIndicator} >
+                              <CheckIcon />
+                            </Checkbox.Indicator>
+                          </Checkbox.Root>
+                          <Text as="label" className={styles.Label} htmlFor={type}>
+                            {type}
+                          </Text>
+                        </Flex>
+                      )
+                    })}
+                </div>
               </div>
             </form>
           </aside>
