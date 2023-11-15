@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { logoutUser } from "../../redux/features/userDataSlice"
 import AnotherUser from "../Modals/AnotherUser"
+import { UploadIcon } from "@radix-ui/react-icons"
 
 function HR_Register() {
   const navigate = useNavigate()
@@ -231,16 +232,17 @@ function HR_Register() {
               />
               <br />
               <CandidateExperience candidateExperience={candidateExperience} setCandidateExperience={setCandidateExperience} />
-              <Button onClick={sendCandidateData} className={styles.AddUser}>Send</Button>
             </div>
             <div className={styles.UploadResumeContainer}>
-              <Text as="label">
-                Upload Resume
-                <TextField.Input
+              <div>
+                <input
                   type="file"
-                  variant="surface"
-                />
-              </Text>
+                  name="file"
+                  id="file"
+                  className={styles.InputFile} />
+                <Button><UploadIcon /> Upload Resume</Button>
+                <Button onClick={sendCandidateData} className={styles.AddUser}>Send</Button>
+              </div>
             </div>
           </div>
         )}

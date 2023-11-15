@@ -232,6 +232,8 @@ function UpdateProfile() {
         setExperience(res.data.experience)
         setSkills(settedSkills)
         setIsPending(false)
+        // setBio(res.data.bio)
+        // setEducation(res.data.education)
       })
       .catch((err) => {
         if (err.response.data.msg) {
@@ -268,7 +270,9 @@ function UpdateProfile() {
           resume: data.resume !== userResume ? userResume : undefined,
           major: data.major !== major ? major : undefined,
           experience: data.experience !== experience ? experience : undefined,
-          skills: data.skills !== skills ? skills : undefined
+          skills: data.skills !== skills ? skills : undefined,
+          // bio: data.bio !== bio ? bio : undefined,
+          // education: education
         },
         {
           headers: {

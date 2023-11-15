@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styles from "../../../styles/EditProfile.module.css"
 import "@radix-ui/themes/styles.css"
 import { Button, Checkbox, Flex, Select, Table, Text, TextField } from "@radix-ui/themes"
@@ -33,11 +33,16 @@ function EditUniversity({ education, setEducation, changeProfile }) {
       setToYear(0)
       setUniversityName("")
       setUniversityLocation("")
+      setStillStudying(false)
     } else {
       alert("Please fill all the fields")
     }
   }
-
+  useEffect(
+    () => {
+      { console.log(education) }
+    }, [education]
+  )
   return (
     <div>
       <div className={styles.AddUniversityContainer}>
@@ -134,6 +139,7 @@ function EditUniversity({ education, setEducation, changeProfile }) {
           <PlusIcon />
         </Button>
       </div>
+
       {education.length > 0 && (
         <Table.Root variant="surface" mt="6">
           <Table.Header>

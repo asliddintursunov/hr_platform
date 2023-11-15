@@ -12,6 +12,7 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
   const [stillStudying, setStillStudying] = useState(false)
   const [universityName, setUniversityName] = useState("")
   const [universityLocation, setUniversityLocation] = useState("")
+  const [emptyFields, setEmptyFields] = useState(false)
 
   // const currentYear = new Date().getFullYear();
   // const startYear = currentYear - 50;
@@ -39,8 +40,12 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
       setUniversityName("")
       setUniversityLocation("")
       setStillStudying(false)
+      setEmptyFields(false)
     } else {
-      alert("Please fill all the fields")
+      setEmptyFields(true)
+      setTimeout(() => {
+        setEmptyFields(false)
+      }, 1500);
     }
   }
 
@@ -64,12 +69,21 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
             <Text as="label" htmlFor="university-major">
               Major
             </Text>
-            <TextField.Input id="university-major" placeholder="Computer Science" onChange={(e) => setUniversityMajor(e.target.value)} value={universityMajor} />
+            <TextField.Input
+              style={{ borderColor: emptyFields && universityMajor === '' ? 'red' : '' }}
+              id="university-major"
+              placeholder="Computer Science"
+              onChange={(e) => setUniversityMajor(e.target.value)}
+              value={universityMajor}
+
+            />
           </div>
           <div className={university.SelectStudiedYear}>
             <Text as="label">
               From
               <TextField.Input
+                style={{ borderColor: emptyFields && universityMajor === '' ? 'red' : '' }}
+
                 type="number"
                 placeholder="2017"
                 onChange={(e) => setFromYear(Number(e.target.value))}
@@ -89,6 +103,7 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
             <Text as="label">
               To
               <TextField.Input
+                style={{ borderColor: emptyFields && universityMajor === '' ? 'red' : '' }}
                 type={stillStudying ? "text" : "number"}
                 placeholder="2021"
                 disabled={stillStudying ? true : false}
@@ -113,11 +128,21 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
         <div className={university.UniversityNameLocation}>
           <Text as="label">
             University Name
-            <TextField.Input placeholder="Inha University in Tashkent" onChange={(e) => setUniversityName(e.target.value)} value={universityName} />
+            <TextField.Input
+              style={{ borderColor: emptyFields && universityMajor === '' ? 'red' : '' }}
+              placeholder="Inha University in Tashkent"
+              onChange={(e) => setUniversityName(e.target.value)}
+              value={universityName}
+            />
           </Text>
           <Text as="label">
             University Location
-            <TextField.Input placeholder="Tashkent, Uzbekistan" onChange={(e) => setUniversityLocation(e.target.value)} value={universityLocation} />
+            <TextField.Input
+              style={{ borderColor: emptyFields && universityMajor === '' ? 'red' : '' }}
+              placeholder="Tashkent, Uzbekistan"
+              onChange={(e) => setUniversityLocation(e.target.value)}
+              value={universityLocation}
+            />
           </Text>
         </div>
         <Button className={university.AddEducationButton} onClick={addEducation}>

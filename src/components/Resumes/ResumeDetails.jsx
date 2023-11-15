@@ -7,7 +7,9 @@ import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
 import AnotherUser from '../Modals/AnotherUser'
 import { useNavigate } from 'react-router-dom'
 import PopUp from '../Modals/PopUp'
-import { Code } from '@radix-ui/themes'
+import { Button, Code } from '@radix-ui/themes'
+import { EnvelopeOpenIcon } from '@radix-ui/react-icons'
+import ResumeFile from './ResumeFile'
 
 function _ResumeDetails() {
   const [userResumeData, setUserResumeData] = useState([])
@@ -22,6 +24,8 @@ function _ResumeDetails() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
+  const [openResume, setOpenResume] = useState(false)
+
 
   useEffect(
     () => {
@@ -66,6 +70,7 @@ function _ResumeDetails() {
 
   return (
     <>
+      {openResume && <ResumeFile setOpenResume={setOpenResume} resume={userResumeData.resume} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={styles.resumeDetailsContainer} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
@@ -103,12 +108,9 @@ function _ResumeDetails() {
           </div>
           <div className={styles.userResumeContainer}>
             <h1>Resume</h1>
-            <embed
-              type='application/pdf'
-              src={userResumeData.resume}
-              height='400'
-              width='100%'
-            />
+            <Button color='gray'
+              onClick={() => setOpenResume(true)}
+            ><EnvelopeOpenIcon />Open Resume</Button>
           </div>
         </div>
       </div>

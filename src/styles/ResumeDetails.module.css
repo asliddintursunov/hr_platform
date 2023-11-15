@@ -79,3 +79,48 @@
   -ms-border-radius: 10rem;
   -o-border-radius: 10rem;
 }
+
+.ResumeFileBackdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.ResumeFileContainer {
+  width: 70%;
+  height: 85%;
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  animation: resumeAnimate 0.3s ease-in-out;
+}
+
+@keyframes resumeAnimate {
+  from {
+    transform: translateY(-50%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.ResumeFileContainer>button {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

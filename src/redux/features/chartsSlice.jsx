@@ -25,7 +25,13 @@ const initialChars = {
     fullstackDev: [],
     MobileDev: [],
     DesktopDev: [],
-    DesignDev: []
+    DesignDev: [],
+    DataScienceDev: [],
+    DevOpsDev: [],
+    QADev: [],
+    SecurityDev: [],
+    InternDev: [],
+    OtherDev: []
   },
   status: "idle",
   error: null
@@ -51,6 +57,12 @@ const chartsSlice = createSlice({
         state.major.MobileDev = experienceFilter.filter((item) => item.major === "Mobile")
         state.major.DesktopDev = experienceFilter.filter((item) => item.major === "Desktop")
         state.major.DesignDev = experienceFilter.filter((item) => item.major === "Design")
+        state.major.DataScienceDev = experienceFilter.filter((item) => item.major === "Data Science")
+        state.major.DevOpsDev = experienceFilter.filter((item) => item.major === "DevOps")
+        state.major.QADev = experienceFilter.filter((item) => item.major === "QA")
+        state.major.SecurityDev = experienceFilter.filter((item) => item.major === "Security")
+        state.major.InternDev = experienceFilter.filter((item) => item.major === "Intern")
+        state.major.OtherDev = experienceFilter.filter((item) => item.major === "Other")
 
         // Getting User type keys
         const userTypeUserCount = action.payload.filter((item) => item.type === "user_count")

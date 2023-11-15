@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button, HoverCard } from "@radix-ui/themes"
+import { Button } from "@radix-ui/themes"
 import styles from "../../../styles/EditProfile.module.css"
 import { UploadIcon } from "@radix-ui/react-icons"
 

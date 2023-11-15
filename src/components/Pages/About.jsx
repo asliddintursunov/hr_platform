@@ -23,7 +23,7 @@ function About() {
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
 
-  const [acceptedUsers, setAcceptedUsers] = useState(0)
+  // const [acceptedUsers, setAcceptedUsers] = useState(0)
   const [waitingUsers, setWaitingUsers] = useState(0)
 
   const fetchUsers = useCallback(
@@ -37,9 +37,14 @@ function About() {
         })
         .then((req) => {
           req.data.map((user) => {
-            if (user.accepted) {
-              setAcceptedUsers((prev) => prev += 1)
-            } else if (!data.accepted && data.approved) {
+            // if (user.accepted) {
+            //   setAcceptedUsers((prev) => prev += 1)
+            // } else if (!data.accepted && data.approved) {
+            //   setWaitingUsers((prev) => prev += 1)
+            // }
+            if (
+              !user.accepted && user.approved
+            ) {
               setWaitingUsers((prev) => prev += 1)
             }
           })
@@ -76,13 +81,13 @@ function About() {
     <div className={`text-center ${styles.aboutPage} pageAnimation`}>
       <div style={{ gap: '2rem' }}>
         <div className={styles.registeredUsersContiner}>
-          {acceptedUsers !== undefined && acceptedUsers !== 0 && (
+          {/* {acceptedUsers !== undefined && acceptedUsers !== 0 && (
             <div>
               <Blockquote>
                 <Link to='/landing/admin/admin/accepted'>{acceptedUsers} users are accepted!</Link>
               </Blockquote>
             </div>
-          )}
+          )} */}
           {waitingUsers !== undefined && waitingUsers !== 0 && (
             <div>
               <Blockquote>

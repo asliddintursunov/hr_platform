@@ -4,14 +4,20 @@ import { allMajors } from "../../redux/features/chartsSlice"
 
 export function useBarChart() {
   const allMajorsData = useSelector(allMajors)
-
+  console.log(allMajorsData);
   const responseData = {
     DesignDev: allMajorsData.DesignDev,
     DesktopDev: allMajorsData.DesktopDev,
     MobileDev: allMajorsData.MobileDev,
     backendDev: allMajorsData.backendDev,
     frontendDev: allMajorsData.frontendDev,
-    fullstackDev: allMajorsData.fullstackDev
+    fullstackDev: allMajorsData.fullstackDev,
+    DataScienceDev: allMajorsData.DataScienceDev,
+    DevOpsDev: allMajorsData.DevOpsDev,
+    QADev: allMajorsData.QADev,
+    SecurityDev: allMajorsData.SecurityDev,
+    InternDev: allMajorsData.InternDev,
+    OtherDev: allMajorsData.OtherDev,
   }
 
   // Define the categories you want to process
@@ -49,7 +55,8 @@ export function useBarChart() {
 
   const barChart = {
     chart: {
-      type: "bar"
+      type: "bar",
+      height: "600px",
     },
     title: {
       text: "Developer experience by category",
