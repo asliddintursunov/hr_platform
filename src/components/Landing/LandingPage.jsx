@@ -5,39 +5,39 @@ import { useEffect, useState } from "react"
 function _LandingPage() {
 
   const userRole = localStorage.getItem("userRole")
-  const [navbarAppear, setNavbarAppear] = useState(true)
+  // const [navbarAppear, setNavbarAppear] = useState(true)
 
   const location = useLocation()
   const defaultPath = "/" + location.pathname.split("/")[1] + "/"
 
-  const style_nav_appear = {
-    position: "fixed",
-    left: 0,
-    transform: "translateX(-101%)"
-  }
-  const style_nav_disappear = {
-    minWidth: "21.5rem"
-  }
+  // const style_nav_appear = {
+  //   position: "fixed",
+  //   left: 0,
+  //   transform: "translateX(-101%)"
+  // }
+  // const style_nav_disappear = {
+  //   minWidth: "21.5rem"
+  // }
   const navbarColor = {
     color: "var(--white)",
     backgroundColor: "var(--dark)"
   }
 
-  useEffect(() => {
-    onresize = (event) => {
-      if (event.target.innerWidth >= 991) {
-        setNavbarAppear(true)
-      } else {
-        setNavbarAppear(false)
-      }
-    }
-  }, [navbarAppear])
+  // useEffect(() => {
+  //   onresize = (event) => {
+  //     if (event.target.innerWidth >= 991) {
+  //       setNavbarAppear(true)
+  //     } else {
+  //       setNavbarAppear(false)
+  //     }
+  //   }
+  // }, [navbarAppear])
 
   return (
     <div className={styles.landingContainer}>
-      <div className={styles.sidebarContainer} style={navbarAppear ? style_nav_disappear : style_nav_appear}>
+      <div className={styles.sidebarContainer}>
         <aside className={styles.sidebar}>
-          {!navbarAppear && (
+          {/* {!navbarAppear && (
             <button onClick={() => setNavbarAppear(!navbarAppear)} className={styles.hamburgerBtn}>
               <i className="bi bi-arrow-bar-right"></i>
             </button>
@@ -47,7 +47,7 @@ function _LandingPage() {
             <button onClick={() => setNavbarAppear(!navbarAppear)} className={styles.hamburgerBtn}>
               <i className="bi bi-arrow-bar-left"></i>
             </button>
-          )}
+          )} */}
 
           <nav>
             <div className={styles.navbarOptions}>

@@ -96,10 +96,11 @@ function HR_Register() {
       candidateEmail &&
       candidateAddress &&
       candidatePhoneNumber &&
-      candidateEducation &&
+      candidateEducation.length > 0 &&
       major &&
       skills &&
       candidateExperience) {
+      // console.log(candidateEducation.length);
       setIsPending(true)
       setEmptyFields(false)
       axios.post(`${baseUrl + '/resumes'}`, {

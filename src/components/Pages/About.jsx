@@ -11,8 +11,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useBarChart } from '../../hooks/charts/useBarChart';
 import axios from 'axios';
 import { baseUrl } from '../../utils/api';
-import { Blockquote } from '@radix-ui/themes';
+import { Blockquote, Button } from '@radix-ui/themes';
 import { Link } from 'react-router-dom';
+import { Cross1Icon } from '@radix-ui/react-icons';
+
 
 function About() {
   const dispatch = useDispatch()
@@ -25,6 +27,7 @@ function About() {
 
   // const [acceptedUsers, setAcceptedUsers] = useState(0)
   const [waitingUsers, setWaitingUsers] = useState(0)
+  const [closeNav, setCloseNav] = useState(false)
 
   const fetchUsers = useCallback(
     () => {
@@ -80,7 +83,7 @@ function About() {
   return (
     <div className={`text-center ${styles.aboutPage} pageAnimation`}>
       <div style={{ gap: '2rem' }}>
-        <div className={styles.registeredUsersContiner}>
+        {!closeNav && <div className={styles.registeredUsersContiner}>
           {/* {acceptedUsers !== undefined && acceptedUsers !== 0 && (
             <div>
               <Blockquote>
@@ -89,13 +92,14 @@ function About() {
             </div>
           )} */}
           {waitingUsers !== undefined && waitingUsers !== 0 && (
-            <div>
+            <div className={styles.waitingUsersNav}>
               <Blockquote>
                 <Link to='/landing/admin/admin/waitingusers'>{waitingUsers} users are waiting for acception!</Link>
               </Blockquote>
             </div>
           )}
-        </div>
+          <Button className={styles.waitingUsersNavClose} color='red' variant='soft' mr='2' onClick={() => setCloseNav(true)}> <Cross1Icon /> </Button>
+        </div>}
         <div className={styles.basicStatsContainer}>
           <div className={styles.lineGraphContainer}>
             <HighchartsReact highcharts={Highcharts} options={lineGraph} />

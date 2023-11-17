@@ -10,6 +10,9 @@ import PopUp from "../Modals/PopUp"
 import { Button, Text, Flex } from "@radix-ui/themes"
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import ResumeList from "./ResumeList"
+import Pagination from "./Pagination"
+
 
 function Resumes() {
   const dispatch = useDispatch()
@@ -57,6 +60,11 @@ function Resumes() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postPerPage, setPostPerPage] = useState(7)
+  const lastPostIndex = currentPage * postPerPage;
+  const firstPostIndex = lastPostIndex - postPerPage;
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -177,6 +185,7 @@ function Resumes() {
       )
       .then((res) => {
         setResumeData(res.data.results)
+        console.log(res.data.results);
       })
       .catch((err) => {
         console.log(err)
@@ -196,6 +205,8 @@ function Resumes() {
     navigate("./userResume")
   }
 
+  const currentPosts = resumeData.slice(firstPostIndex, lastPostIndex)
+
   return (
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
@@ -214,34 +225,17 @@ function Resumes() {
           </div>
         </div>
         <main className={styles.main}>
-          <aside className={styles.leftAside}>
-            {resumeData.length === 0 && <h1 className="display-4 text-secondary">No Suitable CV</h1>}
-            {resumeData.length > 0 &&
-              resumeData.map((resume) => {
-                return (
-                  <div key={resume.id} className={styles.resumeCard}>
-                    <div className={styles.resumeCardMajor}>
-                      <h2>{resume.major}</h2>
-                    </div>
-                    <div className={styles.resumeCardSkills}>{resume.skills && resume.skills.slice(2, -1).map((skill, index) => <code key={index}>{skill}</code>)}</div>
-                    <div className={styles.resumeCardMore}>
-                      <div className={styles.resumeCardUsername}>
-                        <span>Username</span>
-                        <p>{resume.username}</p>
-                      </div>
-                      <div className={styles.resumeCardExperience}>
-                        <span>Experience</span>
-                        <h3>{resume.experience}</h3>
-                      </div>
-                      <div className={styles.resumeCVCard}>
-                        <span>Full Resume</span>
-                        <Button onClick={() => seeResumeDetail(resume.id)} variant="surface">See</Button>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-          </aside>
+          <ResumeList
+            // resumeData={resumeData}
+            resumeData={currentPosts}
+            seeResumeDetail={seeResumeDetail}
+            firstPostIndex={firstPostIndex}
+            lastPostIndex={lastPostIndex}
+            currentPosts={currentPosts}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            postPerPage={postPerPage}
+          />
           <aside className={styles.rightAside}>
             <form method="GET" onSubmit={(e) => e.preventDefault()}>
               <div className={styles.filterWrapper}>
@@ -384,6 +378,11 @@ function Resumes() {
                 </div>
               </div>
             </form>
+            <Pagination
+              totalPost={resumeData.length}
+              postPerPage={postPerPage}
+              setCurrentPage={setCurrentPage}
+            />
           </aside>
         </main>
       </div>
