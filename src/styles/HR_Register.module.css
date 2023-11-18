@@ -25,7 +25,18 @@
 }
 
 .FullNameEmailContainer>label,
-.AddressPhoneNumberContainer>label {
+.AddressPhoneNumberContainer>label,
+.AddressPhoneNumberContainer>div {
+  flex: 1;
+}
+
+.AddressPhoneNumberContainer>div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.AddressPhoneNumberContainer>div>label {
   flex: 1;
 }
 

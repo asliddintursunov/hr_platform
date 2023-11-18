@@ -11,17 +11,17 @@ function ResumeList({ resumeData, seeResumeDetail }) {
           return (
             <div key={index} className={styles.resumeCard}>
               <div className={styles.resumeCardMajor}>
-                <h2>{resume.major}</h2>
+                <h2>{resume.major ? resume.major : 'Not available'}</h2>
               </div>
               <div className={styles.resumeCardSkills}>{resume.skills && resume.skills.slice(2, -1).map((skill, index) => <code key={index}>{skill}</code>)}</div>
               <div className={styles.resumeCardMore}>
                 <div className={styles.resumeCardUsername}>
                   <span>Username</span>
-                  <p>{resume.username}</p>
+                  <p>{resume.username ? resume.username : resume.fullname}</p>
                 </div>
                 <div className={styles.resumeCardExperience}>
                   <span>Experience</span>
-                  <h3>{resume.experience}</h3>
+                  <h3>{resume.experience ? resume.experience : 'Not available'}</h3>
                 </div>
                 <div className={styles.resumeCVCard}>
                   <span>Full Resume</span>

@@ -80,8 +80,8 @@ function _ConfirmPassword({
         {/* ======================== */}
 
         {/* ====== Password Chekcer Validation Starts ====== */}
-        {passwordMatchValue.length >= 1 && validPasswordMatchChecker === "Password Matches" && <i style={{ color: "green", fontSize: "1rem" }}>{validPasswordMatchChecker}</i>}
-        {passwordMatchValue.length >= 1 && validPasswordMatchChecker !== "Password Matches" && <i style={{ color: "red", fontSize: "1rem" }}>{validPasswordMatchChecker}</i>}
+        {passwordMatchValue.length >= 1 && validPasswordMatchChecker === "Password Mos Keldi" && <i style={{ color: "green", fontSize: "1rem" }}>{validPasswordMatchChecker}</i>}
+        {passwordMatchValue.length >= 1 && validPasswordMatchChecker !== "Password Mos Keldi" && <i style={{ color: "red", fontSize: "1rem" }}>{validPasswordMatchChecker}</i>}
         {/* ==================================== */}
       </label>
     </Fragment>

@@ -2,7 +2,7 @@ import '../Admin/Admin.css'
 import styles from "../../styles/HR_Register.module.css"
 import "@radix-ui/themes/styles.css"
 import axios from "axios"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState, useRef } from "react"
 import { Button, Text, TextField } from "@radix-ui/themes"
 import CandidateEducation from "./part/CandidateEducation"
 import CandidateMajor from "./part/CandidateMajor"
@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux"
 import { logoutUser } from "../../redux/features/userDataSlice"
 import AnotherUser from "../Modals/AnotherUser"
 import { UploadIcon } from "@radix-ui/react-icons"
+import PhoneInput from "react-phone-input-2"
+import "react-phone-input-2/lib/style.css"
 
 function HR_Register() {
   const navigate = useNavigate()
@@ -30,10 +32,13 @@ function HR_Register() {
   const [candidateEducation, setCandidateEducation] = useState([])
   const [major, setMajor] = useState("")
   const [candidateExperience, setCandidateExperience] = useState("0-1")
+  const [candidateBirthDate, setCandidateBirthDate] = useState("")
 
   const [customTechList, setCustomTechList] = useState([])
   const [skills, setSkills] = useState([])
   const [customTech, setCustomTech] = useState("Pascal")
+  const [candidateResume, setCandidateResume] = useState(null)
+
 
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
@@ -42,6 +47,18 @@ function HR_Register() {
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
   const [emptyFields, setEmptyFields] = useState(false)
+
+  const [percentage, setPercentage] = useState(0)
+  const full = useRef(null)
+  const value = useRef(0)
+  const [isOnProgress, setIsOnProgress] = useState(false)
+  const [isDone, setIsDone] = useState(false)
+
+  useEffect(
+    () => {
+      console.log(candidatePhoneNumber);
+    }, [candidatePhoneNumber]
+  )
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -99,7 +116,9 @@ function HR_Register() {
       candidateEducation.length > 0 &&
       major &&
       skills &&
-      candidateExperience) {
+      candidateExperience &&
+      candidateBirthDate
+    ) {
       // console.log(candidateEducation.length);
       setIsPending(true)
       setEmptyFields(false)
@@ -107,6 +126,7 @@ function HR_Register() {
         fullname: candidateFullName,
         email: candidateEmail,
         address: candidateAddress,
+        birth_date: candidateBirthDate,
         phone_number: candidatePhoneNumber,
         degree_general: candidateEducation,
         major: major,
@@ -161,6 +181,52 @@ function HR_Register() {
     }, []
   )
 
+  const progressBar = useCallback(() => {
+    let progress = setInterval(() => {
+      setIsOnProgress(true)
+      full.current = Math.floor(Math.random() * 10 + 1)
+
+      value.current += full.current
+
+      if (value.current >= 100) {
+        value.current = 100
+        setPercentage(value.current)
+        clearInterval(progress)
+        setIsDone(true)
+        setTimeout(() => {
+          setIsDone(false),
+            setIsOnProgress(false)
+        }, 1500)
+        console.log("Progress Done!")
+      } else {
+        setPercentage(value.current)
+      }
+    }, 100)
+
+    return () => {
+      if (value.current) {
+        clearInterval(progress)
+        value.current = null
+      }
+    }
+  }, [])
+
+  const handleUploadResume = (event) => {
+    const file = event.target.files[0]
+
+    localStorage.setItem("fileName", file.name)
+
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      const base64String = reader.result
+      setCandidateResume(base64String)
+    }
+    if (file) {
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
@@ -209,15 +275,31 @@ function HR_Register() {
                     onChange={(e) => setCandidateAddress(e.target.value)}
                   />
                 </Text>
-                <Text as="label">
-                  Phone Number
-                  <TextField.Input
-                    type="text"
-                    variant="surface"
-                    placeholder="+1 234 567 89 00"
-                    value={candidatePhoneNumber}
-                    onChange={(e) => setCandidatePhoneNumber(e.target.value)}
-                  />
+                <Text as="div">
+                  <Text as='label'>
+                    Phone Number
+                    <PhoneInput
+                      value={candidatePhoneNumber}
+                      style={{ width: '100%' }}
+                      country="uz"
+                      type="text"
+                      onChange={(e) => setCandidatePhoneNumber(e)}
+                      inputProps={{
+                        required: true
+                      }}
+                    />
+                  </Text>
+                  <Text as='label'>
+                    Date of Birth
+                    <TextField.Input
+                      type="date"
+                      variant="surface"
+                      placeholder="01/01/2000"
+                      value={candidateBirthDate}
+                      onChange={(e) => setCandidateBirthDate(e.target.value)}
+                    />
+
+                  </Text>
                 </Text>
               </div>
             </div>
@@ -237,12 +319,39 @@ function HR_Register() {
             <div className={styles.UploadResumeContainer}>
               <div>
                 <input
+                  style={{ width: '14rem' }}
                   type="file"
                   name="file"
                   id="file"
-                  className={styles.InputFile} />
+                  className={styles.InputFile}
+                  onChange={(file) => {
+                    handleUploadResume(file)
+                    full.current = null
+                    value.current = 0
+                    setIsOnProgress(false)
+                    setPercentage(0)
+                    setTimeout(() => {
+                      progressBar()
+                    }, 100)
+                  }}
+                />
                 <Button><UploadIcon /> Upload Resume</Button>
                 <Button onClick={sendCandidateData} className={styles.AddUser}>Send</Button>
+                <div
+                  style={{
+                    marginTop: '1rem',
+                    maxWidth: '30%',
+                  }}
+                >
+                  {isOnProgress && (
+                    <div className="p-bar-container">
+                      <div className="p-bar" style={{ width: percentage + "%" }}></div>
+                    </div>
+                  )}
+                  {isDone && (
+                    <span>Done😀</span>
+                  )}
+                </div>
               </div>
             </div>
           </div>

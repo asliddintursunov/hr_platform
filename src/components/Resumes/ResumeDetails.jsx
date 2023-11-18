@@ -86,35 +86,24 @@ function _ResumeDetails() {
               onClick={() => navigate(prevPage)}
             >Back <CaretLeftIcon /></Button>
             <h1>General Information</h1>
-            {userResumeData.fullname ? (
+            {userResumeData.fullname && (
               <div>Full Name: <Code>{userResumeData.fullname}</Code></div>
-            ) : (
-              <div>Full Name: <Code>Not Available</Code></div>
             )}
-            {userResumeData.username ? (
+            {userResumeData.username && (
               <div>Username: <Code>{userResumeData.username}</Code></div>
-            ) : (
-              <div>Username: <Code>Not Available</Code></div>
             )}
             {
-              userResumeData.email ? (
+              userResumeData.email && (
                 <div>Email: <Code>
                   <a href={`mailto:${userResumeData.email}`} className='text-decoration-none'>{userResumeData.email}</a>
                 </Code></div>
-              ) : (
-                <div>Email: <Code>Not Available</Code></div>
               )
             }
-            {userResumeData.address ? (
+            {userResumeData.address && (
               <div>Address: <Code>{userResumeData.address}</Code></div>
-            ) : (
-              <div>Address: <Code>Not Available</Code></div>
             )}
-            {userResumeData.date_birth ? (
+            {userResumeData.date_birth && (
               <div>Date of Birth: <Code>{userResumeData.date_birth}</Code></div>
-            ) : (
-              <div>Date of Birth: <Code>Not Available</Code></div>
-
             )}
             {
               Array.isArray(userResumeData.phone_number) ? (
@@ -145,7 +134,7 @@ function _ResumeDetails() {
               <div>Experience: <Code>Not Available</Code></div>
             )}
           </div>
-          {userResumeData.skills ? (
+          {userResumeData.skills > 0 ? (
             <div className={styles.userSkills}>
               <h1>Technologies, Skills</h1>
               <div>

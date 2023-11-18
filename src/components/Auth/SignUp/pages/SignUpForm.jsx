@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // Components
 import Username from "../../../Pages/Username"
@@ -51,7 +51,6 @@ function SignUpForm() {
   } = useConfirmPassword()
 
   const addNewUser = () => {
-    console.log(passwordValue === passwordMatchValue)
     if (passwordValue == passwordMatchValue) {
       axios
         .post(`${baseUrl}/register`, {
@@ -90,7 +89,7 @@ function SignUpForm() {
 
   return (
     <div className="sign-up-form-container" id="signUpContainer">
-      {confirmCodeOpen && (
+      {confirmCodeOpen && !isOpen && (
         <ConfirmationCode
           confirmCodeOpen={confirmCodeOpen}
           setConfirmCodeOpen={setConfirmCodeOpen}

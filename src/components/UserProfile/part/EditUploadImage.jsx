@@ -9,6 +9,7 @@ function UploadImage({ handleImageChange, changeProfile }) {
   const full = useRef(null)
   const value = useRef(0)
   const [isOnProgress, setIsOnProgress] = useState(false)
+  const [isDone, setIsDone] = useState(false)
 
   const progressBar = useCallback(() => {
     let progress = setInterval(() => {
@@ -21,6 +22,11 @@ function UploadImage({ handleImageChange, changeProfile }) {
         value.current = 100
         setPercentage(value.current)
         clearInterval(progress)
+        setIsDone(true)
+        setTimeout(() => {
+          setIsDone(false),
+            setIsOnProgress(false)
+        }, 1500)
         console.log("Progress Done!")
       } else {
         setPercentage(value.current)
@@ -57,6 +63,9 @@ function UploadImage({ handleImageChange, changeProfile }) {
         <div className="p-bar-container">
           <div className="p-bar" style={{ width: percentage + "%" }}></div>
         </div>
+      )}
+      {isDone && (
+        <span>Done😀</span>
       )}
     </div>
   )
