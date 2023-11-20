@@ -87,3 +87,7 @@
   line-height: 1;
   font-weight: 500;
 }
+
+.noBirthDay {
+  font-size: 3rem;
+}

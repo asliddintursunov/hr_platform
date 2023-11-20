@@ -4,7 +4,6 @@ import chartsSlice from "./features/chartsSlice";
 import chatWebSocketPlaceSlicer from "./features/chatWebSocketPlaceSlicer";
 import userDataSlice from "./features/userDataSlice";
 
-
 export const store = configureStore({
   reducer: {
     connection: userConnectionSlice,

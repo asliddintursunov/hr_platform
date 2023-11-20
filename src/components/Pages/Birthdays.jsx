@@ -49,6 +49,8 @@ function _Birthdays() {
   const [popupInfo, setPopupInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState('')
 
+  const fiveteenDays = []
+
   // Token Expired Validation
   const tokenExpired = useCallback((info) => {
     setIsOpen(true)
@@ -144,8 +146,14 @@ function _Birthdays() {
       leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current));
     }
   };
-
   dayTillBirthday()
+
+  leftDays.map((day) => {
+    if (day <= 15 && day >= 0) {
+      fiveteenDays.push(day)
+    }
+  })
+  console.log(fiveteenDays);
 
   const greenBackground = {
     background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
@@ -166,38 +174,53 @@ function _Birthdays() {
           <div className={`${styles.birthdaysContainer}`} >
             <Table.Root variant="surface">
               <Table.Header>
-                <Table.Row>
-                  <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Date Of Birth</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Day Left</Table.ColumnHeaderCell>
-                </Table.Row>
+                {fiveteenDays.length >= 1 ? (
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Date Of Birth</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Day Left</Table.ColumnHeaderCell>
+                  </Table.Row>
+                ) : (
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>Info</Table.ColumnHeaderCell>
+                  </Table.Row>
+                )}
               </Table.Header>
 
               <Table.Body>
-                {userBday && userBday.map((user, index) => {
-                  return (
-                    user.accepted && leftDays[index] <= 15 && leftDays[index] >= 0 && (
-                      <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
-                        <Table.Cell>
-                          <Avatar.Root className={styles.AvatarRoot}>
-                            <Avatar.Image className={styles.AvatarImage} src={user.profile_photo} />
-                            <Avatar.Fallback className={styles.AvatarFallback}>
-                              A
-                            </Avatar.Fallback>
-                          </Avatar.Root>
-                        </Table.Cell>
-                        <Table.Cell>{user.username}</Table.Cell>
-                        <Table.Cell>{user.date_birth}</Table.Cell>
-                        <Table.Cell>
-                          <Code>Birthday!</Code>
-                          {leftDays[index] <= 15 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
-                            leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay} text-center`}>Happy Birthday 🎉</h5> : null}
-                        </Table.Cell>
-                      </Table.Row>
-                    )
-                  )
-                })}
+                {fiveteenDays.length >= 1 && userBday ?
+                  (
+                    userBday.map((user, index) => {
+                      return (
+                        user.accepted && leftDays[index] <= 15 && leftDays[index] >= 0 && (
+                          <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
+                            <Table.Cell>
+                              <Avatar.Root className={styles.AvatarRoot}>
+                                <Avatar.Image className={styles.AvatarImage} src={user.profile_photo} />
+                                <Avatar.Fallback className={styles.AvatarFallback}>
+                                  A
+                                </Avatar.Fallback>
+                              </Avatar.Root>
+                            </Table.Cell>
+                            <Table.Cell>{user.username}</Table.Cell>
+                            <Table.Cell>{user.date_birth}</Table.Cell>
+                            <Table.Cell>
+                              <Code>Birthday!</Code>
+                              {leftDays[index] <= 15 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
+                                leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay} text-center`}>Happy Birthday 🎉</h5> : null}
+                            </Table.Cell>
+                          </Table.Row>
+                        )
+                      )
+                    })
+                  ) : (
+                    <Table.Row className={styles.noBirthDay}>
+                      <Table.Cell>
+                        No upcoming birthdays for now!
+                      </Table.Cell>
+                    </Table.Row>
+                  )}
               </Table.Body>
             </Table.Root>
           </div>}
