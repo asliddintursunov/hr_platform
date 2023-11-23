@@ -1,8 +1,9 @@
 import { Button } from "@radix-ui/themes"
 import styles from "../../styles/ResumeDetails.module.css"
-import { Cross1Icon } from "@radix-ui/react-icons"
+import { Cross1Icon, DownloadIcon } from "@radix-ui/react-icons"
 import { Document, pdfjs, Page } from "react-pdf"
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.js", import.meta.url).toString()
 
@@ -14,7 +15,6 @@ function ResumeFile({ resume, setOpenResume }) {
 
   useEffect(() => {
     onresize = (event) => {
-      console.log(event.target.innerWidth);
       if (event.target.innerWidth >= 1745 && event.target.innerWidth < 1920) setResumeHeight(600)
       if (event.target.innerWidth >= 1920 && event.target.innerWidth < 2133) setResumeHeight(650)
       if (event.target.innerWidth >= 2133 && event.target.innerWidth < 2400) setResumeHeight(700)
@@ -34,11 +34,17 @@ function ResumeFile({ resume, setOpenResume }) {
   }
 
   function onError(error) {
-    console.error('Error loading PDF:', error);
     setError('Failed to load the PDF. Please try again.');
   };
 
-  console.log(resume)
+  function handleDownloadFile() {
+    const link = document.createElement('a');
+    link.href = resume;
+    link.target = '_blank';
+    link.download = resume;
+    link.click();
+  }
+
   return (
     <div className={styles.ResumeFileBackdrop}>
       <div className={`${styles.ResumeFileContainer}`}>
@@ -66,6 +72,9 @@ function ResumeFile({ resume, setOpenResume }) {
             pageNumber={1}
             renderTextLayer={false}
             renderAnnotationLayer={false} />
+          <Button onClick={handleDownloadFile}>
+            Download <DownloadIcon />
+          </Button>
         </Document>
         <Button color="red" onClick={() => setOpenResume(false)}>
           <Cross1Icon />

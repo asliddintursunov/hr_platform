@@ -153,7 +153,6 @@ function _Birthdays() {
       fiveteenDays.push(day)
     }
   })
-  console.log(fiveteenDays);
 
   const greenBackground = {
     background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',

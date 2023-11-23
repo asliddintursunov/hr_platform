@@ -1,10 +1,8 @@
 import { useSelector } from "react-redux"
-import styles from "../../styles/Charts.module.css"
 import { allMajors } from "../../redux/features/chartsSlice"
 
 export function useBarChart() {
   const allMajorsData = useSelector(allMajors)
-  console.log(allMajorsData);
   const responseData = {
     DesignDev: allMajorsData.DesignDev,
     DesktopDev: allMajorsData.DesktopDev,

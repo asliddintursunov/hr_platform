@@ -13,20 +13,32 @@ function EditUniversity({ education, setEducation, changeProfile }) {
 
   const [universityName, setUniversityName] = useState("")
   const [universityLocation, setUniversityLocation] = useState("")
+  const [isFilled, setIsFilled] = useState(false)
+
+  useEffect(
+    () => {
+      if (degree !== '' && universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
+        setIsFilled(true)
+      }
+      else {
+        setIsFilled(false)
+      }
+    }, [
+    degree, universityMajor, fromYear, toYear, universityName, universityLocation
+  ]
+  )
 
   const addEducation = () => {
     if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
-      setEducation([
-        ...education,
-        {
-          degree,
-          universityMajor,
-          fromYear,
-          toYear,
-          universityName,
-          universityLocation
-        }
-      ])
+      setEducation((education) => [...education,
+      {
+        degree,
+        universityMajor,
+        fromYear,
+        toYear,
+        universityName,
+        universityLocation
+      }])
       setDegree("bacheloer")
       setUniversityMajor("")
       setFromYear(0)
@@ -34,8 +46,6 @@ function EditUniversity({ education, setEducation, changeProfile }) {
       setUniversityName("")
       setUniversityLocation("")
       setStillStudying(false)
-    } else {
-      alert("Please fill all the fields")
     }
   }
   useEffect(
@@ -134,7 +144,7 @@ function EditUniversity({ education, setEducation, changeProfile }) {
         <Button
           className={styles.AddEducationButton}
           onClick={addEducation}
-          disabled={!changeProfile}
+          disabled={!isFilled}
         >
           <PlusIcon />
         </Button>
@@ -153,8 +163,8 @@ function EditUniversity({ education, setEducation, changeProfile }) {
           </Table.Header>
 
           <Table.Body>
-            {education.map((edu) => (
-              <Table.Row>
+            {education.map((edu, index) => (
+              <Table.Row key={index}>
                 <Table.Cell>{edu.degree}</Table.Cell>
                 <Table.Cell>{edu.universityMajor}</Table.Cell>
                 <Table.Cell>

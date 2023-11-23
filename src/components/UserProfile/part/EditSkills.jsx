@@ -124,21 +124,20 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
           <Text as='div' mt='4' className={styles.TechListContainer}>
             {customTechList.length > 0 && customTechList.map((tech) => {
               return (
-                <Text as="div" key={tech} className={styles.techCard} style={{ border: !changeProfile && '1px solid red' }}>
+                <Text as="div" key={tech} className={styles.techCard} style={{ border: !changeProfile && '1px solid gray' }}>
                   <Text as="span" size="3" weight="bold">
                     {tech}
                   </Text>
-                  <Button
+                  {changeProfile && <Button
                     color="red"
                     size="small"
                     className={styles.CustomTechDeleteButton}
                     onClick={() => {
                       handleDeleteCustomTech(tech)
                     }}
-                    disabled={!changeProfile}
                   >
                     &times;
-                  </Button>
+                  </Button>}
                 </Text>
               )
             })}

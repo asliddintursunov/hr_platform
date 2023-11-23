@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import styles from "../../styles/Chat.module.css"
 import useURL from "../../hooks/useURL"
 import { useSelector } from "react-redux"
+import { Button } from "@radix-ui/themes"
 
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
 	const socketInstance = useSelector((state) => state.connection.socketInstance)
@@ -151,7 +152,15 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
 
 			<form className={styles.chatInputPart} onSubmit={(e) => e.preventDefault()} style={showUsers ? { right: "11.9rem" } : null}>
 				<input type="text" className="form-control" onChange={(e) => setSenderText(e.target.value)} value={senderText} />
-				<button type="submit" onClick={() => textSend()}>
+				<button type="submit" onClick={() => textSend()} style={{
+					backgroundColor: "royalblue",
+					color: "#fff",
+					border: "none",
+					paddingLeft: "1.6rem",
+					paddingRight: "1.6rem",
+					fontWeight: "bold",
+					borderRadius: "4px",
+				}}>
 					Send
 				</button>
 			</form>

@@ -54,12 +54,6 @@ function HR_Register() {
   const [isOnProgress, setIsOnProgress] = useState(false)
   const [isDone, setIsDone] = useState(false)
 
-  useEffect(
-    () => {
-      console.log(candidatePhoneNumber);
-    }, [candidatePhoneNumber]
-  )
-
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {
@@ -117,9 +111,9 @@ function HR_Register() {
       major &&
       skills &&
       candidateExperience &&
-      candidateBirthDate
+      candidateBirthDate &&
+      candidateResume
     ) {
-      // console.log(candidateEducation.length);
       setIsPending(true)
       setEmptyFields(false)
       axios.post(`${baseUrl + '/resumes'}`, {
@@ -132,6 +126,7 @@ function HR_Register() {
         major: major,
         skills: skills,
         experience: candidateExperience,
+        resume: candidateResume,
       }, {
         headers: {
           'X-UserRole': memberRole,
@@ -139,11 +134,9 @@ function HR_Register() {
         }
       })
         .then((res) => {
-          console.log(res);
           success(res.data)
         })
         .catch((err) => {
-          console.log(err)
           if (err.response.data.msg) {
             tokenExpired(err.response.data.msg)
           } else if (err.response.status === 401) {
@@ -167,7 +160,7 @@ function HR_Register() {
         }
       })
         .then((res) => {
-          console.log(res);
+          console.log(res.status);
         })
         .catch((err) => {
           if (err.response.data.msg) {
@@ -197,7 +190,6 @@ function HR_Register() {
           setIsDone(false),
             setIsOnProgress(false)
         }, 1500)
-        console.log("Progress Done!")
       } else {
         setPercentage(value.current)
       }
@@ -320,6 +312,7 @@ function HR_Register() {
               <div>
                 <input
                   style={{ width: '14rem' }}
+                  accept="application/pdf"
                   type="file"
                   name="file"
                   id="file"

@@ -28,7 +28,6 @@ function EditResume({ handleResumeChange, changeProfile }) {
 					setIsDone(false),
 						setIsOnProgress(false)
 				}, 1500)
-				console.log("Progress Done!")
 			} else {
 				setPercentage(value.current)
 			}

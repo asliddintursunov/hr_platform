@@ -13,7 +13,7 @@ function Pagination({ totalPost, postPerPage, setCurrentPage }) {
           <Button
             key={index}
             onClick={() => setCurrentPage(page)}
-            variant='soft'
+            variant='outline'
             mx='2'
             my='2'
           >

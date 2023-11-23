@@ -215,6 +215,7 @@ function UpdateProfile() {
       .then((res) => {
         const settedSkills = [...new Set(res.data.skills)]
         const remainigSkills = settedSkills.filter((item) => !UserSkills.includes(item))
+        console.log(res);
 
         setCustomTechList(remainigSkills)
         setJoined(res.data.joined)
@@ -232,8 +233,8 @@ function UpdateProfile() {
         setExperience(res.data.experience)
         setSkills(settedSkills)
         setIsPending(false)
-        // setBio(res.data.bio)
-        // setEducation(res.data.education)
+        setBio(res.data.about)
+        setEducation(res.data.degree_general)
       })
       .catch((err) => {
         if (err.response.data.msg) {
@@ -253,7 +254,7 @@ function UpdateProfile() {
 
   // Save Edition === Working
   const saveEdition = useCallback(() => {
-
+    console.log(education);
     axios
       .patch(
         `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
@@ -271,8 +272,8 @@ function UpdateProfile() {
           major: data.major !== major ? major : undefined,
           experience: data.experience !== experience ? experience : undefined,
           skills: data.skills !== skills ? skills : undefined,
-          // bio: data.bio !== bio ? bio : undefined,
-          // education: education
+          about: data.about !== bio ? bio : undefined,
+          degree_general: education
         },
         {
           headers: {
@@ -300,7 +301,10 @@ function UpdateProfile() {
           setPopupInfo(err.response.data)
         }
       })
-  }, [fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage, numbers, data, major, experience, skills, userResume])
+  }, [
+    fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage,
+    numbers, data, major, experience, skills, userResume, education, bio
+  ])
 
   // Log Out === Working
   const logOut = () => {

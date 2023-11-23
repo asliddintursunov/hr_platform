@@ -7,7 +7,7 @@ import { logoutUser } from "../../redux/features/userDataSlice"
 import { useDispatch, useSelector } from "react-redux"
 import AnotherUser from "../Modals/AnotherUser"
 import PopUp from "../Modals/PopUp"
-import { Button, Text, Flex } from "@radix-ui/themes"
+import { Text, Flex } from "@radix-ui/themes"
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import ResumeList from "./ResumeList"
@@ -65,6 +65,13 @@ function Resumes() {
   const [postPerPage, setPostPerPage] = useState(7)
   const lastPostIndex = currentPage * postPerPage;
   const firstPostIndex = lastPostIndex - postPerPage;
+
+  useEffect(
+    () => {
+      console.log(optn)
+      console.log(baseUrl + '/' + optn)
+    }, [optn]
+  )
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -185,10 +192,8 @@ function Resumes() {
       )
       .then((res) => {
         setResumeData(res.data.results)
-        console.log(res.data.results);
       })
       .catch((err) => {
-        console.log(err)
         if (err.response.data.msg) {
           setWrongUser(true)
           tokenExpired(err.response.data.msg)
@@ -206,7 +211,6 @@ function Resumes() {
   }
 
   const currentPosts = resumeData.slice(firstPostIndex, lastPostIndex)
-
   return (
     <>
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
@@ -261,7 +265,6 @@ function Resumes() {
                               name="searchOptions"
                               value={option}
                               onChange={(e) => {
-                                console.log(selectedOption, option)
                                 setOptn(e.target.value)
                                 setSelectedOption(e.target.value)
                               }}
@@ -304,7 +307,6 @@ function Resumes() {
                               name="skills"
                               value={type.split("-")[0]}
                               onChange={(e) => {
-                                console.log(selectedSkill, type.split("-")[0])
                                 MajorStudy(e.target.value)
                                 setSelectedSkill(e.target.value)
                               }}
@@ -337,7 +339,6 @@ function Resumes() {
                               name="workexperience"
                               value={type}
                               onChange={(e) => {
-                                console.log(selectedExperience, type)
                                 ExperienceYears(e.target.value)
                                 setSelectedExperience(e.target.value)
                               }}
