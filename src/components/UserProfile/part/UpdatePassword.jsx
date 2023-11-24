@@ -22,9 +22,11 @@ function UpdatePassword({
   const [isOpened, setIsOpened] = useState(false)
   const [popUpInfo, setPopUpInfo] = useState('')
   const [errorOccured, setErrorOccured] = useState(false)
+  const [isPending, setIsPending] = useState(false)
 
   const handleChangePassword = function (e) {
     e.preventDefault();
+    setIsPending(true)
     axios.post(
       baseUrl + '/change_password/' + memberId, {
       old_password: oldPassword,
@@ -37,6 +39,7 @@ function UpdatePassword({
         },
       })
       .then((res) => {
+        setIsPending(false)
         setTimeout(() => {
           setChangePassword(false)
         }, 1200);
@@ -48,6 +51,7 @@ function UpdatePassword({
         setErrorOccured(false)
       })
       .catch((err) => {
+        setIsPending(false)
         setChangePassword(true)
         setOldPassword('')
         setPasswordValue('')
@@ -59,9 +63,14 @@ function UpdatePassword({
   }
   return (
     <>
-      {isOpened && <PopUp setIsOpen={setIsOpened} errorOccured={errorOccured} popupInfo={popUpInfo} />}
-      {!isOpened && <div className={styles.PopUpWrapper}>
-        <div className={styles.PopUpContainer}>
+      {isPending && <div className={styles.Loader}>
+        <div></div>
+      </div>}
+      {isOpened && !isPending && <PopUp setIsOpen={setIsOpened} errorOccured={errorOccured} popupInfo={popUpInfo} />}
+      {!isOpened && !isPending && <div className={styles.PopUpWrapper}>
+        <div className={styles.PopUpContainer} style={{
+          blur: isPending ? 'blur(5px)' : 'none',
+        }}>
           <div className={styles.PopUpHeader}>
             <span>Update password</span>
             <span>Update your password here. Click save when you're done.</span>
