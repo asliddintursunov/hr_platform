@@ -14,12 +14,6 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
   const [universityLocation, setUniversityLocation] = useState("")
   const [emptyFields, setEmptyFields] = useState(false)
 
-  // const currentYear = new Date().getFullYear();
-  // const startYear = currentYear - 50;
-  // const yearsArray = Array.from({ length: currentYear - startYear + 1 }, (_, index) => startYear + index);
-  // console.log(yearsArray);
-
-
   const addEducation = () => {
     if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
       setCandidateEducation([
@@ -88,17 +82,6 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
                 placeholder="2017"
                 onChange={(e) => setFromYear(Number(e.target.value))}
                 value={fromYear <= 0 ? "" : fromYear} />
-              {/* <Select.Root defaultValue="2017" onValueChange={(e) => setFromYear(e)}>
-                <Text as="label">From</Text>
-                <Select.Trigger />
-                <Select.Content position="popper">
-                  {yearsArray.map((year) => {
-                    return (
-                      <Select.Item value={year}>{year}</Select.Item>
-                    )
-                  })}
-                </Select.Content>
-              </Select.Root> */}
             </Text>
             <Text as="label">
               To

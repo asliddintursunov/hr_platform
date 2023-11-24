@@ -24,8 +24,8 @@ function EditEmail({ emailValue, setEmailValue, validEmailChecker,
           id='email'
           name='email'
           required />
-        {emailValue.length >= 1 && emailFocus && validEmailChecker === 'Valid Email' && <i style={{ color: 'green' }}>{validEmailChecker}</i>}
-        {emailValue.length >= 1 && emailFocus && validEmailChecker === 'Invalid Email' && <i style={{ color: 'red' }}>{validEmailChecker}</i>}
+        {emailValue.length >= 1 && emailFocus && validEmailChecker === 'Valid Email' && <i style={{ color: 'green', fontSize: '1.2rem' }}>{validEmailChecker}</i>}
+        {emailValue.length >= 1 && emailFocus && validEmailChecker !== 'Valid Email' && <i style={{ color: 'red', fontSize: '1.2rem' }}>{validEmailChecker}</i>}
       </div>
     </Fragment>
   )

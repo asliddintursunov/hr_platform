@@ -180,10 +180,13 @@
 
 .passwordChanger>div i {
   position: absolute;
-  right: 1rem;
-  top: 2.5rem;
+  right: 0;
+  top: 2.4rem;
+  padding-left: 0.5rem;
   font-size: x-large;
   color: royalblue;
+  background: #fff;
+  cursor: pointer;
 }
 
 /* Phone Number */
@@ -295,11 +298,9 @@
   border: none;
   border-bottom: 1px solid #333;
   padding-top: 0.4rem;
-  color: rgb(112, 112, 112);
 }
 
 .inputContainer>textarea {
-  color: gray;
   border-radius: 2px;
   outline: none;
   border: 1px solid gray;
@@ -654,4 +655,21 @@
   border-radius: 4px;
   outline: 2px solid orangered;
   outline-offset: 2px;
+}
+
+.changePasswordBtn {
+  background-color: rgb(93, 123, 212);
+  border: 1px solid royalblue;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.changePasswordBtn:hover {
+  background-color: transparent;
+  border: 1px solid royalblue;
+  color: royalblue;
 }

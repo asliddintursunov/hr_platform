@@ -46,7 +46,6 @@ function Sign_In_Form() {
       .catch((err) => {
         setIsOpen(true)
         setErrorOccured(true)
-        console.log(err)
         setPopupInfo(err.response.data.message)
       })
   }

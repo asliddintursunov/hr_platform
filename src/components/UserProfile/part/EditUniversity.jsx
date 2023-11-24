@@ -48,11 +48,6 @@ function EditUniversity({ education, setEducation, changeProfile }) {
       setStillStudying(false)
     }
   }
-  useEffect(
-    () => {
-      { console.log(education) }
-    }, [education]
-  )
   return (
     <div>
       <div className={styles.AddUniversityContainer}>

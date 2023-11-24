@@ -40,11 +40,6 @@ function About() {
         })
         .then((req) => {
           req.data.map((user) => {
-            // if (user.accepted) {
-            //   setAcceptedUsers((prev) => prev += 1)
-            // } else if (!data.accepted && data.approved) {
-            //   setWaitingUsers((prev) => prev += 1)
-            // }
             if (
               !user.accepted && user.approved
             ) {
@@ -83,21 +78,12 @@ function About() {
   return (
     <div className={`text-center ${styles.aboutPage} pageAnimation`}>
       <div style={{ gap: '2rem' }}>
-        {!closeNav && <div className={styles.registeredUsersContiner}>
-          {/* {acceptedUsers !== undefined && acceptedUsers !== 0 && (
-            <div>
-              <Blockquote>
-                <Link to='/landing/admin/admin/accepted'>{acceptedUsers} users are accepted!</Link>
-              </Blockquote>
-            </div>
-          )} */}
-          {waitingUsers !== undefined && waitingUsers !== 0 && (
-            <div className={styles.waitingUsersNav}>
-              <Blockquote>
-                <Link to='/landing/admin/admin/waitingusers'>{waitingUsers} users are waiting for acception!</Link>
-              </Blockquote>
-            </div>
-          )}
+        {!closeNav && waitingUsers !== undefined && waitingUsers !== 0 && <div className={styles.registeredUsersContiner}>
+          <div className={styles.waitingUsersNav}>
+            <Blockquote>
+              <Link to='/landing/admin/admin/waitingusers'>{waitingUsers} users are waiting for acception!</Link>
+            </Blockquote>
+          </div>
           <Button className={styles.waitingUsersNavClose} color='red' variant='soft' mr='2' onClick={() => setCloseNav(true)}> <Cross1Icon /> </Button>
         </div>}
         <div className={styles.basicStatsContainer}>

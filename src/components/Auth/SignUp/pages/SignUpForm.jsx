@@ -60,14 +60,12 @@ function SignUpForm() {
           confirm_password: passwordMatchValue
         })
         .then((req) => {
-          console.log(req)
           setConfirmCodeOpen(true)
           setErrorOccured(false)
           setPopupInfo(req.data.message)
           localStorage.setItem("new_username", req.data.username)
         })
         .catch((err) => {
-          console.log(err)
           setIsOpen(true)
           setErrorOccured(true)
           if (typeof err.response.data !== "object") {

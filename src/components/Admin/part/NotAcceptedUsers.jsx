@@ -58,7 +58,6 @@ function NotAcceptedUsers() {
         }
       })
       .then((req) => {
-        console.log(req.data)
         setDatas(req.data)
         setIsPending(false)
       })
@@ -138,7 +137,6 @@ function NotAcceptedUsers() {
         }
       })
       .then((res) => {
-        console.log(res.data)
         setPopupInfo(res.data)
         setIsOpen(true)
         setErrorOccured(false)

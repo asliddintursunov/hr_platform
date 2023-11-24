@@ -1,7 +1,6 @@
 import { Fragment } from "react"
 import styles from '../../../styles/EditProfile.module.css'
 import { Text } from "@radix-ui/themes"
-import * as Form from '@radix-ui/react-form'
 /* eslint-disable react/prop-types */
 function EditUserName({ usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus,
   usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle, changeProfile }) {

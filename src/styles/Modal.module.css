@@ -1,0 +1,75 @@
+.PopUpWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.PopUpContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 6px;
+  padding: 2rem 3rem;
+  box-sizing: border-box;
+  overflow: auto;
+  z-index: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 2rem;
+  max-width: 450px;
+  animation: UpdatePasswordPopUp 0.2s ease-in-out;
+}
+
+@keyframes UpdatePasswordPopUp {
+  from {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.PopUpHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 1rem;
+}
+
+.PopUpHeader>span:first-child {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.PopUpHeader>span:last-child {
+  font-size: 1.5rem;
+  color: gray;
+  font-weight: 400;
+}
+
+.InputContainer {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
+}
+
+.InputContainer>button:last-child {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

@@ -17,7 +17,6 @@ import { baseUrl } from "../../utils/api"
 import EditFullName from "./part/EditFullName"
 import EditUserName from "./part/EditUserName"
 import EditEmail from "./part/EditEmail"
-import EditPassword from "./part/EditPassword"
 import EditAddress from "./part/EditAddress"
 import EditDateOfBirth from "./part/EditDateOfBirth"
 import EditUploadImage from "./part/EditUploadImage"
@@ -31,6 +30,7 @@ import EditExperience from "./part/EditExperience"
 import EditResume from "./part/EditResume"
 import AnotherUser from "../Modals/AnotherUser"
 import EditUniversity from "./part/EditUniversity"
+import UpdatePassword from "./part/UpdatePassword"
 
 const ButtonFunction = (props) => {
   return (
@@ -68,6 +68,14 @@ const ButtonFunction = (props) => {
             Cancel Edition
           </button>
         )}
+        <button
+          className={`btn ${styles.changePasswordBtn}`}
+          onClick={() => {
+            props.setChangePassword(true)
+          }}
+        >
+          Change <br /> Password
+        </button>
       </div>
     </div>
   )
@@ -99,9 +107,11 @@ function UpdateProfile() {
   const [data, set_data] = useState({})
   const [joined, setJoined] = useState("")
   const [bio, setBio] = useState("")
+  const [oldPassword, setOldPassword] = useState("")
 
   // Disable && Enable inputs
   const [changeProfile, setChangeProfile] = useState(false)
+  const [changePassword, setChangePassword] = useState(false)
 
   // Add Phone Number
   const [numbers, setNumbers] = useState([])
@@ -215,7 +225,6 @@ function UpdateProfile() {
       .then((res) => {
         const settedSkills = [...new Set(res.data.skills)]
         const remainigSkills = settedSkills.filter((item) => !UserSkills.includes(item))
-        console.log(res);
 
         setCustomTechList(remainigSkills)
         setJoined(res.data.joined)
@@ -232,9 +241,9 @@ function UpdateProfile() {
         setMajor(res.data.major)
         setExperience(res.data.experience)
         setSkills(settedSkills)
-        setIsPending(false)
         setBio(res.data.about)
         setEducation(res.data.degree_general)
+        setIsPending(false)
       })
       .catch((err) => {
         if (err.response.data.msg) {
@@ -254,16 +263,15 @@ function UpdateProfile() {
 
   // Save Edition === Working
   const saveEdition = useCallback(() => {
-    console.log(education);
     axios
       .patch(
         `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
         {
           fullname: data.fullname !== fullName ? fullName : undefined,
-          // username: data.username !== usernameValue ? usernameValue : undefined,
           username: usernameValue,
           email: data.email !== emailValue ? emailValue : undefined,
-          password: passwordValue !== "" ? passwordValue : undefined,
+          // new_password: passwordValue !== "" ? passwordValue : undefined,
+          // old_password: oldPassword !== "" ? oldPassword : undefined,
           address: data.address !== address ? address : undefined,
           date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
           phone_number: data.phone_number !== numbers ? numbers : undefined,
@@ -302,7 +310,7 @@ function UpdateProfile() {
         }
       })
   }, [
-    fullName, usernameValue, emailValue, passwordValue, address, dateOfBirth, selectedImage,
+    fullName, usernameValue, emailValue, address, dateOfBirth, selectedImage,
     numbers, data, major, experience, skills, userResume, education, bio
   ])
 
@@ -361,7 +369,12 @@ function UpdateProfile() {
       {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
       {!isPending && (
         <div className={`container ${styles.userProfileContainer} pageAnimation`}>
-          <ButtonFunction toggleModal={toggleModal} changeProfile={changeProfile} setChangeProfile={setChangeProfile} saveEdition={saveEdition} CancleEdition={CancleEdition} />
+          <ButtonFunction
+            toggleModal={toggleModal} changeProfile={changeProfile}
+            setChangeProfile={setChangeProfile} saveEdition={saveEdition}
+            CancleEdition={CancleEdition}
+            changePassword={changePassword} setChangePassword={setChangePassword}
+          />
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
             <div className={styles.profileUpdateHeader}>
@@ -429,18 +442,6 @@ function UpdateProfile() {
                           changeProfile={changeProfile}
                         />
                         <EditBio changeProfile={changeProfile} bio={bio} setBio={setBio} />
-                        <EditPassword
-                          passwordValue={passwordValue}
-                          setPasswordValue={setPasswordValue}
-                          validPasswordChecker={validPasswordChecker}
-                          passwordTrue={passwordTrue}
-                          setPasswordTrue={setPasswordTrue}
-                          passwordType={passwordType}
-                          setPasswordType={setPasswordType}
-                          passwordChecker={passwordChecker}
-                          passwordInputStyle={passwordInputStyle}
-                          changeProfile={changeProfile}
-                        />
                         <EditAddress changeProfile={changeProfile} address={address} setAddress={setAddress} />
                         <EditDateOfBirth changeProfile={changeProfile} dateOfBirth={dateOfBirth} setDateOfBirth={setDateOfBirth} />
                       </div>
@@ -482,6 +483,21 @@ function UpdateProfile() {
           </div>
         </div>
       )}
+      {changePassword && <UpdatePassword
+        passwordValue={passwordValue}
+        setPasswordValue={setPasswordValue}
+        validPasswordChecker={validPasswordChecker}
+        passwordTrue={passwordTrue}
+        setPasswordTrue={setPasswordTrue}
+        passwordType={passwordType}
+        setPasswordType={setPasswordType}
+        passwordChecker={passwordChecker}
+        passwordInputStyle={passwordInputStyle}
+        changeProfile={changeProfile}
+        oldPassword={oldPassword}
+        setOldPassword={setOldPassword}
+        setChangePassword={setChangePassword}
+      />}
     </>
   )
 }

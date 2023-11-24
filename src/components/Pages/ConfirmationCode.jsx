@@ -24,10 +24,8 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
     },
     )
       .then(req => {
-        console.log(req);
         setRemindEmailCode(false)
         if (req.status === 202) {
-          console.log(202, req);
           setConfirmCodeOpen(true)
 
           setErrorOccured(true)
@@ -35,7 +33,6 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
           setPopupInfo(req.data)
         }
         if (req.status === 200) {
-          console.log(200, req);
           setConfirmCodeOpen(false)
 
           setErrorOccured(false)
@@ -56,7 +53,6 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
         }
       })
       .catch(err => {
-        console.log(err);
         if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
@@ -75,14 +71,6 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
     setConfirmEmailCode('')
 
     sendEmailCode()
-    console.log(confirmEmailCode)
-  }
-
-  const ClickCloseBtn = () => {
-    setConfirmEmailCode('')
-
-    setConfirmCodeOpen(false)
-    console.log(confirmEmailCode);
   }
 
   return (
@@ -98,7 +86,6 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
           <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
           <button type='submit' className="btn btn-primary sendBtn" onClick={() => { ClickSendBtn() }
           }>Send</button>
-          {/* <button onClick={() => { ClickCloseBtn() }} className='btn closeBtn'><i className="bi bi-x-lg"></i></button> */}
         </form>}
       </div>
     </>

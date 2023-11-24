@@ -218,3 +218,7 @@ hr:nth-child(2) {
   font-size: 1.2rem;
   font-weight: bold;
 }
+
+.input-container input {
+  max-width: 400px;
+}

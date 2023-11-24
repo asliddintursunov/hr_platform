@@ -127,9 +127,11 @@ hr:nth-child(2) {
   font-size: large;
   position: absolute;
   right: 0.5rem;
-  top: 0.5rem;
+  top: 0.8rem;
   padding: 0.5rem;
   color: royalblue;
+  background: #fff;
+  cursor: pointer;
 }
 
 .sign-in-btn {
@@ -200,4 +202,8 @@ hr:nth-child(2) {
 .sign-in-form-container a {
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+.input-container input {
+  max-width: 400px;
 }

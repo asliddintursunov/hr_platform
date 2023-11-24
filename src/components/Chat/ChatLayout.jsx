@@ -81,7 +81,6 @@ function ChatLayout() {
     })
       .then((res) => setOneUserData(res.data))
       .catch((err) => {
-        console.log(err);
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         }
