@@ -30,7 +30,7 @@ function Resumes() {
   const [skills, setSkills] = useState([])
   const [experience, setExperience] = useState("")
   const [major, setMajor] = useState("")
-  const [optn, setOptn] = useState("all")
+  const [optn, setOptn] = useState("")
 
   const [resumeData, setResumeData] = useState([])
 
@@ -46,7 +46,7 @@ function Resumes() {
     'Data Science-developer', 'DevOps-developer', 'QA-developer', 'Security-developer', 'Intern-developer', 'Other-developer'
   ]
   const SearchOptions = [
-    "all", 'registered', 'notregistered'
+    "all", 'users', 'candidates'
   ]
 
   const [wrongUser, setWrongUser] = useState(false)
@@ -54,7 +54,7 @@ function Resumes() {
 
   const [selectedSkill, setSelectedSkill] = useState(null)
   const [selectedExperience, setSelectedExperience] = useState(null)
-  const [selectedOption, setSelectedOption] = useState("all")
+  const [selectedOption, setSelectedOption] = useState(null)
 
 
   const [isOpen, setIsOpen] = useState(false)
@@ -93,6 +93,7 @@ function Resumes() {
       .post(
         `${baseUrl}/search`,
         {
+          resumes: optn === "all" ? "all" : optn,
           skills: skills.length === 0 ? undefined : skills,
           major: major === "" ? undefined : major,
           experience: experience === "" ? undefined : experience
@@ -121,17 +122,18 @@ function Resumes() {
   const seeAllResumes = () => {
     setSelectedSkill(null)
     setSelectedExperience(null)
-    setSelectedOption("all")
+    setSelectedOption(null)
     setSkills([])
     setMajor("")
     setResumeData([])
     setExperience("")
-    setOptn("all")
+    setOptn("")
 
     axios
       .post(
         `${baseUrl}/search`,
         {
+          resumes: undefined,
           skills: undefined,
           major: undefined,
           experience: undefined
