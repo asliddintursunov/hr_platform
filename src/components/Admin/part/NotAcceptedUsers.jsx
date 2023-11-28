@@ -14,6 +14,7 @@ import AnotherUser from "../../Modals/AnotherUser"
 import { Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
+import InternalError from "../../Modals/InternalError"
 
 function NotAcceptedUsers() {
   const memberRole = localStorage.getItem("userRole")
@@ -32,6 +33,8 @@ function NotAcceptedUsers() {
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
+
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -62,6 +65,10 @@ function NotAcceptedUsers() {
         setIsPending(false)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -106,6 +113,10 @@ function NotAcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -142,6 +153,10 @@ function NotAcceptedUsers() {
         setErrorOccured(false)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -157,7 +172,8 @@ function NotAcceptedUsers() {
   }
 
   return (
-    <Fragment>
+    <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {showAcceptModal && <AcceptUserModal toggleAcceptModal={toggleAcceptModal} AddUser={AddUser} />}
       {showRejectModal && <RejectUserModal toggleRejectModal={toggleRejectModal} RejectUser={RejectUser} />}
@@ -165,61 +181,60 @@ function NotAcceptedUsers() {
       <div className={`${styles.acceptedUsersContainer}`} style={{ filter: showRejectModal || showAcceptModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
         {isPending && <div className="loaderr"></div>}
 
-        {!isPending && (<Table.Root variant="surface">
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Accept</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
-            </Table.Row>
-          </Table.Header>
+        {!isPending && (
+          <Table.Root variant="surface">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Accept</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
 
-          <Table.Body>
-            {datas &&
-              datas.map((data) => {
-                return (
-                  !data.accepted &&
-                  data.approved && (
-                    <Table.Row key={data.id}>
-                      <Table.RowHeaderCell>
-                        <Strong>{data.id}</Strong>
-                      </Table.RowHeaderCell>
-                      <Table.Cell>
-                        <Avatar.Root className={styles.AvatarRoot}>
-                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
-                          <Avatar.Fallback className={styles.AvatarFallback}>
-                            A
-                          </Avatar.Fallback>
-                        </Avatar.Root>
-                      </Table.Cell>
-                      <Table.Cell>{data.username}</Table.Cell>
-                      <Table.Cell>{data.email}</Table.Cell>
-                      <Table.Cell>
-                        {!data.accepted && (
-                          <Button color="grass" variant="soft" className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
-                            <i className="bi bi-check-square-fill"></i>
-                          </Button>
-                        )}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {!data.accepted && (
-                          <Button color="red" variant="soft" className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
-                            <i className="bi bi-trash3-fill"></i>
-                          </Button>
-                        )}
-                      </Table.Cell>
-                    </Table.Row>
+            <Table.Body>
+              {datas &&
+                datas.map((data) => {
+                  return (
+                    !data.accepted &&
+                    data.approved && (
+                      <Table.Row key={data.id}>
+                        <Table.RowHeaderCell>
+                          <Strong>{data.id}</Strong>
+                        </Table.RowHeaderCell>
+                        <Table.Cell>
+                          <Avatar.Root className={styles.AvatarRoot}>
+                            <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                            <Avatar.Fallback className={styles.AvatarFallback}>A</Avatar.Fallback>
+                          </Avatar.Root>
+                        </Table.Cell>
+                        <Table.Cell>{data.username}</Table.Cell>
+                        <Table.Cell>{data.email}</Table.Cell>
+                        <Table.Cell>
+                          {!data.accepted && (
+                            <Button color="grass" variant="soft" className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
+                              <i className="bi bi-check-square-fill"></i>
+                            </Button>
+                          )}
+                        </Table.Cell>
+                        <Table.Cell>
+                          {!data.accepted && (
+                            <Button color="red" variant="soft" className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
+                              <i className="bi bi-trash3-fill"></i>
+                            </Button>
+                          )}
+                        </Table.Cell>
+                      </Table.Row>
+                    )
                   )
-                )
-              })}
-          </Table.Body>
-        </Table.Root>
+                })}
+            </Table.Body>
+          </Table.Root>
         )}
       </div>
-    </Fragment>
+    </>
   )
 }
 

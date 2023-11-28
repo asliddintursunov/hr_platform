@@ -1,29 +1,41 @@
-import { InputNumber } from 'primereact/inputnumber';
-import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { InputNumber } from "primereact/inputnumber"
+import { useCallback, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
 import "../../styles/PopUp.css"
-
-import { baseUrl } from '../../utils/api';
+import { baseUrl } from "../../utils/api"
 import AnotherUser from "../Modals/AnotherUser"
+import InternalError from "../Modals/InternalError"
 
-function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, setConfirmEmailCode, confirmEmailCode,
-  setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setIsOpen, setPopupInfo, setErrorOccured, usernameValue }) {
-
+function _ConfirmationCode({
+  confirmCodeOpen,
+  setConfirmCodeOpen,
+  popupInfo,
+  setConfirmEmailCode,
+  confirmEmailCode,
+  setUsernameValue,
+  setEmailValue,
+  setPasswordValue,
+  setPasswordMatchValue,
+  setIsOpen,
+  setPopupInfo,
+  setErrorOccured,
+  usernameValue
+}) {
   const navigate = useNavigate()
 
   const [wrongUser, setWrongUser] = useState(false)
-  const [wrongUserData, setWrongUserData] = useState('')
+  const [wrongUserData, setWrongUserData] = useState("")
   const [remindEmailCode, setRemindEmailCode] = useState(true)
-
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
   const sendEmailCode = useCallback(() => {
     setConfirmCodeOpen(false)
-    axios.post(`${baseUrl}/register/code`, {
-      code: confirmEmailCode ? confirmEmailCode.toString() : null,
-      username: usernameValue
-    },
-    )
-      .then(req => {
+    axios
+      .post(`${baseUrl}/register/code`, {
+        code: confirmEmailCode ? confirmEmailCode.toString() : null,
+        username: usernameValue
+      })
+      .then((req) => {
         setRemindEmailCode(false)
         if (req.status === 202) {
           setConfirmCodeOpen(true)
@@ -37,22 +49,27 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
 
           setErrorOccured(false)
 
-          setUsernameValue('')
-          setEmailValue('')
-          setPasswordValue('')
-          setPasswordMatchValue('')
+          setUsernameValue("")
+          setEmailValue("")
+          setPasswordValue("")
+          setPasswordMatchValue("")
 
           setTimeout(() => {
             setIsOpen(true)
             setPopupInfo(req.data)
 
             setTimeout(() => {
-              navigate('/signin')
-            }, 2000);
-          }, 500);
+              navigate("/signin")
+            }, 2000)
+          }, 500)
         }
       })
-      .catch(err => {
+      .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
+
         if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
@@ -64,29 +81,38 @@ function _ConfirmationCode({ confirmCodeOpen, setConfirmCodeOpen, popupInfo, set
 
         setClosepopup(true)
       })
-  }, [confirmEmailCode, setIsOpen, setPopupInfo, navigate, setUsernameValue, setEmailValue,
-    setPasswordValue, setPasswordMatchValue, setConfirmCodeOpen, setErrorOccured])
+  }, [confirmEmailCode, setIsOpen, setPopupInfo, navigate, setUsernameValue, setEmailValue, setPasswordValue, setPasswordMatchValue, setConfirmCodeOpen, setErrorOccured])
 
   const ClickSendBtn = () => {
-    setConfirmEmailCode('')
+    setConfirmEmailCode("")
 
     sendEmailCode()
   }
 
   return (
     <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
-      <div className='popupContainer open'>
-        {confirmCodeOpen && <form className='popup open' onSubmit={e => e.preventDefault()}>
-          <label htmlFor="number-input">
-            <h3>{popupInfo}</h3>
-          </label>
-          <br />
-          {remindEmailCode && <h3>Emailingizga kelgan 6 ta raqamdan iborat sonni kiriting!</h3>}
-          <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
-          <button type='submit' className="btn btn-primary sendBtn" onClick={() => { ClickSendBtn() }
-          }>Send</button>
-        </form>}
+      <div className="popupContainer open">
+        {confirmCodeOpen && (
+          <form className="popup open" onSubmit={(e) => e.preventDefault()}>
+            <label htmlFor="number-input">
+              <h3>{popupInfo}</h3>
+            </label>
+            <br />
+            {remindEmailCode && <h3>Emailingizga kelgan 6 ta raqamdan iborat sonni kiriting!</h3>}
+            <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
+            <button
+              type="submit"
+              className="btn btn-primary sendBtn"
+              onClick={() => {
+                ClickSendBtn()
+              }}
+            >
+              Send
+            </button>
+          </form>
+        )}
       </div>
     </>
   )

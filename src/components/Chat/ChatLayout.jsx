@@ -1,3 +1,4 @@
+// import '../../app/App.css'
 import { useCallback, useEffect, useState } from "react"
 import ChatUserSidebar from "./ChatUserSidebar"
 import ChatWebsocketPlace from "./ChatWebsocketPlace"
@@ -9,7 +10,7 @@ import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
 import { connect } from "../../redux/features/socketConnectionSlice"
 import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
-
+import InternalError from "../Modals/InternalError"
 function ChatLayout() {
   const navigate = useNavigate()
 
@@ -25,10 +26,12 @@ function ChatLayout() {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
 
   const [wrongUser, setWrongUser] = useState(false)
-  const [wrongUserData, setWrongUserData] = useState('')
+  const [wrongUserData, setWrongUserData] = useState("")
   const userID = localStorage.getItem("userId")
+  // const [isPending, setIsPending] = useState(false)
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -36,15 +39,13 @@ function ChatLayout() {
     dispatch(connect())
   }, [])
 
-  useEffect(
-    () => {
-      if (isConnected && userID) {
-        socketInstance.emit("hello", {
-          id: userID
-        })
-      }
-    }, [isConnected, socketInstance, userID]
-  )
+  useEffect(() => {
+    if (isConnected && userID) {
+      socketInstance.emit("hello", {
+        id: userID
+      })
+    }
+  }, [isConnected, socketInstance, userID])
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -67,49 +68,63 @@ function ChatLayout() {
 
     localStorage.setItem("receiverUsername", username)
 
-
     setChatSelected(true)
-
-    axios.post(`${baseUrl}/chat/${senderId}`, {
-      username: username,
-    }, {
-      // headers: head
-      headers: {
-        'X-UserRole': localStorage.getItem('userRole'),
-        'X-UserId': localStorage.getItem('userId')
-      }
-    })
-      .then((res) => setOneUserData(res.data))
+    setIsPending(true)
+    axios
+      .post(
+        `${baseUrl}/chat/${senderId}`,
+        {
+          username: username
+        },
+        {
+          // headers: head
+          headers: {
+            "X-UserRole": localStorage.getItem("userRole"),
+            "X-UserId": localStorage.getItem("userId")
+          }
+        }
+      )
+      .then((res) => {
+        setIsPending(false)
+        setOneUserData(res.data)
+      })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
+        // setIsPending(false)
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
       })
 
-
     await axios
       .get(`${baseUrl}/chat/room`, {
         params: { user_id1: senderId, user_id2: id },
-        // headers: head 
+        // headers: head
         headers: {
-          'X-UserRole': localStorage.getItem('userRole'),
-          'X-UserId': localStorage.getItem('userId')
+          "X-UserRole": localStorage.getItem("userRole"),
+          "X-UserId": localStorage.getItem("userId")
         }
       })
       .then((res) => {
+        // setIsPending(false)
         setMessages(res.data)
       })
       .catch((err) => {
-        setIsOpen(true)
+        setIsPending(false)
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -117,9 +132,10 @@ function ChatLayout() {
       })
   }
 
-
   return (
     <>
+      {/* {isPending && <div className="loaderr"></div>} */}
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
@@ -128,7 +144,7 @@ function ChatLayout() {
           {!chatSelected && <h1 className="display-2 text-center">Select A Chat to have a conversation!</h1>}
         </div>
         <div className={styles.usersSidebar}>
-          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} />
+          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} setCloseInternalErrorModal={setCloseInternalErrorModal} />
         </div>
       </div>
     </>

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid"
 import PopUp from "../../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
 import { baseUrl } from "../../../utils/api"
+import InternalError from "../../Modals/InternalError"
 
 // eslint-disable-next-line react/prop-types
 function GoogleAUTH({ page, number }) {
@@ -14,6 +15,7 @@ function GoogleAUTH({ page, number }) {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
 
   const GoogleAuthUrl = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=`
 
@@ -37,6 +39,10 @@ function GoogleAUTH({ page, number }) {
             }, 2000)
           })
           .catch((err) => {
+            if (err.response.status === 500) {
+              setCloseInternalErrorModal(true)
+              return
+            }
             setPopupInfo(err.response.data)
             setErrorOccured(true)
             setIsOpen(true)
@@ -68,6 +74,10 @@ function GoogleAUTH({ page, number }) {
             }, 2000)
           })
           .catch((err) => {
+            if (err.response.status === 500) {
+              setCloseInternalErrorModal(true)
+              return
+            }
             setPopupInfo(err.response.data.message)
             setErrorOccured(true)
             setIsOpen(true)
@@ -119,28 +129,46 @@ function GoogleAUTH({ page, number }) {
         .then((res) => {
           sendUserDetails(res.data)
         })
-        .catch((err) => console.error(err))
+        .catch((err) => {
+          if (err.response.status === 500) {
+            setCloseInternalErrorModal(true)
+            return
+          }
+        })
     }
   }
 
   return (
-    <div className="container">
-      {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-      <button
-        type="button"
-        className="btn btn-outline-light text-danger border border-primary google-btn"
-        onClick={() => {
-          login()
-        }}
-      >
-        <i className="bi bi-google text-primary"></i>
-        <span style={{ fontWeight: 500 }} className="text-danger">o</span>
-        <span style={{ fontWeight: 500 }} className="text-warning">o</span>
-        <span style={{ fontWeight: 500 }} className="text-primary">g</span>
-        <span style={{ fontWeight: 500 }} className="text-success">l</span>
-        <span style={{ fontWeight: 500 }} className="text-danger">e</span>
-      </button>
-    </div>
+    <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      <div className="container">
+        {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
+        <button
+          type="button"
+          className="btn btn-outline-light text-danger border border-primary google-btn"
+          onClick={() => {
+            login()
+          }}
+        >
+          <i className="bi bi-google text-primary"></i>
+          <span style={{ fontWeight: 500 }} className="text-danger">
+            o
+          </span>
+          <span style={{ fontWeight: 500 }} className="text-warning">
+            o
+          </span>
+          <span style={{ fontWeight: 500 }} className="text-primary">
+            g
+          </span>
+          <span style={{ fontWeight: 500 }} className="text-success">
+            l
+          </span>
+          <span style={{ fontWeight: 500 }} className="text-danger">
+            e
+          </span>
+        </button>
+      </div>
+    </>
   )
 }
 

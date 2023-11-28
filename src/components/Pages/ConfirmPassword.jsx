@@ -1,5 +1,3 @@
-import { Fragment } from "react"
-
 function _ConfirmPassword({
   passwordValue,
   setPasswordValue,
@@ -22,7 +20,7 @@ function _ConfirmPassword({
 }) {
   //* ########################################################################################
   return (
-    <Fragment>
+    <>
       <label style={{ position: "relative", maxWidth: "min-content", lineHeight: "1.2rem" }}>
         <input
           style={passwordValue.length >= 1 && passwordTrue ? passwordInputStyle : null}
@@ -84,7 +82,7 @@ function _ConfirmPassword({
         {passwordMatchValue.length >= 1 && validPasswordMatchChecker !== "Password Mos Keldi" && <i style={{ color: "red", fontSize: "1rem" }}>{validPasswordMatchChecker}</i>}
         {/* ==================================== */}
       </label>
-    </Fragment>
+    </>
   )
 }
 

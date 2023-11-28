@@ -1,12 +1,13 @@
 import axios from "axios"
 import styles from "../../../styles/Admin.module.css"
-import { Fragment, useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../../Modals/PopUp"
 import { baseUrl } from "../../../utils/api"
 import { logoutUser } from "../../../redux/features/userDataSlice"
 import ConfirmModal from "../../Modals/ConfirmModal"
 import AnotherUser from "../../Modals/AnotherUser"
+import InternalError from "../../Modals/InternalError"
 
 import { Select, Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
@@ -28,6 +29,8 @@ function AcceptedUsers() {
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
+
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -58,6 +61,11 @@ function AcceptedUsers() {
         setDatas(req.data)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
+
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -97,6 +105,10 @@ function AcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -131,6 +143,10 @@ function AcceptedUsers() {
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -145,81 +161,80 @@ function AcceptedUsers() {
   }
 
   return (
-    <Fragment>
+    <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {showRemoveModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <div className={`${styles.acceptedUsersContainer}`} style={{ filter: showRemoveModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
-        {isPending && <div className="loaderr"></div>}
+        {isPending && !closeInternalErrorModal && <div className="loaderr"></div>}
 
-        {!isPending && (<Table.Root variant="surface">
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
-              <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
-            </Table.Row>
-          </Table.Header>
+        {!isPending && (
+          <Table.Root variant="surface">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
 
-
-          <Table.Body>
-            {datas &&
-              datas.map((data) => {
-                return (
-                  data.accepted &&
-                  data.approved && (
-                    <Table.Row key={data.id}>
-                      <Table.RowHeaderCell>
-                        <Strong>{data.id}</Strong>
-                      </Table.RowHeaderCell>
-                      <Table.Cell>
-                        <Avatar.Root className={styles.AvatarRoot}>
-                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
-                          <Avatar.Fallback className={styles.AvatarFallback}>
-                            A
-                          </Avatar.Fallback>
-                        </Avatar.Root>
-                      </Table.Cell>
-                      <Table.Cell>{data.username}</Table.Cell>
-                      <Table.Cell>{data.email}</Table.Cell>
-                      {data.role !== "admin" && (
+            <Table.Body>
+              {datas &&
+                datas.map((data) => {
+                  return (
+                    data.accepted &&
+                    data.approved && (
+                      <Table.Row key={data.id}>
+                        <Table.RowHeaderCell>
+                          <Strong>{data.id}</Strong>
+                        </Table.RowHeaderCell>
                         <Table.Cell>
-                          <Select.Root defaultValue={data.role} onValueChange={() => handleEditRole(data.id, data.role === "user" ? "moderator" : "user")}>
-                            <Select.Trigger />
-                            <Select.Content position="popper">
-                              <Select.Item value="user">User</Select.Item>
-                              <Select.Item value="moderator">Moderator</Select.Item>
-                            </Select.Content>
-                          </Select.Root>
+                          <Avatar.Root className={styles.AvatarRoot}>
+                            <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                            <Avatar.Fallback className={styles.AvatarFallback}>A</Avatar.Fallback>
+                          </Avatar.Root>
                         </Table.Cell>
-                      )}
-                      {data.role === "admin" && <Table.Cell>Admin</Table.Cell>}
-                      <Table.Cell>
+                        <Table.Cell>{data.username}</Table.Cell>
+                        <Table.Cell>{data.email}</Table.Cell>
                         {data.role !== "admin" && (
-                          <Button
-                            variant="soft"
-                            color="red"
-                            className="btn btn-outline-danger"
-                            onClick={() => {
-                              toggleRemoveUserModal(data.id)
-                            }}
-                          >
-                            <i className="bi bi-trash3-fill"></i>
-                          </Button>
+                          <Table.Cell>
+                            <Select.Root defaultValue={data.role} onValueChange={() => handleEditRole(data.id, data.role === "user" ? "moderator" : "user")}>
+                              <Select.Trigger />
+                              <Select.Content position="popper">
+                                <Select.Item value="user">User</Select.Item>
+                                <Select.Item value="moderator">Moderator</Select.Item>
+                              </Select.Content>
+                            </Select.Root>
+                          </Table.Cell>
                         )}
-                      </Table.Cell>
-                    </Table.Row>
+                        {data.role === "admin" && <Table.Cell>Admin</Table.Cell>}
+                        <Table.Cell>
+                          {data.role !== "admin" && (
+                            <Button
+                              variant="soft"
+                              color="red"
+                              className="btn btn-outline-danger"
+                              onClick={() => {
+                                toggleRemoveUserModal(data.id)
+                              }}
+                            >
+                              <i className="bi bi-trash3-fill"></i>
+                            </Button>
+                          )}
+                        </Table.Cell>
+                      </Table.Row>
+                    )
                   )
-                )
-              })}
-          </Table.Body>
-        </Table.Root>
+                })}
+            </Table.Body>
+          </Table.Root>
         )}
       </div>
-    </Fragment>
+    </>
   )
 }
 

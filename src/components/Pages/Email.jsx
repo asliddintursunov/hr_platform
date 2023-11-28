@@ -1,8 +1,6 @@
-import { Fragment } from "react"
-
 function _Email({ emailValue, setEmailValue, validEmailChecker, emailFocus, setEmailFocus, emailTrue, setEmailtrue, emailChecker, emailInputStyle }) {
   return (
-    <Fragment>
+    <>
       <label style={{ maxWidth: "min-content", lineHeight: "1.2rem" }}>
         <input
           style={emailValue.length >= 1 && emailTrue ? emailInputStyle : null}
@@ -22,7 +20,7 @@ function _Email({ emailValue, setEmailValue, validEmailChecker, emailFocus, setE
         {emailValue.length >= 1 && emailFocus && validEmailChecker === "Valid Email" && <i style={{ color: "green", fontSize: "1rem" }}>{validEmailChecker}</i>}
         {emailValue.length >= 1 && emailFocus && validEmailChecker !== "Valid Email" && <i style={{ color: "red", fontSize: "1rem" }}>{validEmailChecker}</i>}
       </label>
-    </Fragment>
+    </>
   )
 }
 

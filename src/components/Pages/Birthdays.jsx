@@ -2,15 +2,15 @@ import axios from "axios"
 import { useCallback, useEffect, useState, useRef, Fragment } from "react"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
-import styles from '../../styles/Birthdays.module.css'
+import styles from "../../styles/Birthdays.module.css"
 import { baseUrl } from "../../utils/api"
 import { useDispatch, useSelector } from "react-redux"
 import { logoutUser } from "../../redux/features/userDataSlice"
 import AnotherUser from "../Modals/AnotherUser"
-
 import { Table, Code } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
+import InternalError from "../Modals/InternalError"
 
 function _Birthdays() {
   const memberRole = localStorage.getItem("userRole")
@@ -20,19 +20,16 @@ function _Birthdays() {
   const navigate = useNavigate()
 
   const [wrongUser, setWrongUser] = useState(false)
-  const [wrongUserData, setWrongUserData] = useState('')
+  const [wrongUserData, setWrongUserData] = useState("")
 
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
-
-  useEffect(
-    () => {
-      if (isConnected) {
-        socketInstance.disconnect();
-      }
-    }, []
-  )
-
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
+  useEffect(() => {
+    if (isConnected) {
+      socketInstance.disconnect()
+    }
+  }, [])
 
   const [userBday, setUserBday] = useState([]) // Shows User's B-day in table
   var setUserBdayToDays = [] // Users' B-day in days in array
@@ -45,44 +42,51 @@ function _Birthdays() {
   const [isPending, setIsPending] = useState(false) // Loader
 
   // Pop Up States
-  const [isOpen, setIsOpen] = useState(false);
-  const [popupInfo, setPopupInfo] = useState('')
-  const [errorOccured, setErrorOccured] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [popupInfo, setPopupInfo] = useState("")
+  const [errorOccured, setErrorOccured] = useState("")
 
   const fiveteenDays = []
 
   // Token Expired Validation
-  const tokenExpired = useCallback((info) => {
-    setIsOpen(true)
-    setErrorOccured(true)
-    setPopupInfo(info)
-    setTimeout(() => {
-      localStorage.removeItem('token')
-      localStorage.clear()
-      navigate('/signin')
-    }, 1500);
-  }, [navigate])
-
+  const tokenExpired = useCallback(
+    (info) => {
+      setIsOpen(true)
+      setErrorOccured(true)
+      setPopupInfo(info)
+      setTimeout(() => {
+        localStorage.removeItem("token")
+        localStorage.clear()
+        navigate("/signin")
+      }, 1500)
+    },
+    [navigate]
+  )
 
   const getBday = useCallback(() => {
     setIsPending(true)
-    axios.get(`${baseUrl}/users`, {
-      headers: {
-        'X-UserRole': memberRole,
-        'X-UserId': memberId
-      }
-    })
-      .then(res => {
+    axios
+      .get(`${baseUrl}/users`, {
+        headers: {
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
+        }
+      })
+      .then((res) => {
         setIsPending(false)
         setUserBday(res.data)
         setUsersLength(res.data.length)
       })
-      .catch(err => {
+      .catch((err) => {
+        console.log(err);
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
 
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -91,10 +95,12 @@ function _Birthdays() {
         setIsPending(false)
       })
   }, [tokenExpired])
-  useEffect(() => { getBday() }, [getBday])
+  useEffect(() => {
+    getBday()
+  }, [getBday])
 
   const dayTillBirthday = () => {
-    currentDateInDay.current = 0;
+    currentDateInDay.current = 0
 
     const daysInMonth = [
       31, // January
@@ -108,44 +114,44 @@ function _Birthdays() {
       30, // September
       31, // October
       30, // November
-      31, // December
-    ];
+      31 // December
+    ]
 
     // Check if the current year is a leap year
-    const currentYear = new Date().getFullYear();
-    const isLeapYear = currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0);
+    const currentYear = new Date().getFullYear()
+    const isLeapYear = currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0)
 
     // Adjust the number of days in February for leap years
     if (isLeapYear) {
-      daysInMonth[1] = 29;
+      daysInMonth[1] = 29
     }
 
     // Calculating Current Day of Year
     for (let i = 0; i < currentMonth - 1; i++) {
-      currentDateInDay.current += daysInMonth[i];
+      currentDateInDay.current += daysInMonth[i]
     }
-    currentDateInDay.current += currentDay;
+    currentDateInDay.current += currentDay
 
     for (let i = 0; i < usersLength; i++) {
-      userBdayInDate.current = 0;
+      userBdayInDate.current = 0
 
       if (userBday[i].date_birth === null || userBday[i].date_birth === undefined) {
-        userBdayInDate.current = 30;
+        userBdayInDate.current = 30
       } else {
-        const birthMonth = Number(userBday[i].date_birth.split('-')[1]);
-        const birthDay = Number(userBday[i].date_birth.split('-')[2]);
+        const birthMonth = Number(userBday[i].date_birth.split("-")[1])
+        const birthDay = Number(userBday[i].date_birth.split("-")[2])
 
         for (let j = 0; j < birthMonth - 1; j++) {
-          userBdayInDate.current += daysInMonth[j];
+          userBdayInDate.current += daysInMonth[j]
         }
-        userBdayInDate.current += birthDay;
+        userBdayInDate.current += birthDay
       }
 
       // setUserBdayToDays.push(userBdayInDate.current - 30 - 1);
-      setUserBdayToDays.push(userBdayInDate.current - daysInMonth[currentMonth] - 1);
-      leftDays.push(setUserBdayToDays[i] - (currentDateInDay.current));
+      setUserBdayToDays.push(userBdayInDate.current - daysInMonth[currentMonth] - 1)
+      leftDays.push(setUserBdayToDays[i] - currentDateInDay.current)
     }
-  };
+  }
   dayTillBirthday()
 
   leftDays.map((day) => {
@@ -155,12 +161,13 @@ function _Birthdays() {
   })
 
   const greenBackground = {
-    background: 'linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)',
-    color: 'var(--white)',
+    background: "linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)",
+    color: "var(--white)"
   }
 
   return (
-    <Fragment>
+    <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <div className={`container pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
@@ -169,8 +176,8 @@ function _Birthdays() {
         <br />
         {isPending && <div className="loaderr"></div>}
 
-        {!isPending &&
-          <div className={`${styles.birthdaysContainer}`} >
+        {!isPending && (
+          <div className={`${styles.birthdaysContainer}`}>
             <Table.Root variant="surface">
               <Table.Header>
                 {fiveteenDays.length >= 1 ? (
@@ -188,43 +195,44 @@ function _Birthdays() {
               </Table.Header>
 
               <Table.Body>
-                {fiveteenDays.length >= 1 && userBday ?
-                  (
-                    userBday.map((user, index) => {
-                      return (
-                        user.accepted && leftDays[index] <= 15 && leftDays[index] >= 0 && (
-                          <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
-                            <Table.Cell>
-                              <Avatar.Root className={styles.AvatarRoot}>
-                                <Avatar.Image className={styles.AvatarImage} src={user.profile_photo} />
-                                <Avatar.Fallback className={styles.AvatarFallback}>
-                                  A
-                                </Avatar.Fallback>
-                              </Avatar.Root>
-                            </Table.Cell>
-                            <Table.Cell>{user.username}</Table.Cell>
-                            <Table.Cell>{user.date_birth}</Table.Cell>
-                            <Table.Cell>
-                              <Code>Birthday!</Code>
-                              {leftDays[index] <= 15 && leftDays[index] >= 1 ? <h5 className="text-info">{leftDays[index]} left</h5> :
-                                leftDays[index] == 0 ? <h5 className={`${styles.TodayBirthDay} text-center`}>Happy Birthday 🎉</h5> : null}
-                            </Table.Cell>
-                          </Table.Row>
-                        )
+                {fiveteenDays.length >= 1 && userBday ? (
+                  userBday.map((user, index) => {
+                    return (
+                      user.accepted &&
+                      leftDays[index] <= 15 &&
+                      leftDays[index] >= 0 && (
+                        <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
+                          <Table.Cell>
+                            <Avatar.Root className={styles.AvatarRoot}>
+                              <Avatar.Image className={styles.AvatarImage} src={user.profile_photo} />
+                              <Avatar.Fallback className={styles.AvatarFallback}>A</Avatar.Fallback>
+                            </Avatar.Root>
+                          </Table.Cell>
+                          <Table.Cell>{user.username}</Table.Cell>
+                          <Table.Cell>{user.date_birth}</Table.Cell>
+                          <Table.Cell>
+                            <Code>Birthday!</Code>
+                            {leftDays[index] <= 15 && leftDays[index] >= 1 ? (
+                              <h5 className="text-info">{leftDays[index]} left</h5>
+                            ) : leftDays[index] == 0 ? (
+                              <h5 className={`${styles.TodayBirthDay} text-center`}>Happy Birthday 🎉</h5>
+                            ) : null}
+                          </Table.Cell>
+                        </Table.Row>
                       )
-                    })
-                  ) : (
-                    <Table.Row className={styles.noBirthDay}>
-                      <Table.Cell>
-                        No upcoming birthdays for now!
-                      </Table.Cell>
-                    </Table.Row>
-                  )}
+                    )
+                  })
+                ) : (
+                  <Table.Row className={styles.noBirthDay}>
+                    <Table.Cell>No upcoming birthdays for now!</Table.Cell>
+                  </Table.Row>
+                )}
               </Table.Body>
             </Table.Root>
-          </div>}
+          </div>
+        )}
       </div>
-    </Fragment>
+    </>
   )
 }
 export default _Birthdays

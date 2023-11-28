@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 // Components
 import Username from "../../../Pages/Username"
@@ -16,6 +16,7 @@ import { useUsername } from "../../../../hooks/useUsername"
 import { useEmail } from "../../../../hooks/useEmail"
 import { useConfirmPassword } from "../../../../hooks/useConfirmPassword"
 import { baseUrl } from "../../../../utils/api"
+import InternalError from "../../../Modals/InternalError"
 function SignUpForm() {
   // Pop Up States
   const [isOpen, setIsOpen] = useState(false)
@@ -52,6 +53,7 @@ function SignUpForm() {
   } = useConfirmPassword()
 
   const [isPending, setIsPending] = useState(false)
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
 
   const addNewUser = () => {
     if (passwordValue == passwordMatchValue) {
@@ -71,6 +73,11 @@ function SignUpForm() {
           localStorage.setItem("new_username", req.data.username)
         })
         .catch((err) => {
+          if (err.response.status === 500) {
+            setCloseInternalErrorModal(true)
+            return;
+          }
+  
           setIsPending(false)
           setIsOpen(true)
           setErrorOccured(true)
@@ -93,6 +100,7 @@ function SignUpForm() {
 
   return (
     <>
+    {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {isPending && <div className={styles.Loader}>
         <div></div>
       </div>}

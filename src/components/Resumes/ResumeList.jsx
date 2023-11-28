@@ -3,6 +3,7 @@ import styles from '../../styles/Resumes.module.css'
 import { Button } from '@radix-ui/themes'
 
 function ResumeList({ resumeData, seeResumeDetail }) {
+  console.log(resumeData);
   return (
     <aside className={styles.leftAside}>
       {resumeData.length === 0 && <h1 className="display-4 text-secondary">No Suitable CV</h1>}
@@ -13,7 +14,7 @@ function ResumeList({ resumeData, seeResumeDetail }) {
               <div className={styles.resumeCardMajor}>
                 <h2>{resume.major ? resume.major : 'Not available'}</h2>
               </div>
-              <div className={styles.resumeCardSkills}>{resume.skills && resume.skills.slice(2, -1).map((skill, index) => <code key={index}>{skill}</code>)}</div>
+              <div className={styles.resumeCardSkills}>{resume.skills && resume.skills.map((skill, index) => <code key={index}>{skill}</code>)}</div>
               <div className={styles.resumeCardMore}>
                 <div className={styles.resumeCardUsername}>
                   <span>Username</span>

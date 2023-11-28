@@ -8,12 +8,13 @@ import useURL from "../../hooks/useURL"
 import { baseUrl } from "../../utils/api"
 import { useDispatch, useSelector } from "react-redux"
 import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
-import ConfirmModal from '../Modals/ConfirmModal'
+import ConfirmModal from "../Modals/ConfirmModal"
 import AnotherUser from "../Modals/AnotherUser"
 
-import { Select, Table, Strong, Button } from "@radix-ui/themes"
+import { Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
+import InternalError from "../Modals/InternalError"
 
 function Moderator() {
   const memberRole = localStorage.getItem("userRole")
@@ -32,28 +33,27 @@ function Moderator() {
   const [errorOccured, setErrorOccured] = useState("")
 
   const [wrongUser, setWrongUser] = useState(false)
-  const [wrongUserData, setWrongUserData] = useState('')
+  const [wrongUserData, setWrongUserData] = useState("")
+
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
 
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
 
-  useEffect(
-    () => {
-      if (isConnected) {
-        socketInstance.disconnect();
-      }
-    }, []
-  )
+  useEffect(() => {
+    if (isConnected) {
+      socketInstance.disconnect()
+    }
+  }, [])
 
   useEffect(() => {
     dispatch(sendHeaders())
   }, [])
 
-
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {
-      console.log(info);
+      console.log(info)
       setIsOpen(true)
       setErrorOccured(true)
       setPopupInfo(info)
@@ -71,8 +71,8 @@ function Moderator() {
     axios
       .get(`${baseUrl}/users`, {
         headers: {
-          'X-UserRole': memberRole,
-          'X-UserId': memberId
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
         }
       })
       .then((req) => {
@@ -80,10 +80,13 @@ function Moderator() {
         setDatas(req.data)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
@@ -100,7 +103,7 @@ function Moderator() {
   const [user_id, setId] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const toggleRemoveUserModal = (id) => {
-    setShowModal(prev => !prev)
+    setShowModal((prev) => !prev)
     setId(id)
   }
 
@@ -109,35 +112,40 @@ function Moderator() {
       return prev.filter((data) => data.id !== user_id)
     })
 
-    axios.delete(`${baseUrl}/user/${user_id}`, {
-      headers: {
-        'X-UserRole': memberRole,
-        'X-UserId': memberId
-      }
-    })
+    axios
+      .delete(`${baseUrl}/user/${user_id}`, {
+        headers: {
+          "X-UserRole": memberRole,
+          "X-UserId": memberId
+        }
+      })
       .then((res) => {
         setErrorOccured(false)
         setPopupInfo(res.data)
         setIsOpen(true)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
-        }
-        else if (err.response.status === 401) {
+        } else if (err.response.status === 401) {
           setWrongUser(true)
           setWrongUserData(err.response.data)
           dispatch(logoutUser())
         }
 
         setErrorOccured(true)
-        setPopupInfo('Qandaydir xatolik ro\'y berdi!')
+        setPopupInfo("Qandaydir xatolik ro'y berdi!")
         setIsOpen(true)
       })
   }
 
   return (
     <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {showModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}

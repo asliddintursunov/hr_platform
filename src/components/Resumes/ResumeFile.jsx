@@ -3,7 +3,6 @@ import styles from "../../styles/ResumeDetails.module.css"
 import { Cross1Icon, DownloadIcon } from "@radix-ui/react-icons"
 import { Document, pdfjs, Page } from "react-pdf"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.js", import.meta.url).toString()
 

@@ -10,6 +10,7 @@ import PopUp from "../Modals/PopUp"
 import { Button, Code, Table } from "@radix-ui/themes"
 import { CaretLeftIcon, EnvelopeOpenIcon } from "@radix-ui/react-icons"
 import ResumeFile from "./ResumeFile"
+import InternalError from "../Modals/InternalError"
 
 function _ResumeDetails() {
   const [userResumeData, setUserResumeData] = useState([])
@@ -27,7 +28,7 @@ function _ResumeDetails() {
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
   const [openResume, setOpenResume] = useState(false)
-
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
   useEffect(() => {
     dispatch(sendHeaders())
   }, [])
@@ -56,6 +57,10 @@ function _ResumeDetails() {
         console.log(res.data[0])
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -68,6 +73,7 @@ function _ResumeDetails() {
 
   return (
     <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {openResume && <ResumeFile setOpenResume={setOpenResume} resume={userResumeData.resume} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}

@@ -31,6 +31,7 @@ import EditResume from "./part/EditResume"
 import AnotherUser from "../Modals/AnotherUser"
 import EditUniversity from "./part/EditUniversity"
 import UpdatePassword from "./part/UpdatePassword"
+import InternalError from "../Modals/InternalError"
 
 const ButtonFunction = (props) => {
   return (
@@ -126,11 +127,29 @@ function UpdateProfile() {
   const [skills, setSkills] = useState([])
   const [customTech, setCustomTech] = useState("Pascal")
   const UserSkills = [
-    'typesctipt', 'javascript', 'react', 'vue', 'angular',
-    'nodeJS', 'php', 'rust', 'go', 'ruby',
-    'cpp', 'java', 'spring', 'swing', 'cSharp', '.net',
-    'pyhton', 'django', 'flask',
-    'kotlin', 'swift', 'figma', 'adobe',
+    "typesctipt",
+    "javascript",
+    "react",
+    "vue",
+    "angular",
+    "nodeJS",
+    "php",
+    "rust",
+    "go",
+    "ruby",
+    "cpp",
+    "java",
+    "spring",
+    "swing",
+    "cSharp",
+    ".net",
+    "pyhton",
+    "django",
+    "flask",
+    "kotlin",
+    "swift",
+    "figma",
+    "adobe"
   ]
 
   const [userResume, setUserResume] = useState(null)
@@ -146,7 +165,7 @@ function UpdateProfile() {
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
-
+  const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
   useEffect(() => {
     if (isConnected) {
       socketInstance.disconnect()
@@ -246,6 +265,11 @@ function UpdateProfile() {
         setIsPending(false)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
+
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -296,6 +320,11 @@ function UpdateProfile() {
         setErrorOccured(false)
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
+
         setIsOpen(true)
 
         if (err.response.data.msg) {
@@ -309,10 +338,7 @@ function UpdateProfile() {
           setPopupInfo(err.response.data)
         }
       })
-  }, [
-    fullName, usernameValue, emailValue, address, dateOfBirth, selectedImage,
-    numbers, data, major, experience, skills, userResume, education, bio
-  ])
+  }, [fullName, usernameValue, emailValue, address, dateOfBirth, selectedImage, numbers, data, major, experience, skills, userResume, education, bio])
 
   // Log Out === Working
   const logOut = () => {
@@ -336,6 +362,11 @@ function UpdateProfile() {
         localStorage.clear()
       })
       .catch((err) => {
+        if (err.request.status === 500 || err.request.status === 0) {
+          setCloseInternalErrorModal(true)
+          return
+        }
+
         setIsOpen(true)
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
@@ -363,6 +394,7 @@ function UpdateProfile() {
   // ###########################################################333
   return (
     <>
+      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {isPending && <div className="loaderr"></div>}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
@@ -370,10 +402,13 @@ function UpdateProfile() {
       {!isPending && (
         <div className={`container ${styles.userProfileContainer} pageAnimation`}>
           <ButtonFunction
-            toggleModal={toggleModal} changeProfile={changeProfile}
-            setChangeProfile={setChangeProfile} saveEdition={saveEdition}
+            toggleModal={toggleModal}
+            changeProfile={changeProfile}
+            setChangeProfile={setChangeProfile}
+            saveEdition={saveEdition}
             CancleEdition={CancleEdition}
-            changePassword={changePassword} setChangePassword={setChangePassword}
+            changePassword={changePassword}
+            setChangePassword={setChangePassword}
           />
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
@@ -483,21 +518,23 @@ function UpdateProfile() {
           </div>
         </div>
       )}
-      {changePassword && <UpdatePassword
-        passwordValue={passwordValue}
-        setPasswordValue={setPasswordValue}
-        validPasswordChecker={validPasswordChecker}
-        passwordTrue={passwordTrue}
-        setPasswordTrue={setPasswordTrue}
-        passwordType={passwordType}
-        setPasswordType={setPasswordType}
-        passwordChecker={passwordChecker}
-        passwordInputStyle={passwordInputStyle}
-        changeProfile={changeProfile}
-        oldPassword={oldPassword}
-        setOldPassword={setOldPassword}
-        setChangePassword={setChangePassword}
-      />}
+      {changePassword && (
+        <UpdatePassword
+          passwordValue={passwordValue}
+          setPasswordValue={setPasswordValue}
+          validPasswordChecker={validPasswordChecker}
+          passwordTrue={passwordTrue}
+          setPasswordTrue={setPasswordTrue}
+          passwordType={passwordType}
+          setPasswordType={setPasswordType}
+          passwordChecker={passwordChecker}
+          passwordInputStyle={passwordInputStyle}
+          changeProfile={changeProfile}
+          oldPassword={oldPassword}
+          setOldPassword={setOldPassword}
+          setChangePassword={setChangePassword}
+        />
+      )}
     </>
   )
 }
