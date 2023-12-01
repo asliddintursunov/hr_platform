@@ -21,7 +21,7 @@ function InternalError({ setCloseInternalErrorModal }) {
             className="sendBtn"
             type="submit"
             onClick={() => {
-              window.location.reload()
+              // window.location.reload()
               setCloseInternalErrorModal(false)
             }}
           >

@@ -71,7 +71,7 @@ function HR_Register() {
   )
 
   const CandidateInitialSkills = [
-    "typesctipt",
+    "typescript",
     "javascript",
     "react",
     "vue",

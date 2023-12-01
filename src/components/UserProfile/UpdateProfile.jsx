@@ -127,7 +127,7 @@ function UpdateProfile() {
   const [skills, setSkills] = useState([])
   const [customTech, setCustomTech] = useState("Pascal")
   const UserSkills = [
-    "typesctipt",
+    "typescript",
     "javascript",
     "react",
     "vue",
@@ -261,7 +261,7 @@ function UpdateProfile() {
         setExperience(res.data.experience)
         setSkills(settedSkills)
         setBio(res.data.about)
-        setEducation(res.data.degree_general)
+        res.data.degree_general === null ? setEducation([]) : setEducation(res.data.degree_general)
         setIsPending(false)
       })
       .catch((err) => {
@@ -288,9 +288,9 @@ function UpdateProfile() {
   // Save Edition === Working
   const saveEdition = useCallback(() => {
     axios
-      .patch(
-        `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
-        {
+    .patch(
+      `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
+      {
           fullname: data.fullname !== fullName ? fullName : undefined,
           username: usernameValue,
           email: data.email !== emailValue ? emailValue : undefined,

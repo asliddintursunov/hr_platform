@@ -14,7 +14,7 @@ function EditUniversity({ education, setEducation, changeProfile }) {
   const [universityName, setUniversityName] = useState("")
   const [universityLocation, setUniversityLocation] = useState("")
   const [isFilled, setIsFilled] = useState(false)
-
+  
   useEffect(
     () => {
       if (degree !== '' && universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
@@ -30,7 +30,7 @@ function EditUniversity({ education, setEducation, changeProfile }) {
 
   const addEducation = () => {
     if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
-      setEducation((education) => [...education,
+      setEducation((prev) => [...prev,
       {
         degree,
         universityMajor,

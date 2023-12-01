@@ -9,8 +9,37 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.j
 function ResumeFile({ resume, setOpenResume }) {
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null)
   const [resumeHeight, setResumeHeight] = useState(600)
+
+  const [showDocument, setShowDocument] = useState(true)
+  function onPassword(callback, reason) {
+    function callbackProxy(pswrd) {
+      // Cancel button handler
+      if (pswrd === null) {
+        // password will be null if user clicks on cancel, you should unmount the Document and show custom message, eg:  failed to load  PDF and button with try again
+        setShowDocument(false)
+      }
+
+      callback(pswrd)
+    }
+
+    switch (reason) {
+      case 1: {
+        const password = prompt("Enter the password to open this PDF file.")
+        if (password === null || password === "") setShowDocument(false)
+        else callbackProxy(password)
+        break
+      }
+      case 2: {
+        const password = prompt("Invalid password. Please try again.")
+        if (password === null || password === "") setShowDocument(false)
+        else callbackProxy(password)
+        break
+      }
+      default:
+    }
+  }
 
   useEffect(() => {
     onresize = (event) => {
@@ -21,61 +50,48 @@ function ResumeFile({ resume, setOpenResume }) {
     }
   }, [])
 
-
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages)
   }
 
-  function onPassword(callback) {
-    const userEnteredPassword = prompt('Please enter the password to view this PDF.')
-    if (userEnteredPassword === null || userEnteredPassword === '') return;
-    callback(userEnteredPassword)
-  }
-
-  function onError(error) {
-    setError('Failed to load the PDF. Please try again.');
-  };
+  // function onError(error) {
+  //   setError('Failed to load the PDF. Please try again.');
+  // };
 
   function handleDownloadFile() {
-    const link = document.createElement('a');
-    link.href = resume;
-    link.target = '_blank';
-    link.download = resume;
-    link.click();
+    const link = document.createElement("a")
+    link.href = resume
+    link.target = "_blank"
+    link.download = resume
+    link.click()
   }
 
   return (
     <div className={styles.ResumeFileBackdrop}>
       <div className={`${styles.ResumeFileContainer}`}>
-        <p>
-          Resume
-        </p>
-        <Document
-          file={resume}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onPassword={onPassword}
-          onError={onError}
-        >
-          {/* {Array.apply(null, Array(numPages))
-            .map((x, i) => i + 1)
-            .map((page) => {
-              return <Page
-                height={600}
-                key={page}
-                pageNumber={page}
-                renderTextLayer={false}
-                renderAnnotationLayer={false} />
-            })} */}
-          <Page
-            height={resumeHeight}
-            pageNumber={1}
-            renderTextLayer={false}
-            renderAnnotationLayer={false} />
-          <Button onClick={handleDownloadFile}>
-            Download <DownloadIcon />
-          </Button>
-        </Document>
-        <Button color="red" onClick={() => setOpenResume(false)}>
+        <p>Resume</p>
+        {!showDocument ? (
+          <>
+            <Button color="gray" variant="outline" onClick={() => setShowDocument(true)}>
+              Reload PDF with password
+            </Button>
+          </>
+        ) : (
+          <>
+            <Document
+              file={resume}
+              onLoadSuccess={onDocumentLoadSuccess}
+              onPassword={onPassword}
+              // onError={onError}
+            >
+              <Page height={resumeHeight} pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} />
+              <Button onClick={handleDownloadFile}>
+                Download <DownloadIcon />
+              </Button>
+            </Document>
+          </>
+        )}
+        <Button color="red" className={styles.closeResumeBtn} onClick={() => setOpenResume(false)}>
           <Cross1Icon />
         </Button>
       </div>
@@ -84,3 +100,15 @@ function ResumeFile({ resume, setOpenResume }) {
 }
 
 export default ResumeFile
+{
+  /* {Array.apply(null, Array(numPages))
+            .map((x, i) => i + 1)
+            .map((page) => {
+              return <Page
+                height={600}
+                key={page}
+                pageNumber={page}
+                renderTextLayer={false}
+                renderAnnotationLayer={false} />
+            })} */
+}

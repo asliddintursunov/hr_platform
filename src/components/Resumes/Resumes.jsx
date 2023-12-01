@@ -36,7 +36,7 @@ function Resumes() {
   const [resumeData, setResumeData] = useState([])
 
   const Skills = [
-    "typesctipt",
+    "typescript",
     "javascript",
     "react",
     "vue",
@@ -94,11 +94,6 @@ function Resumes() {
   const lastPostIndex = currentPage * postPerPage
   const firstPostIndex = lastPostIndex - postPerPage
 
-  useEffect(() => {
-    console.log(optn)
-    console.log(baseUrl + "/" + optn)
-  }, [optn])
-
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {
@@ -114,7 +109,7 @@ function Resumes() {
   )
 
   const sendData = () => {
-    setResumeData([])
+    setResumeData([]);
     axios
       .post(
         `${baseUrl}/search`,
@@ -122,97 +117,39 @@ function Resumes() {
           resumes: optn === "all" ? "all" : optn,
           skills: skills.length === 0 ? undefined : skills,
           major: major === "" ? undefined : major,
-          experience: experience === "" ? undefined : experience
+          experience: experience === "" ? undefined : experience,
         },
         {
           headers: {
             "X-UserRole": localStorage.getItem("userRole"),
-            "X-UserId": localStorage.getItem("userId")
-          }
+            "X-UserId": localStorage.getItem("userId"),
+          },
         }
       )
       .then((res) => {
-        if (err.request.status === 500 || err.request.status === 0) {
-          setCloseInternalErrorModal(true)
-          return
+        console.log(res);
+        setResumeData(res.data.results);
+  
+        if (res.status === 500 || res.status === 0) {
+          setCloseInternalErrorModal(true);
+          return;
         }
-
-        setResumeData(res.data.results)
       })
       .catch((err) => {
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        } else if (err.response.status === 401) {
-          setWrongUser(true)
-          setWrongUserData(err.response.data)
-          dispatch(logoutUser())
+        if (err.response && err.response.data.msg) {
+          tokenExpired(err.response.data.msg);
+        } else if (err.response && err.response.status === 401) {
+          setWrongUser(true);
+          setWrongUserData(err.response.data);
+          dispatch(logoutUser());
+        } else {
+          console.error("Unexpected error:", err);
         }
-      })
-  }
+      });
+  };
+  
 
-  const seeAllResumes = () => {
-    setSelectedSkill(null)
-    setSelectedExperience(null)
-    setSelectedOption(null)
-    setSkills([])
-    setMajor("")
-    setResumeData([])
-    setExperience("")
-    setOptn("")
-
-    axios
-      .post(
-        `${baseUrl}/search`,
-        {
-          resumes: undefined,
-          skills: undefined,
-          major: undefined,
-          experience: undefined
-        },
-        {
-          headers: {
-            "X-UserRole": localStorage.getItem("userRole"),
-            "X-UserId": localStorage.getItem("userId")
-          }
-        }
-      )
-      .then((res) => {
-        if (err.request.status === 500 || err.request.status === 0) {
-          setCloseInternalErrorModal(true)
-          return
-        }
-
-        setResumeData(res.data.results)
-      })
-      .catch((err) => {
-        if (err.response.data.msg) {
-          setWrongUser(true)
-          tokenExpired(err.response.data.msg)
-        } else if (err.response.status === 401) {
-          setWrongUser(true)
-          setWrongUserData(err.response.data)
-          dispatch(logoutUser())
-        }
-      })
-  }
-
-  const KnowingSkills = (value) => {
-    if (skills.includes(value)) {
-      setSkills((prev) => prev.filter((hour) => hour !== value))
-    } else {
-      setSkills((prev) => [...prev, value])
-    }
-  }
-
-  const ExperienceYears = (value) => {
-    setExperience(value)
-  }
-
-  const MajorStudy = (value) => {
-    setMajor(value)
-  }
-
-  useEffect(() => {
+  const getAllData = useCallback(() => {
     setIsPending(true)
     axios
       .post(
@@ -249,7 +186,39 @@ function Resumes() {
           dispatch(logoutUser())
         }
       })
-  }, [tokenExpired])
+  }, [])
+
+  useEffect(() => {
+    getAllData()
+  }, [getAllData])
+
+  const seeAllResumes = () => {
+    setSelectedSkill(null)
+    setSelectedExperience(null)
+    setSelectedOption(null)
+    setSkills([])
+    setMajor("")
+    setResumeData([])
+    setExperience("")
+    setOptn("")
+    getAllData()
+  }
+
+  const KnowingSkills = (value) => {
+    if (skills.includes(value)) {
+      setSkills((prev) => prev.filter((hour) => hour !== value))
+    } else {
+      setSkills((prev) => [...prev, value])
+    }
+  }
+
+  const ExperienceYears = (value) => {
+    setExperience(value)
+  }
+
+  const MajorStudy = (value) => {
+    setMajor(value)
+  }
 
   const seeResumeDetail = (userID) => {
     localStorage.setItem("userResumeID", userID)
