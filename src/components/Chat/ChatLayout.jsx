@@ -69,7 +69,7 @@ function ChatLayout() {
     localStorage.setItem("receiverUsername", username)
 
     setChatSelected(true)
-    setIsPending(true)
+    // setIsPending(true)
     axios
       .post(
         `${baseUrl}/chat/${senderId}`,
@@ -85,7 +85,7 @@ function ChatLayout() {
         }
       )
       .then((res) => {
-        setIsPending(false)
+        // setIsPending(false)
         setOneUserData(res.data)
       })
       .catch((err) => {
@@ -117,7 +117,7 @@ function ChatLayout() {
         setMessages(res.data)
       })
       .catch((err) => {
-        setIsPending(false)
+        // setIsPending(false)
         if (err.request.status === 500 || err.request.status === 0) {
           setCloseInternalErrorModal(true)
           return

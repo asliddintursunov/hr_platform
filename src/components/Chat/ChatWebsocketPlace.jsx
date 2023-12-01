@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import styles from "../../styles/Chat.module.css"
 import useURL from "../../hooks/useURL"
 import { useSelector } from "react-redux"
+import { Avatar } from "@radix-ui/themes"
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const conversationPathRef = useRef(null)
@@ -122,8 +123,9 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
   return (
     <>
       <div className={styles.receiverHeader}>
+        {console.log(oneUserData)}
         <span>{oneUserData.username}</span>
-        <img src={oneUserData.profile_photo || defaultImage} alt={oneUserData.username} />
+        <Avatar src={oneUserData.profile_photo} radius="full" fallback="A" />
       </div>
       <div className={styles.conversationPath} ref={conversationPathRef}>
         {messages &&
