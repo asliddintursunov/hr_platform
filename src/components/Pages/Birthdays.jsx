@@ -148,7 +148,7 @@ function _Birthdays() {
       }
 
       // setUserBdayToDays.push(userBdayInDate.current - 30 - 1);
-      setUserBdayToDays.push(userBdayInDate.current - daysInMonth[currentMonth] - 1)
+      setUserBdayToDays.push(userBdayInDate.current - daysInMonth[currentMonth] + 1)
       leftDays.push(setUserBdayToDays[i] - currentDateInDay.current)
     }
   }

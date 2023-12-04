@@ -86,7 +86,7 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
           <br />
           <Dialog.Root>
             <Dialog.Trigger>
-              <Button radius="full" variant="outline">
+              <Button radius="full" variant="outline" disabled={!changeProfile}>
                 <PlusIcon style={PlusIconStyle} width="18" height="18" /> Create Custom Skill
               </Button>
             </Dialog.Trigger>

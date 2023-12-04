@@ -70,7 +70,7 @@ function _ResumeDetails() {
         }
       })
   }, [userID, tokenExpired])
-
+  console.log(userResumeData);
   return (
     <>
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
