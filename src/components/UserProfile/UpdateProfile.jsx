@@ -414,10 +414,9 @@ function UpdateProfile() {
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
             <div className={styles.profileUpdateHeader}>
               <h2>My Profile</h2>
-              <div>
-                <i className="bi bi-bell-fill"></i>
+              {/* <div>
                 <Avatar src={selectedImage} alt="Selected" fallback="A" />
-              </div>
+              </div> */}
             </div>
 
             <hr style={{ color: "gray" }} />

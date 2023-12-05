@@ -46,7 +46,7 @@ function ResumeFile({ resume, setOpenResume }) {
       if (event.target.innerWidth >= 1745 && event.target.innerWidth < 1920) setResumeHeight(600)
       if (event.target.innerWidth >= 1920 && event.target.innerWidth < 2133) setResumeHeight(650)
       if (event.target.innerWidth >= 2133 && event.target.innerWidth < 2400) setResumeHeight(700)
-      if (event.target.innerWidth >= 2400) setResumeHeight(850)
+      if (event.target.innerWidth >= 2400) setResumeHeight(870)
     }
   }, [])
 

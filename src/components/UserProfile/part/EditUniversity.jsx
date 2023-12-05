@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import styles from "../../../styles/EditProfile.module.css"
 import "@radix-ui/themes/styles.css"
 import { Button, Checkbox, Flex, Select, Table, Text, TextField } from "@radix-ui/themes"
-import { PlusIcon } from "@radix-ui/react-icons"
+import { PlusIcon, TrashIcon } from "@radix-ui/react-icons"
 
 function EditUniversity({ education, setEducation, changeProfile }) {
   const [degree, setDegree] = useState("bacheloer")
@@ -47,6 +47,11 @@ function EditUniversity({ education, setEducation, changeProfile }) {
       setUniversityLocation("")
       setStillStudying(false)
     }
+  }
+  const handleEducationDelete = (index) => {
+    const newEducation = [...education]
+    newEducation.splice(index, 1)
+    setEducation(newEducation)
   }
   return (
     <div>
@@ -154,6 +159,7 @@ function EditUniversity({ education, setEducation, changeProfile }) {
               <Table.ColumnHeaderCell>Education Year</Table.ColumnHeaderCell>
               <Table.ColumnHeaderCell>University Name</Table.ColumnHeaderCell>
               <Table.ColumnHeaderCell>University Location</Table.ColumnHeaderCell>
+              {changeProfile && <Table.ColumnHeaderCell>Remove</Table.ColumnHeaderCell>}
             </Table.Row>
           </Table.Header>
 
@@ -167,6 +173,9 @@ function EditUniversity({ education, setEducation, changeProfile }) {
                 </Table.Cell>
                 <Table.Cell>{edu.universityName}</Table.Cell>
                 <Table.Cell>{edu.universityLocation}</Table.Cell>
+                {changeProfile && <Table.Cell>
+                  <Button color="red" variant="soft" onClick={() => handleEducationDelete(index)}><TrashIcon/></Button>
+                </Table.Cell>}
               </Table.Row>
             ))}
           </Table.Body>

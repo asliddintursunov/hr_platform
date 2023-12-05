@@ -68,7 +68,13 @@ function _LandingPage() {
               )}
             </div>
             <div className={styles.logout}>
-              <button className="btn btn-dark">HR Platform</button>
+              {/* <button className="btn btn-dark">HR Platform</button> */}
+              <img src="/src/img/hr-platform-high-resolution-logo-transparent.svg" alt="Description of the SVG" style={{
+                objectFit: "contain",
+                margin: "0 auto",
+                width: "100%",
+                height: "100px"
+              }} />
             </div>
           </nav>
         </aside>
