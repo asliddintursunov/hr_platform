@@ -8,7 +8,7 @@ function _PageNotFound404() {
         <h1 className="display-4 text-danger">404 - PAGE NOT FOUND</h1>
       </div>
       <h3>Siz Izlayotgan sahifa mavjud emas!</h3>
-      <button className="btn btn-primary p-2"><NavLink to='signin' className='text-light text-decoration-none ' style={{ fontSize: 'medium' }}>GO TO HOMEPAGE</NavLink></button>
+      <button className="btn btn-primary p-2"><NavLink to='signin' className='text-light text-decoration-none ' style={{ fontSize: 'medium' }}>GO TO MAIN</NavLink></button>
     </div>
   )
 }

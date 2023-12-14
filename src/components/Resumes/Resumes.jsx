@@ -109,7 +109,7 @@ function Resumes() {
   )
 
   const sendData = () => {
-    setResumeData([]);
+    setResumeData([])
     axios
       .post(
         `${baseUrl}/search`,
@@ -117,37 +117,36 @@ function Resumes() {
           resumes: optn === "all" ? "all" : optn,
           skills: skills.length === 0 ? undefined : skills,
           major: major === "" ? undefined : major,
-          experience: experience === "" ? undefined : experience,
+          experience: experience === "" ? undefined : experience
         },
         {
           headers: {
             "X-UserRole": localStorage.getItem("userRole"),
-            "X-UserId": localStorage.getItem("userId"),
-          },
+            "X-UserId": localStorage.getItem("userId")
+          }
         }
       )
       .then((res) => {
-        console.log(res);
-        setResumeData(res.data.results);
-  
+        console.log(res)
+        setResumeData(res.data.results)
+
         if (res.status === 500 || res.status === 0) {
-          setCloseInternalErrorModal(true);
-          return;
+          setCloseInternalErrorModal(true)
+          return
         }
       })
       .catch((err) => {
         if (err.response && err.response.data.msg) {
-          tokenExpired(err.response.data.msg);
+          tokenExpired(err.response.data.msg)
         } else if (err.response && err.response.status === 401) {
-          setWrongUser(true);
-          setWrongUserData(err.response.data);
-          dispatch(logoutUser());
+          setWrongUser(true)
+          setWrongUserData(err.response.data)
+          dispatch(logoutUser())
         } else {
-          console.error("Unexpected error:", err);
+          console.error("Unexpected error:", err)
         }
-      });
-  };
-  
+      })
+  }
 
   const getAllData = useCallback(() => {
     setIsPending(true)
@@ -247,17 +246,21 @@ function Resumes() {
             </div>
           </div>
           <main className={styles.main}>
-            <ResumeList
-              // resumeData={resumeData}
-              resumeData={currentPosts}
-              seeResumeDetail={seeResumeDetail}
-              firstPostIndex={firstPostIndex}
-              lastPostIndex={lastPostIndex}
-              currentPosts={currentPosts}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              postPerPage={postPerPage}
-            />
+            <div style={{
+              flex: 2
+            }}>
+              <ResumeList
+                resumeData={currentPosts}
+                seeResumeDetail={seeResumeDetail}
+                firstPostIndex={firstPostIndex}
+                lastPostIndex={lastPostIndex}
+                currentPosts={currentPosts}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                postPerPage={postPerPage}
+              />
+              <Pagination totalPost={resumeData.length} postPerPage={postPerPage} setCurrentPage={setCurrentPage} />
+            </div>
             <aside className={styles.rightAside}>
               <form method="GET" onSubmit={(e) => e.preventDefault()}>
                 <div className={styles.filterWrapper}>
@@ -267,8 +270,6 @@ function Resumes() {
                       <MagnifyingGlassIcon />
                     </button>
                   </div>
-
-                  {/* ========= HERE THE API CHANGES ========= */}
                   <div className={styles.filterOptionsContainer}>
                     {SearchOptions &&
                       SearchOptions.map((option) => {
@@ -392,7 +393,6 @@ function Resumes() {
                   </div>
                 </div>
               </form>
-              <Pagination totalPost={resumeData.length} postPerPage={postPerPage} setCurrentPage={setCurrentPage} />
             </aside>
           </main>
         </div>

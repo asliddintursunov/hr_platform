@@ -44,14 +44,13 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUpLayout />} />
         <Route path="/signin" element={<SignInLayout />} />
         {isAuthenticated ? (
           <Route path="/landing" element={<LandingPage />}>
-            {userRole == "admin" && <Route index element={<About />} />}
-            {userRole == "moderator" && <Route index element={<About />} />}
-            {userRole == "user" && <Route index element={<UpdateProfile />} />}
+            <Route index element={<Home />} />
+            {(userRole === "admin") || (userRole === "moderator") ? <Route path="dashboard" element={<About />} /> : null}
+            <Route element={<UpdateProfile />} />
 
             <Route path="profile" element={<UpdateProfile />} />
             {userRole === "admin" && (

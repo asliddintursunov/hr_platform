@@ -3,10 +3,6 @@ import styles from '../../styles/Resumes.module.css'
 import { Button } from '@radix-ui/themes'
 
 function ResumeList({ resumeData, seeResumeDetail }) {
-  console.log(resumeData);
-  // const resumeDataSkills = resumeData[4]
-  // console.log(typeof resumeDataSkills.skills.slice(1, -1).split(', '));
-  // console.log(resumeDataSkills.skills.slice(1, -1).split(', '));
   return (
     <aside className={styles.leftAside}>
       {resumeData.length === 0 && <h1 className="display-4 text-secondary">No Suitable CV</h1>}

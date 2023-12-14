@@ -101,9 +101,10 @@ export function useBarChart() {
         style: {
           fontSize: "1.2rem",
           color: "#888",
-        }
+        },
       },
-      gridLineWidth: 0
+      gridLineWidth: 0,
+      tickInterval: 1,
     },
     tooltip: {
       valueSuffix: " ta",

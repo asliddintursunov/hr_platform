@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { googleLogout } from "@react-oauth/google"
 import axios from "axios"
 import styles from "../../styles/EditProfile.module.css"
 import { logoutUser } from "../../redux/features/userDataSlice"
@@ -22,7 +21,6 @@ import EditDateOfBirth from "./part/EditDateOfBirth"
 import EditUploadImage from "./part/EditUploadImage"
 import AddPhoneNumber from "./part/AddPhoneNumber"
 import EditBio from "./part/EditBio"
-import LogOutModal from "../Modals/LogOutModal"
 import PopUp from "../Modals/PopUp"
 import EditMajor from "./part/EditMajor"
 import EditSkills from "./part/EditSkills"
@@ -36,11 +34,6 @@ import InternalError from "../Modals/InternalError"
 const ButtonFunction = (props) => {
   return (
     <div className={styles.right}>
-      <div>
-        <button className={`btn ${styles.logOutBtn}`} onClick={() => props.toggleModal()}>
-          <i className="bi bi-box-arrow-right"></i> Log Out
-        </button>
-      </div>
       <div className={styles.btnStyles}>
         {!props.changeProfile && (
           <button className={`btn ${styles.editBtn}`} onClick={() => props.setChangeProfile(true)}>
@@ -288,9 +281,9 @@ function UpdateProfile() {
   // Save Edition === Working
   const saveEdition = useCallback(() => {
     axios
-    .patch(
-      `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
-      {
+      .patch(
+        `${baseUrl}/update_profile/${localStorage.getItem("userId")}`,
+        {
           fullname: data.fullname !== fullName ? fullName : undefined,
           username: usernameValue,
           email: data.email !== emailValue ? emailValue : undefined,
@@ -315,11 +308,13 @@ function UpdateProfile() {
         }
       )
       .then((res) => {
+        setNewNumber("998")
         setIsOpen(true)
         setPopupInfo(res.data)
         setErrorOccured(false)
       })
       .catch((err) => {
+        setNewNumber("998")
         if (err.request.status === 500 || err.request.status === 0) {
           setCloseInternalErrorModal(true)
           return
@@ -340,43 +335,6 @@ function UpdateProfile() {
       })
   }, [fullName, usernameValue, emailValue, address, dateOfBirth, selectedImage, numbers, data, major, experience, skills, userResume, education, bio])
 
-  // Log Out === Working
-  const logOut = () => {
-    googleLogout()
-    axios
-      .get(`${baseUrl}/logout/${memberId}`, {
-        headers: {
-          "X-UserRole": memberRole,
-          "X-UserId": memberId
-        }
-      })
-      .then((res) => {
-        setIsOpen(true)
-
-        setErrorOccured(false)
-        setPopupInfo(res.data)
-
-        setTimeout(() => {
-          navigate("/signin")
-        }, 1500)
-        localStorage.clear()
-      })
-      .catch((err) => {
-        if (err.request.status === 500 || err.request.status === 0) {
-          setCloseInternalErrorModal(true)
-          return
-        }
-
-        setIsOpen(true)
-        if (err.response.data.msg) {
-          tokenExpired(err.response.data.msg)
-        } else if (err.response.status === 401) {
-          setWrongUser(true)
-          setWrongUserData(err.response.data)
-          dispatch(logoutUser())
-        }
-      })
-  }
   const [showModal, setShowModal] = useState(false)
   const toggleModal = () => setShowModal(!showModal)
 
@@ -398,7 +356,6 @@ function UpdateProfile() {
       {isPending && <div className="loaderr"></div>}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-      {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
       {!isPending && (
         <div className={`container ${styles.userProfileContainer} pageAnimation`}>
           <ButtonFunction
@@ -413,9 +370,13 @@ function UpdateProfile() {
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
             <div className={styles.profileUpdateHeader}>
-              <h2 style={{
-                letterSpacing: '1rem'
-              }}>My Profile</h2>
+              <h2
+                style={{
+                  letterSpacing: "1rem"
+                }}
+              >
+                My Profile
+              </h2>
               {/* <div>
                 <Avatar src={selectedImage} alt="Selected" fallback="A" />
               </div> */}
