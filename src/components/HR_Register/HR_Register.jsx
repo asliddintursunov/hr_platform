@@ -52,7 +52,7 @@ function HR_Register() {
   const full = useRef(null)
   const value = useRef(0)
   const [isOnProgress, setIsOnProgress] = useState(false)
-  const [isDone, setIsDone] = useState(false)
+  const [isDone, setIsDone] = useState(null)
   const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
 
   // Token Expired Validation
@@ -261,7 +261,7 @@ function HR_Register() {
       <h1 className="text-center display-3 mb-4">HR Register Title</h1>
       {!isPending && (
         <div
-          className={`${styles.HrRegisterContainer} pageAnimation`}
+          className={`${styles.HrRegisterContainer} pageAnimation container`}
           style={{
             filter: isOpen || wrongUser ? "blur(4px)" : "blur(0)"
           }}
@@ -347,6 +347,16 @@ function HR_Register() {
               <Button onClick={sendCandidateData} className={styles.AddUser}>
                 Send
               </Button>
+              {isDone === false && (
+                <span
+                  style={{
+                    marginLeft: "1rem",
+                    textDecoration: "underline"
+                  }}
+                >
+                  Uploaded
+                </span>
+              )}
               <div
                 style={{
                   marginTop: "1rem",

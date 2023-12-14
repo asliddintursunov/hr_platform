@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import university from "../../../styles/EditProfile.module.css"
 import { Button, Checkbox, Flex, Select, Table, Text, TextField } from "@radix-ui/themes"
 import { PlusIcon } from "@radix-ui/react-icons"
@@ -13,6 +13,20 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
   const [universityName, setUniversityName] = useState("")
   const [universityLocation, setUniversityLocation] = useState("")
   const [emptyFields, setEmptyFields] = useState(false)
+  const [isFilled, setIsFilled] = useState(false)
+
+  useEffect(
+    () => {
+      if (degree !== '' && universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
+        setIsFilled(true)
+      }
+      else {
+        setIsFilled(false)
+      }
+    }, [
+    degree, universityMajor, fromYear, toYear, universityName, universityLocation
+  ]
+  )
 
   const addEducation = () => {
     if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
@@ -128,7 +142,7 @@ function CandidateEducation({ candidateEducation, setCandidateEducation }) {
             />
           </Text>
         </div>
-        <Button className={university.AddEducationButton} onClick={addEducation}>
+        <Button className={university.AddEducationButton} onClick={addEducation} disabled={!isFilled}>
           <PlusIcon />
         </Button>
       </div>

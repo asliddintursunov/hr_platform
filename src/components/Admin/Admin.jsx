@@ -22,7 +22,7 @@ function Admin() {
   )
 
   return (
-    <div className={`container ${styles.adminContainer} pageAnimation`}>
+    <div className={`${styles.adminContainer} pageAnimation`}>
       <br />
       <h1 className="display-3 text-dark text-center">Admin Panel</h1>
       <br />

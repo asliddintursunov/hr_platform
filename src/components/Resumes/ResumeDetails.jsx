@@ -70,7 +70,6 @@ function _ResumeDetails() {
         }
       })
   }, [userID, tokenExpired])
-
   return (
     <>
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
@@ -129,7 +128,7 @@ function _ResumeDetails() {
               </div>
             ) : (
               <div className={styles.userPhoneNumber}>
-                Phone Numbers:{" "}
+                Phone Numbers: 
                 <Code>
                   <a href={`tel:+${userResumeData.phone_number}`} className="text-decoration-none">
                     {userResumeData.phone_number}

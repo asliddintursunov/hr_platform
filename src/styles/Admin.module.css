@@ -1,8 +1,9 @@
 /* ========== Admin Layout ========== */
 .adminContainer {
-  width: 96%;
+  width: 80%;
   height: 100%;
   color: var(--dark);
+  margin: 0px auto;
 }
 
 .adminNav {

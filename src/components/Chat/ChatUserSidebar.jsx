@@ -9,13 +9,6 @@ import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
 import { Avatar, Card, Code, Flex, Text } from "@radix-ui/themes"
 
-// import { setUsersData, setUsersImage } from "../features/chatWebSocketPlaceSlicer"
-// import { setUsersData } from "../features/chatWebSocketPlaceSlicer"
-// const userData = useSelector((state) => state.usersData.usersData)
-// const userImage = useSelector((state) => state.usersData.usersImage)
-// dispatch(setUsersData(data)) -> Count
-// dispatch(setUsersImage(res.data)) -> GET
-
 function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
   const userid = localStorage.getItem("userId")
   const navigate = useNavigate()
@@ -72,6 +65,9 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
     if (isConnected) {
       socketInstance.on("count", (data) => {
         setUserData(data)
+        console.log(data)
+        // const d = data
+        // console.log(userid, d);
       })
     }
   }, [isConnected, socketInstance])
@@ -81,7 +77,6 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
       setTimeout(() => {
         axios
           .get(`${baseUrl}/chat/${userid}`, {
-            // headers: head
             headers: {
               "X-UserRole": localStorage.getItem("userRole"),
               "X-UserId": localStorage.getItem("userId")
@@ -107,6 +102,12 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
       }, 100)
     }
   }, [userid, head])
+  useEffect(
+    () => {
+      console.log("Image -> ", userImage);
+      console.log("Count -> ", userData);
+    }, [userImage, userData]
+  )
   return (
     <>
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
@@ -122,7 +123,9 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
                   <Card key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
                     <Flex gap="3" align="center">
                       <Avatar src={userInfo.profile_photo} radius="full" fallback="A" />
-                      {user.id === userInfo.id && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>}
+                      {user.id === userInfo.id && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>} 
+                      {/* user.id === userInfo.id && */}
+                      {/*  */}
                       <Text as="div" size="2" weight="bold">
                         {userInfo.username}
                       </Text>
@@ -138,12 +141,3 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
 }
 
 export default ChatUserSidebar
-{
-  /* <div key={user.id}
-className={styles.userCard}
-onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
-{user.id === userInfo.id && <span className={styles.unreadMsg}>{user.unread_msg}</span>}
-<span>{userInfo.username}</span>
-<img src={userInfo.profile_photo !== null ? userInfo.profile_photo : defaultImage} alt={`Profile of ${userInfo.username}`} />
-</div> */
-}

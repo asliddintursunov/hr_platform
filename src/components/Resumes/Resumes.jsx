@@ -303,7 +303,7 @@ function Resumes() {
                       Filter
                     </button>
                     <button type="submit" onClick={seeAllResumes}>
-                      All
+                      Clear
                     </button>
                   </div>
                 </div>

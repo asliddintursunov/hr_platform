@@ -38,6 +38,7 @@
 }
 
 .TodayBirthDay {
+  width: 50%;
   padding: 0.5rem 0;
   background-color: var(--white);
   color: limegreen;
@@ -89,5 +90,8 @@
 }
 
 .noBirthDay {
+  display: grid;
+  place-items: center;
   font-size: 3rem;
+  letter-spacing: 1rem;
 }

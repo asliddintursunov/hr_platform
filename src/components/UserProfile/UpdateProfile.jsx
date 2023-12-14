@@ -391,7 +391,7 @@ function UpdateProfile() {
     setExperience(value)
   }
 
-  // ###########################################################333
+  // ###########################################################
   return (
     <>
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
@@ -413,7 +413,9 @@ function UpdateProfile() {
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
             <div className={styles.profileUpdateHeader}>
-              <h2>My Profile</h2>
+              <h2 style={{
+                letterSpacing: '1rem'
+              }}>My Profile</h2>
               {/* <div>
                 <Avatar src={selectedImage} alt="Selected" fallback="A" />
               </div> */}

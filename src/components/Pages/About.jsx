@@ -33,18 +33,14 @@ function About() {
 
   const fetchUsers = useCallback(() => {
     axios
-      .get(`${baseUrl}/users`, {
+      .get(`${baseUrl}/count_users`, {
         headers: {
           "X-UserRole": memberRole,
           "X-UserId": memberId
         }
       })
       .then((req) => {
-        req.data.map((user) => {
-          if (!user.accepted && user.approved) {
-            setWaitingUsers((prev) => (prev += 1))
-          }
-        })
+        setWaitingUsers(req.data)
       })
       .catch((err) => {
         if (err.request.status === 500 || err.request.status === 0) {

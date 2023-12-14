@@ -130,7 +130,11 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
       <div className={styles.conversationPath} ref={conversationPathRef}>
         {messages &&
           messages.map((message, index) => (
-            <div key={index} id={message.msg_id} value={message.is_read}>
+            <div key={index} id={message.msg_id} value={message.is_read} style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: message.sender_id === Number(senderId) ? "flex-end" : "flex-start"
+            }}>
               {message.sender_id === Number(senderId) && message.receiver_id === Number(receiverId) ? (
                 <div style={sendingStyle}>
                   <p style={{ ...messageStyle, backgroundColor: "royalblue" }}>{message.message}</p>
@@ -180,9 +184,9 @@ const sendingStyle = {
   display: "flex",
   justifyContent: "end",
   position: "relative",
-  marginLeft: "10rem",
   wordWrap: "break-word",
-  maxWidth: "125rem"
+  maxWidth: "125rem",
+  width: "100%",
 }
 
 const receivingStyle = {
@@ -195,7 +199,7 @@ const receivingStyle = {
   position: "relative",
   marginRight: "10rem",
   wordWrap: "break-word",
-  maxWidth: "125rem"
+  maxWidth: "125rem",
 }
 
 const messageStyle = {

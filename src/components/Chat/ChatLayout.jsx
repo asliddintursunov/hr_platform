@@ -16,7 +16,6 @@ function ChatLayout() {
 
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
-  const head = useSelector((state) => state.headers)
 
   const [chatSelected, setChatSelected] = useState(false)
   const [oneUserData, setOneUserData] = useState({})
@@ -31,7 +30,6 @@ function ChatLayout() {
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
   const userID = localStorage.getItem("userId")
-  // const [isPending, setIsPending] = useState(false)
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -56,7 +54,6 @@ function ChatLayout() {
       setTimeout(() => {
         localStorage.removeItem("token")
         localStorage.clear()
-        // navigate("/signin")
       }, 1500)
     },
     [navigate]
@@ -69,7 +66,6 @@ function ChatLayout() {
     localStorage.setItem("receiverUsername", username)
 
     setChatSelected(true)
-    // setIsPending(true)
     axios
       .post(
         `${baseUrl}/chat/${senderId}`,
@@ -77,7 +73,6 @@ function ChatLayout() {
           username: username
         },
         {
-          // headers: head
           headers: {
             "X-UserRole": localStorage.getItem("userRole"),
             "X-UserId": localStorage.getItem("userId")

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useCallback, useEffect, useState, useRef, Fragment } from "react"
+import { useCallback, useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
 import styles from "../../styles/Birthdays.module.css"
@@ -170,7 +170,7 @@ function _Birthdays() {
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-      <div className={`container pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
+      <div className={`pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)", width: '80%' ,margin: '0px auto' }}>
         <h1 className="display-3 text-center">Birthdays</h1>
         <br />
         <br />
@@ -208,10 +208,20 @@ function _Birthdays() {
                               <Avatar.Fallback className={styles.AvatarFallback}>A</Avatar.Fallback>
                             </Avatar.Root>
                           </Table.Cell>
-                          <Table.Cell>{user.username}</Table.Cell>
-                          <Table.Cell>{user.date_birth}</Table.Cell>
+                          <Table.Cell style={{
+                            fontWeight: 600,
+                            color: '#222',
+                            fontSize: '1.8rem'
+                          }}>{user.username}</Table.Cell>
+                          <Table.Cell style={{
+                            fontWeight: 600,
+                            color: '#222',
+                            fontSize: '1.8rem'
+                          }}>{user.date_birth}</Table.Cell>
                           <Table.Cell>
-                            <Code>Birthday!</Code>
+                            <Code style={{
+                              fontSize: '1.8rem',
+                            }}>Birthday!</Code>
                             {leftDays[index] <= 15 && leftDays[index] >= 1 ? (
                               <h5 className="text-info">{leftDays[index]} left</h5>
                             ) : leftDays[index] == 0 ? (
