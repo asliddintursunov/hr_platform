@@ -15,6 +15,7 @@ import { Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
 import InternalError from "../Modals/InternalError"
+import { Spinner } from "../../lottie/illustrations"
 
 function Moderator() {
   const memberRole = localStorage.getItem("userRole")
@@ -151,7 +152,7 @@ function Moderator() {
       {showModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}
       <div className={`container pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div style={{ filter: showModal ? "blur(4px)" : "blur(0)" }}>
-          {isPending && <div className="loaderr"></div>}
+          {isPending && <Spinner />}
           <div className={`container ${styles.ModeratorContainer}`}>
             {!isPending && (
               <Table.Root variant="surface">
@@ -178,9 +179,9 @@ function Moderator() {
                             </Table.RowHeaderCell>
                             <Table.Cell>
                               <Avatar.Root className={styles.AvatarRoot}>
-                                <Avatar.Image className={styles.AvatarImage} src={data.profile_photo ? data.profile_photo : defaultImage} alt="Colm Tuite" />
+                                <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} alt="Colm Tuite" />
                                 <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
-                                  CT
+                                  {data.username.slice(0, 2).toUpperCase()}
                                 </Avatar.Fallback>
                               </Avatar.Root>
                             </Table.Cell>

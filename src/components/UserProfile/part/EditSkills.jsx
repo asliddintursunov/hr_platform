@@ -1,52 +1,44 @@
 /* eslint-disable react/prop-types */
-import additional from '../../../styles/Additional.module.css'
+import additional from "../../../styles/Additional.module.css"
 import { PlusIcon } from "@radix-ui/react-icons"
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes"
-import styles from '../../../styles/EditProfile.module.css'
-import hrstyle from '../../../styles/HR_Register.module.css'
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon } from '@radix-ui/react-icons';
-import { useState } from 'react';
-function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
-  setSkills, customTech, setCustomTech, UserSkills }) {
-
-  const [openToast, setOpenToast] = useState(false);
-  const [toastInfo, setToastInfo] = useState('');
+import styles from "../../../styles/EditProfile.module.css"
+import hrstyle from "../../../styles/HR_Register.module.css"
+import * as Checkbox from "@radix-ui/react-checkbox"
+import { CheckIcon } from "@radix-ui/react-icons"
+import { useState } from "react"
+function EditSkills({ changeProfile, customTechList, setCustomTechList, skills, setSkills, customTech, setCustomTech, UserSkills }) {
+  const [openToast, setOpenToast] = useState(false)
+  const [toastInfo, setToastInfo] = useState("")
 
   const seeSkills = (value) => {
     if (skills.includes(value)) {
-      setSkills((prev) => prev.filter((skill) => skill !== value));
+      setSkills((prev) => prev.filter((skill) => skill !== value))
     } else {
-      setSkills((prev) => [...prev, value]);
+      setSkills((prev) => [...prev, value])
     }
-  };
+  }
 
   const handleAddCustomTech = () => {
     if (customTech && !customTechList.includes(customTech) && !UserSkills.includes(customTech.toLowerCase())) {
-      setCustomTechList((prev) => [...prev, customTech]);
-      setSkills((prev) => [...new Set([...prev, customTech])]);
-      setCustomTech('');
+      setCustomTechList((prev) => [...prev, customTech])
+      setSkills((prev) => [...new Set([...prev, customTech])])
+      setCustomTech("")
     } else {
       setOpenToast(false)
       setTimeout(() => {
-        setOpenToast(true);
-        setToastInfo('This technology already exists or is invalid');
-
-        // setTimeout(() => {
-        //   setOpenToast(false);
-        // }, 1500);
-
-      }, 100);
-
+        setOpenToast(true)
+        setToastInfo("This technology already exists or is invalid")
+      }, 100)
     }
-  };
+  }
 
   const handleDeleteCustomTech = (tech) => {
-    setCustomTechList((prev) => prev.filter((t) => t !== tech));
-    const updatedSkills = skills.filter((skill) => skill !== tech);
+    setCustomTechList((prev) => prev.filter((t) => t !== tech))
+    const updatedSkills = skills.filter((skill) => skill !== tech)
 
-    setSkills(updatedSkills);
-  };
+    setSkills(updatedSkills)
+  }
 
   return (
     <>
@@ -58,25 +50,19 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
       )}
       <div className={additional.skillsContainier}>
         <div className={styles.CustomTechContainer}>
-          <Text as="label" style={{ fontSize: '1.8rem' }}>
+          <Text as="label" style={{ fontSize: "1.8rem" }}>
             Custom Technalogies
           </Text>
-          <Flex direction='row' align='center' gap='4' wrap='wrap' >
+          <Flex direction="row" align="center" gap="4" wrap="wrap">
             {UserSkills.map((skill) => {
               return (
-                <Flex key={skill} mb='2' style={{ width: '150px' }}>
-                  <Checkbox.Root
-                    className={hrstyle.CheckboxRoot}
-                    id={skill}
-                    onClick={(e) => seeSkills(e.target.id)}
-                    checked={skills.includes(skill)}
-                    disabled={!changeProfile}
-                  >
-                    <Checkbox.Indicator className={hrstyle.CheckboxIndicator} >
+                <Flex key={skill} mb="2" style={{ width: "150px" }}>
+                  <Checkbox.Root className={hrstyle.CheckboxRoot} id={skill} onClick={(e) => seeSkills(e.target.id)} checked={skills.includes(skill)} disabled={!changeProfile}>
+                    <Checkbox.Indicator className={hrstyle.CheckboxIndicator}>
                       <CheckIcon />
                     </Checkbox.Indicator>
                   </Checkbox.Root>
-                  <Text as="label" className={hrstyle.Label} htmlFor={skill} style={{ textTransform: 'capitalize' }}>
+                  <Text as="label" className={hrstyle.Label} htmlFor={skill} style={{ textTransform: "capitalize" }}>
                     {skill}
                   </Text>
                 </Flex>
@@ -102,10 +88,7 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
                   <Text as="div" size="2" mb="1" weight="bold">
                     Custom Tech
                   </Text>
-                  <TextField.Input
-                    value={customTech}
-                    onChange={(e) => setCustomTech(e.target.value)}
-                    placeholder="Enter one technalogy name" />
+                  <TextField.Input value={customTech} onChange={(e) => setCustomTech(e.target.value)} placeholder="Enter one technalogy name" />
                 </label>
               </Flex>
 
@@ -121,26 +104,29 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills,
               </Flex>
             </Dialog.Content>
           </Dialog.Root>
-          <Text as='div' mt='4' className={styles.TechListContainer}>
-            {customTechList.length > 0 && customTechList.map((tech) => {
-              return (
-                <Text as="div" key={tech} className={styles.techCard} style={{ border: !changeProfile && '1px solid gray' }}>
-                  <Text as="span" size="3" weight="bold">
-                    {tech}
+          <Text as="div" mt="4" className={styles.TechListContainer}>
+            {customTechList.length > 0 &&
+              customTechList.map((tech) => {
+                return (
+                  <Text as="div" key={tech} className={styles.techCard} style={{ border: !changeProfile && "1px solid gray" }}>
+                    <Text as="span" size="3" weight="bold">
+                      {tech}
+                    </Text>
+                    {changeProfile && (
+                      <Button
+                        color="red"
+                        size="small"
+                        className={styles.CustomTechDeleteButton}
+                        onClick={() => {
+                          handleDeleteCustomTech(tech)
+                        }}
+                      >
+                        &times;
+                      </Button>
+                    )}
                   </Text>
-                  {changeProfile && <Button
-                    color="red"
-                    size="small"
-                    className={styles.CustomTechDeleteButton}
-                    onClick={() => {
-                      handleDeleteCustomTech(tech)
-                    }}
-                  >
-                    &times;
-                  </Button>}
-                </Text>
-              )
-            })}
+                )
+              })}
           </Text>
         </div>
       </div>

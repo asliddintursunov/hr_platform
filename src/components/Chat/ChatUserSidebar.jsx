@@ -8,6 +8,7 @@ import AnotherUser from "../Modals/AnotherUser"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
 import { Avatar, Card, Code, Flex, Text } from "@radix-ui/themes"
+import { setCount } from "../../redux/features/chatMsgCountSlice"
 
 function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
   const userid = localStorage.getItem("userId")
@@ -65,9 +66,8 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
     if (isConnected) {
       socketInstance.on("count", (data) => {
         setUserData(data)
-        console.log(data)
-        // const d = data
-        // console.log(userid, d);
+        const unreadMsgCount = data.map((msg) => msg.unread_msg).reduce((a, b) => a + b, 0 )
+        dispatch(setCount(unreadMsgCount))
       })
     }
   }, [isConnected, socketInstance])
@@ -102,12 +102,7 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
       }, 100)
     }
   }, [userid, head])
-  useEffect(
-    () => {
-      console.log("Image -> ", userImage);
-      console.log("Count -> ", userData);
-    }, [userImage, userData]
-  )
+
   return (
     <>
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
@@ -122,10 +117,8 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
                 return (
                   <Card key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
                     <Flex gap="3" align="center">
-                      <Avatar src={userInfo.profile_photo} radius="full" fallback="A" />
-                      {user.id === userInfo.id && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>} 
-                      {/* user.id === userInfo.id && */}
-                      {/*  */}
+                      <Avatar src={userInfo.profile_photo} radius="full" fallback={userImage[index].username.slice(0,2).toUpperCase()} />
+                      {user.id === userInfo.id && user.unread_msg !== 0 && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>} 
                       <Text as="div" size="2" weight="bold">
                         {userInfo.username}
                       </Text>

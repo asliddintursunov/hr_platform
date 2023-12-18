@@ -101,7 +101,7 @@ function _ConfirmationCode({
             </label>
             <br />
             {remindEmailCode && <h3>Emailingizga kelgan 6 ta raqamdan iborat sonni kiriting!</h3>}
-            <InputNumber id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
+            <InputNumber useGrouping={false} id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
             <button
               type="submit"
               className="btn btn-primary sendBtn"

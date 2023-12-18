@@ -1,25 +1,30 @@
 import { useEffect, useState, useRef } from "react"
 import styles from "../../styles/Chat.module.css"
-import useURL from "../../hooks/useURL"
 import { useSelector } from "react-redux"
 import { Avatar } from "@radix-ui/themes"
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const conversationPathRef = useRef(null)
 
-  const { defaultImage } = useURL()
   const [senderText, setSenderText] = useState("")
   const [scrollBottom, setScrollBottom] = useState(false)
   const chatContainerRef = useRef(null)
-
   const senderId = localStorage.getItem("userId")
   const receiverId = localStorage.getItem("receiverId")
-
+  const [imgFallback, setImgFallback] = useState("")
+  
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollIntoView({ behavior: "smooth" })
     }
   }
+  
+  useEffect(() => {
+    if (oneUserData.profile_photo === null) {
+      setImgFallback(oneUserData.username.slice(0, 2).toUpperCase())
+    }
+  }, [oneUserData.username])
+  
 
   useEffect(() => {
     socketInstance.on("new_message", (data) => {
@@ -123,18 +128,22 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
   return (
     <>
       <div className={styles.receiverHeader}>
-        {console.log(oneUserData)}
         <span>{oneUserData.username}</span>
-        <Avatar src={oneUserData.profile_photo} radius="full" fallback="A" />
+        <Avatar src={oneUserData.profile_photo} radius="full" fallback={imgFallback} />
       </div>
       <div className={styles.conversationPath} ref={conversationPathRef}>
         {messages &&
           messages.map((message, index) => (
-            <div key={index} id={message.msg_id} value={message.is_read} style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: message.sender_id === Number(senderId) ? "flex-end" : "flex-start"
-            }}>
+            <div
+              key={index}
+              id={message.msg_id}
+              value={message.is_read}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: message.sender_id === Number(senderId) ? "flex-end" : "flex-start"
+              }}
+            >
               {message.sender_id === Number(senderId) && message.receiver_id === Number(receiverId) ? (
                 <div style={sendingStyle}>
                   <p style={{ ...messageStyle, backgroundColor: "royalblue" }}>{message.message}</p>
@@ -186,7 +195,7 @@ const sendingStyle = {
   position: "relative",
   wordWrap: "break-word",
   maxWidth: "125rem",
-  width: "100%",
+  width: "100%"
 }
 
 const receivingStyle = {
@@ -199,7 +208,7 @@ const receivingStyle = {
   position: "relative",
   marginRight: "10rem",
   wordWrap: "break-word",
-  maxWidth: "125rem",
+  maxWidth: "125rem"
 }
 
 const messageStyle = {

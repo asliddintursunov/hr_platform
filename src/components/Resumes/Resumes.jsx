@@ -8,12 +8,13 @@ import { logoutUser } from "../../redux/features/userDataSlice"
 import { useDispatch, useSelector } from "react-redux"
 import AnotherUser from "../Modals/AnotherUser"
 import PopUp from "../Modals/PopUp"
-import { Text, Flex } from "@radix-ui/themes"
+import { Text, Flex, Button, TextField, Dialog } from "@radix-ui/themes"
 import * as Checkbox from "@radix-ui/react-checkbox"
-import { CheckIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
+import { CheckIcon, PlusIcon } from "@radix-ui/react-icons"
 import ResumeList from "./ResumeList"
 import Pagination from "./Pagination"
 import InternalError from "../Modals/InternalError"
+import { Spinner } from "../../lottie/illustrations"
 
 function Resumes() {
   const dispatch = useDispatch()
@@ -35,13 +36,13 @@ function Resumes() {
 
   const [resumeData, setResumeData] = useState([])
 
-  const Skills = [
+  const [DefaultSkills, setDefaultSkills] = useState([
     "typescript",
     "javascript",
     "react",
     "vue",
     "angular",
-    "nodeJS",
+    "nodejs",
     "php",
     "rust",
     "go",
@@ -50,16 +51,18 @@ function Resumes() {
     "java",
     "spring",
     "swing",
-    "cSharp",
+    "csharp",
     ".net",
-    "pyhton",
+    "python",
     "django",
     "flask",
     "kotlin",
     "swift",
     "figma",
     "adobe"
-  ]
+  ])
+  const [customTech, setCustomTech] = useState("")
+
   const WorkExperience = ["0-1", "1-3", "3-6", "6+"]
   const Specializations = [
     "FullStack-developer",
@@ -94,6 +97,8 @@ function Resumes() {
   const lastPostIndex = currentPage * postPerPage
   const firstPostIndex = lastPostIndex - postPerPage
 
+  const [openToast, setOpenToast] = useState(false)
+  const [toastInfo, setToastInfo] = useState("")
   // Token Expired Validation
   const tokenExpired = useCallback(
     (info) => {
@@ -127,7 +132,6 @@ function Resumes() {
         }
       )
       .then((res) => {
-        console.log(res)
         setResumeData(res.data.results)
 
         if (res.status === 500 || res.status === 0) {
@@ -219,15 +223,28 @@ function Resumes() {
     setMajor(value)
   }
 
-  const seeResumeDetail = (userID) => {
+  const seeResumeDetail = (userID, userName) => {
     localStorage.setItem("userResumeID", userID)
+    localStorage.setItem("userResumeName", userName)
     navigate("./userResume")
   }
 
+  const handleAddCustomTech = (tech) => {
+    if (!DefaultSkills.includes(tech) && tech !== "") {
+      setDefaultSkills((prev) => [...prev, tech])
+      setSkills((prev) => [...prev, tech])
+    } else {
+      setOpenToast(false)
+      setTimeout(() => {
+        setOpenToast(true)
+        setToastInfo("This technology already exists or is invalid")
+      }, 100)
+    }
+  }
   const currentPosts = resumeData.slice(firstPostIndex, lastPostIndex)
   return (
     <>
-      {isPending && <div className="loaderr"></div>}
+      {isPending && <Spinner />}
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
@@ -246,9 +263,11 @@ function Resumes() {
             </div>
           </div>
           <main className={styles.main}>
-            <div style={{
-              flex: 2
-            }}>
+            <div
+              style={{
+                flex: 2
+              }}
+            >
               <ResumeList
                 resumeData={currentPosts}
                 seeResumeDetail={seeResumeDetail}
@@ -259,17 +278,11 @@ function Resumes() {
                 setCurrentPage={setCurrentPage}
                 postPerPage={postPerPage}
               />
-              <Pagination totalPost={resumeData.length} postPerPage={postPerPage} setCurrentPage={setCurrentPage} />
+              <Pagination totalPost={resumeData.length} postPerPage={postPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage} />
             </div>
             <aside className={styles.rightAside}>
               <form method="GET" onSubmit={(e) => e.preventDefault()}>
                 <div className={styles.filterWrapper}>
-                  <div className={styles.searchByName}>
-                    <input type="text" />
-                    <button>
-                      <MagnifyingGlassIcon />
-                    </button>
-                  </div>
                   <div className={styles.filterOptionsContainer}>
                     {SearchOptions &&
                       SearchOptions.map((option) => {
@@ -297,15 +310,6 @@ function Resumes() {
                           </div>
                         )
                       })}
-                  </div>
-
-                  <div className={styles.filterByButton}>
-                    <button type="submit" onClick={sendData}>
-                      Filter
-                    </button>
-                    <button type="submit" onClick={seeAllResumes}>
-                      Clear
-                    </button>
                   </div>
                 </div>
                 <div className={`${styles.filterWrapper}`}>
@@ -372,11 +376,17 @@ function Resumes() {
                       })}
                   </div>
                 </div>
-                <div className={`${styles.filterWrapper}`}>
+                <div
+                  className={`${styles.filterWrapper}`}
+                  style={{
+                    position: "relative",
+                    paddingBottom: "5rem"
+                  }}
+                >
                   <h3 className="mb-4">Languages / Technologies</h3>
                   <div className={styles.technalogyContainer}>
-                    {Skills &&
-                      Skills.map((type) => {
+                    {DefaultSkills &&
+                      DefaultSkills.map((type) => {
                         return (
                           <Flex key={type} mb="2" style={{ width: "120px" }}>
                             <Checkbox.Root className={styles.CheckboxRoot} id={type} onClick={(e) => KnowingSkills(e.target.id)} checked={skills.includes(type.split("-").join("").toLowerCase())}>
@@ -390,6 +400,56 @@ function Resumes() {
                           </Flex>
                         )
                       })}
+                  </div>
+                  {openToast && (
+                    <div className={styles.toastContainer}>
+                      <span>{toastInfo}</span>
+                      <button onClick={() => setOpenToast(false)}>undo</button>
+                    </div>
+                  )}
+                  <Dialog.Root>
+                    <Dialog.Trigger>
+                      <Button radius="full" variant="outline">
+                        <PlusIcon width="18" height="18" /> Search more skills
+                      </Button>
+                    </Dialog.Trigger>
+
+                    <Dialog.Content style={{ maxWidth: 450 }}>
+                      <Dialog.Title>More technalogy</Dialog.Title>
+                      <Dialog.Description size="2" mb="4">
+                        Find more skilled users/candidates.
+                      </Dialog.Description>
+
+                      <Flex direction="column" gap="3">
+                        <label>
+                          <Text as="div" size="2" mb="1" weight="bold">
+                            More Tech
+                          </Text>
+                          <TextField.Input value={customTech} onChange={(e) => setCustomTech(e.target.value.toLowerCase())} placeholder="Enter one technalogy name" />
+                        </label>
+                      </Flex>
+
+                      <Flex gap="3" mt="4" justify="end">
+                        <Dialog.Close>
+                          <Button variant="soft" color="gray">
+                            Cancel
+                          </Button>
+                        </Dialog.Close>
+                        <Dialog.Close>
+                          <Button onClick={() => handleAddCustomTech(customTech)}>Add</Button>
+                        </Dialog.Close>
+                      </Flex>
+                    </Dialog.Content>
+                  </Dialog.Root>
+                </div>
+                <div className={styles.filterWrapper}>
+                  <div className={styles.filterByButton}>
+                    <Button variant="surface" type="submit" onClick={sendData}>
+                      Filter
+                    </Button>
+                    <Button variant="surface" color="orange" type="submit" onClick={seeAllResumes}>
+                      Clear
+                    </Button>
                   </div>
                 </div>
               </form>

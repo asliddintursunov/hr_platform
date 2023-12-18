@@ -15,33 +15,33 @@
   background-color: var(--white);
 }
 
-.header>div {
+.header > div {
   margin: 1rem 3rem;
   height: fit-content;
   display: flex;
   flex-direction: column;
 }
 
-.header>h1 {
+.header > h1 {
   text-align: center;
 }
 
-.header>div>div {
+.header > div > div {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.header>div>div>span {
+.header > div > div > span {
   color: royalblue;
 }
 
-.header>div>div>strong:first-child {
+.header > div > div > strong:first-child {
   font-size: 3rem;
   text-transform: capitalize;
 }
 
-.header>div>div>strong:last-child {
+.header > div > div > strong:last-child {
   color: gray;
   text-transform: uppercase;
   font-size: 1.7rem;
@@ -123,7 +123,7 @@
   gap: 0.8rem;
 }
 
-.resumeCardSkills>code {
+.resumeCardSkills > code {
   padding: 0.3rem 1rem;
   background-color: lightgray;
   color: var(--white);
@@ -142,16 +142,16 @@
   margin-top: 1rem;
 }
 
-.resumeCardMore>div {
+.resumeCardMore > div {
   text-align: start;
   flex: 1;
 }
 
-.resumeCardMore>div>span {
+.resumeCardMore > div > span {
   color: gray;
 }
 
-.resumeCardMore>div>p {
+.resumeCardMore > div > p {
   font-size: 1.7rem;
 }
 
@@ -161,7 +161,7 @@
   align-items: center;
 }
 
-.resumeCVCard>button {
+.resumeCVCard > button {
   width: 50%;
   cursor: pointer;
   transition: all 0.2s;
@@ -180,7 +180,7 @@
   justify-content: center;
 }
 
-.rightAside>form {
+.rightAside > form {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -200,7 +200,7 @@
 }
 
 /** ================== Search Bar ================== */
-.filterWrapper>h3 {
+.filterWrapper > h3 {
   color: gray;
   text-transform: uppercase;
 }
@@ -213,40 +213,6 @@
   gap: 1.5rem;
 }
 
-.searchByName {
-  height: 3rem;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.searchByName>input {
-  padding: 0 0.8rem;
-  height: 100%;
-  border: 1px solid lightgray;
-  border-radius: 1rem 0 0 1rem;
-  width: 100%;
-  outline: none;
-  transition: all 0.2s;
-}
-
-.searchByName>input:focus {
-  border: 1px solid lightblue;
-}
-
-.searchByName>button {
-  height: 100%;
-  padding: 0 1.6rem;
-  border: 0;
-  color: var(--white);
-  border-radius: 0 1rem 1rem 0;
-  transition: background-color 0.2s;
-  background-color: royalblue;
-
-}
-
 .filterByButton {
   width: 100%;
   display: flex;
@@ -255,7 +221,7 @@
   justify-content: space-between;
 }
 
-.filterWrapper:first-child>.filterByButton>button {
+.filterWrapper:first-child > .filterByButton > button {
   padding: 0.6rem 1.5rem;
   border: 0;
   color: var(--white);
@@ -263,26 +229,26 @@
   transition: background-color 0.2s;
 }
 
-.filterWrapper:first-child>.filterByButton>button:first-child {
+.filterWrapper:first-child > .filterByButton > button:first-child {
   background-color: rgb(108, 142, 243);
 }
 
-.filterWrapper:first-child>.filterByButton>button:first-child:hover {
+.filterWrapper:first-child > .filterByButton > button:first-child:hover {
   background-color: rgb(79, 119, 237);
 }
 
-.filterWrapper:first-child>.filterByButton>button:last-child {
+.filterWrapper:first-child > .filterByButton > button:last-child {
   background-color: #ffa500;
 }
 
-.filterWrapper:first-child>.filterByButton>button:last-child:hover {
+.filterWrapper:first-child > .filterByButton > button:last-child:hover {
   background-color: #df9100;
 }
 
 /** ==================================== */
 
 /** ================== Employment Type / Specializations ================== */
-.filterWrapper:last-child>div>label {
+.filterWrapper:last-child > div > label {
   position: relative;
   display: inline-block;
   cursor: pointer;
@@ -290,7 +256,7 @@
   margin: 0.2rem auto;
 }
 
-.filterWrapper:last-child>div>label input {
+.filterWrapper:last-child > div > label input {
   /* position: absolute; */
   /* opacity: 0; */
   cursor: pointer;
@@ -311,12 +277,12 @@
   -o-border-radius: 3px;
 }
 
-.filterWrapper:last-child>div>label input:checked~.checkboxSpan {
+.filterWrapper:last-child > div > label input:checked ~ .checkboxSpan {
   background-color: royalblue;
   border-color: royalblue;
 }
 
-.filterWrapper:last-child>div>label input:checked~.checkboxSpan:after {
+.filterWrapper:last-child > div > label input:checked ~ .checkboxSpan:after {
   content: "\2713";
   position: absolute;
   top: 0;
@@ -330,8 +296,8 @@
 /** ================= Experience =================== */
 /* === AND === */
 /** ================== Employment Type / Specializations ================== */
-.filterWrapper:nth-child(3)>div>label,
-.filterWrapper:nth-child(2)>div>label {
+.filterWrapper:nth-child(3) > div > label,
+.filterWrapper:nth-child(2) > div > label {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -342,20 +308,20 @@
   -o-transition: all 0.2s ease-in-out;
 }
 
-.filterWrapper:nth-child(3)>div>label:hover,
-.filterWrapper:nth-child(2)>div>label:hover {
+.filterWrapper:nth-child(3) > div > label:hover,
+.filterWrapper:nth-child(2) > div > label:hover {
   transform: translateY(-2px);
 }
 
-.filterOptionsContainer>div>label {
+.filterOptionsContainer > div > label {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
 }
 
-.majorContainer input[type="radio"]:checked~.radioCheckmark:before,
-.workExperienceContainer input[type="radio"]:checked~.radioCheckmark:before,
-.filterOptionsContainer input[type="radio"]:checked~.radioCheckmark:before {
+.majorContainer input[type="radio"]:checked ~ .radioCheckmark:before,
+.workExperienceContainer input[type="radio"]:checked ~ .radioCheckmark:before,
+.filterOptionsContainer input[type="radio"]:checked ~ .radioCheckmark:before {
   transform: translate(-50%, -50%) scale(1);
 }
 
@@ -382,20 +348,29 @@
   transition: all 0.2s ease-in-out;
 }
 
-.filterWrapper>input {
+.filterWrapper > input {
   height: 8rem;
   width: 8rem;
 }
 
-.technalogyContainer,
+.technalogyContainer {
+  width: 100%;
+  gap: 1rem 2rem;
+  max-height: 350px;
+  overflow-y: scroll;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); */
+  padding: 1rem;
+}
 .workExperienceContainer {
   width: 100%;
   gap: 1rem 2rem;
   max-height: 350px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
@@ -408,11 +383,10 @@
   align-items: flex-start;
   justify-content: center;
   flex-wrap: wrap;
-
 }
 
-@import '@radix-ui/colors/black-alpha.css';
-@import '@radix-ui/colors/violet.css';
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/colors/violet.css";
 
 /* reset */
 button {
@@ -448,7 +422,7 @@ button {
   line-height: 1;
 }
 
-@import '@radix-ui/colors/black-alpha.css';
+@import "@radix-ui/colors/black-alpha.css";
 
 /* reset */
 button {
@@ -464,8 +438,7 @@ button {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-
-.SwitchRoot[data-state='checked'] {
+.SwitchRoot[data-state="checked"] {
   background-color: royalblue;
 }
 
@@ -480,7 +453,7 @@ button {
   will-change: transform;
 }
 
-.SwitchThumb[data-state='checked'] {
+.SwitchThumb[data-state="checked"] {
   transform: translateX(19px);
 }
 
@@ -497,5 +470,40 @@ button {
 }
 
 /** ==================================== */
+.toastContainer {
+  position: absolute;
+  max-width: 350px;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  animation: toastAnimate 0.2s ease-in-out forwards 0.15s 1 normal running;
+  opacity: 0;
+  background-color: royalblue;
+  border-radius: 8px;
+  color: #fff;
+}
+.toastContainer > button {
+  width: fit-content;
+  padding: 0.2rem 0.6rem;
+  background-color: rgb(253, 86, 111);
+  border-radius: 4px;
+  outline: 2px solid orangered;
+  outline-offset: 2px;
+}
+@keyframes toastAnimate {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
 
 /** ========== FOOTER ========== */

@@ -78,7 +78,7 @@ function About() {
             <div className={styles.registeredUsersContiner}>
               <div className={styles.waitingUsersNav}>
                 <Blockquote>
-                  <Link to="/landing/admin/admin/waitingusers">{waitingUsers} users are waiting for acception!</Link>
+                  <Link to="/landing/admin/waitingusers">{waitingUsers} users are waiting for acception!</Link>
                 </Blockquote>
               </div>
               <Button className={styles.waitingUsersNavClose} color="red" variant="soft" mr="2" onClick={() => setCloseNav(true)}>

@@ -54,7 +54,6 @@ function _ResumeDetails() {
       })
       .then((res) => {
         setUserResumeData(res.data[0])
-        console.log(res.data[0])
       })
       .catch((err) => {
         if (err.request.status === 500 || err.request.status === 0) {

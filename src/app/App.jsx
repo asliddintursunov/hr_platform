@@ -56,8 +56,8 @@ function App() {
             {userRole === "admin" && (
               <>
                 <Route path="admin" element={<Admin />}>
-                  <Route path="admin/accepted" element={<AcceptedUsers />} />
-                  <Route path="admin/waitingusers" element={<NotAcceptedUsers />} />
+                  <Route path="accepted" element={<AcceptedUsers />} />
+                  <Route path="waitingusers" element={<NotAcceptedUsers />} />
                 </Route>
               </>
             )}

@@ -11,6 +11,7 @@ import { Table, Code } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
 import InternalError from "../Modals/InternalError"
+import { Spinner } from "../../lottie/illustrations"
 
 function _Birthdays() {
   const memberRole = localStorage.getItem("userRole")
@@ -66,7 +67,7 @@ function _Birthdays() {
   const getBday = useCallback(() => {
     setIsPending(true)
     axios
-      .get(`${baseUrl}/users`, {
+      .get(`${baseUrl}/date_birth`, {
         headers: {
           "X-UserRole": memberRole,
           "X-UserId": memberId
@@ -174,7 +175,7 @@ function _Birthdays() {
         <h1 className="display-3 text-center">Birthdays</h1>
         <br />
         <br />
-        {isPending && <div className="loaderr"></div>}
+        {isPending && <Spinner />}
 
         {!isPending && (
           <div className={`${styles.birthdaysContainer}`}>
@@ -205,7 +206,9 @@ function _Birthdays() {
                           <Table.Cell>
                             <Avatar.Root className={styles.AvatarRoot}>
                               <Avatar.Image className={styles.AvatarImage} src={user.profile_photo} />
-                              <Avatar.Fallback className={styles.AvatarFallback}>A</Avatar.Fallback>
+                              <Avatar.Fallback className={styles.AvatarFallback}>
+                                {user.username[0].toUpperCase()}
+                              </Avatar.Fallback>
                             </Avatar.Root>
                           </Table.Cell>
                           <Table.Cell style={{

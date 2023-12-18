@@ -25,7 +25,7 @@ function ResumeList({ resumeData, seeResumeDetail }) {
                 </div>
                 <div className={styles.resumeCVCard}>
                   <span>Full Resume</span>
-                  <Button onClick={() => seeResumeDetail(resume.id)} variant="surface">See</Button>
+                  <Button onClick={() => seeResumeDetail(resume.id, resume.username)} variant="surface">See</Button>
                 </div>
               </div>
             </div>

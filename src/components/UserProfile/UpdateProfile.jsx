@@ -30,6 +30,7 @@ import AnotherUser from "../Modals/AnotherUser"
 import EditUniversity from "./part/EditUniversity"
 import UpdatePassword from "./part/UpdatePassword"
 import InternalError from "../Modals/InternalError"
+import { Spinner } from "../../lottie/illustrations"
 
 const ButtonFunction = (props) => {
   return (
@@ -159,6 +160,11 @@ function UpdateProfile() {
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
   const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
+
+  const [openToast, setOpenToast] = useState(false)
+  const [toastInfo, setToastInfo] = useState("")
+  const [imgFallback, setImgFallback] = useState("")
+
   useEffect(() => {
     if (isConnected) {
       socketInstance.disconnect()
@@ -181,7 +187,15 @@ function UpdateProfile() {
 
   const handleAddNewNumber = (e) => {
     e.preventDefault()
-    setNumbers((prev) => [...prev, Number(newNumber)])
+    if (!numbers.includes(Number(newNumber))) {
+      setNumbers((prev) => [...prev, Number(newNumber)])
+    } else {
+      setOpenToast(false)
+      setTimeout(() => {
+        setOpenToast(true)
+        setToastInfo("This number already exists")
+      }, 100)
+    }
 
     setNewNumber("998")
   }
@@ -255,6 +269,7 @@ function UpdateProfile() {
         setSkills(settedSkills)
         setBio(res.data.about)
         res.data.degree_general === null ? setEducation([]) : setEducation(res.data.degree_general)
+        setImgFallback(res.data.username[0])
         setIsPending(false)
       })
       .catch((err) => {
@@ -287,8 +302,6 @@ function UpdateProfile() {
           fullname: data.fullname !== fullName ? fullName : undefined,
           username: usernameValue,
           email: data.email !== emailValue ? emailValue : undefined,
-          // new_password: passwordValue !== "" ? passwordValue : undefined,
-          // old_password: oldPassword !== "" ? oldPassword : undefined,
           address: data.address !== address ? address : undefined,
           date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
           phone_number: data.phone_number !== numbers ? numbers : undefined,
@@ -353,7 +366,7 @@ function UpdateProfile() {
   return (
     <>
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
-      {isPending && <div className="loaderr"></div>}
+      {isPending && <Spinner />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {!isPending && (
@@ -377,9 +390,6 @@ function UpdateProfile() {
               >
                 My Profile
               </h2>
-              {/* <div>
-                <Avatar src={selectedImage} alt="Selected" fallback="A" />
-              </div> */}
             </div>
 
             <hr style={{ color: "gray" }} />
@@ -389,7 +399,7 @@ function UpdateProfile() {
             <form action="/update_profile/" method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()} className={`${styles.updateProfileForm}`}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "2rem" }}>
                 <div className={styles.profileImgContainer}>
-                  <Avatar size="9" src={selectedImage} alt="Selected" fallback="A" />
+                  <Avatar size="9" src={selectedImage} alt="Selected" fallback={imgFallback} />
                 </div>
                 <div className={styles.mainTopLeft}>
                   <Heading size="6">{fullName}</Heading>
@@ -460,6 +470,12 @@ function UpdateProfile() {
                       </div>
                     </Tabs.Content>
                     <Tabs.Content value="additional">
+                      {openToast && (
+                        <div className={styles.toastContainer__phoneNumber}>
+                          <span>{toastInfo}</span>
+                          <button onClick={() => setOpenToast(false)}>undo</button>
+                        </div>
+                      )}
                       <div className={styles.PhoneNumberResumesContainer}>
                         <AddPhoneNumber
                           numbers={numbers}

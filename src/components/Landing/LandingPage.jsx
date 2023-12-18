@@ -1,9 +1,17 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom"
 import styles from "../../styles/Landing.module.css"
 import LogOut from "../UserProfile/part/LogOut"
+import { useSelector } from "react-redux"
+import { useEffect } from "react"
 
 function _LandingPage() {
   const userRole = localStorage.getItem("userRole")
+  const count = useSelector((state) => state.chatMsgCount.count)
+  useEffect(
+    () => {
+      console.log(count);
+    }, [count]
+  )
 
   const location = useLocation()
   const defaultPath = "/" + location.pathname.split("/")[1] + "/"
@@ -68,9 +76,14 @@ function _LandingPage() {
                 </NavLink>
               )}
 
-              <NavLink style={location.pathname === defaultPath + "chat" ? navbarColor : null} to="chat">
+              <NavLink style={location.pathname === defaultPath + "chat" ? navbarColor : null} to="chat" className={styles.chatSidebar}>
                 <i className="bi bi-chat-dots-fill"></i>
-                &#160; Chat
+                &#160; Chat {count > 0 && <span style={{
+                  position: 'absolute',
+                  right: '2rem',
+                  fontWeight: 'bold',
+                  textDecoration: 'underline'
+                }}>{count}</span>}
               </NavLink>
 
               {userRole === "admin" && (

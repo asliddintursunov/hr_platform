@@ -15,6 +15,7 @@ import { Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
 import InternalError from "../../Modals/InternalError"
+import { Spinner } from "../../../lottie/illustrations"
 
 function NotAcceptedUsers() {
   const memberRole = localStorage.getItem("userRole")
@@ -179,7 +180,7 @@ function NotAcceptedUsers() {
       {showRejectModal && <RejectUserModal toggleRejectModal={toggleRejectModal} RejectUser={RejectUser} />}
       {isOpen && <_PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <div className={`${styles.acceptedUsersContainer}`} style={{ filter: showRejectModal || showAcceptModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
-        {isPending && <div className="loaderr"></div>}
+        {isPending && <Spinner />}
 
         {!isPending && (
           <Table.Root variant="surface">
@@ -207,7 +208,9 @@ function NotAcceptedUsers() {
                         <Table.Cell>
                           <Avatar.Root className={styles.AvatarRoot}>
                             <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
-                            <Avatar.Fallback className={styles.AvatarFallback}>A</Avatar.Fallback>
+                            <Avatar.Fallback className={styles.AvatarFallback}>
+                              {data.username.charAt(0).toUpperCase()}
+                            </Avatar.Fallback>
                           </Avatar.Root>
                         </Table.Cell>
                         <Table.Cell>{data.username}</Table.Cell>

@@ -12,6 +12,7 @@ import InternalError from "../../Modals/InternalError"
 import { Select, Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
+import { Spinner } from "../../../lottie/illustrations"
 
 function AcceptedUsers() {
   const memberRole = localStorage.getItem("userRole")
@@ -50,13 +51,14 @@ function AcceptedUsers() {
   const fetchData = useCallback(() => {
     setIsPending(true)
     axios
-      .get(`${baseUrl}/users`, {
+      .get(`${baseUrl}/accepted_users`, {
         headers: {
           "X-UserRole": memberRole,
           "X-UserId": memberId
         }
       })
       .then((req) => {
+        console.log(req)
         setIsPending(false)
         setDatas(req.data)
       })
@@ -167,7 +169,7 @@ function AcceptedUsers() {
       {showRemoveModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <div className={`${styles.acceptedUsersContainer}`} style={{ filter: showRemoveModal || wrongUser ? "blur(4px)" : "blur(0)" }}>
-        {isPending && !closeInternalErrorModal && <div className="loaderr"></div>}
+        {isPending && !closeInternalErrorModal && <Spinner />}
 
         {!isPending && (
           <Table.Root variant="surface">
@@ -186,48 +188,45 @@ function AcceptedUsers() {
               {datas &&
                 datas.map((data) => {
                   return (
-                    data.accepted &&
-                    data.approved && (
-                      <Table.Row key={data.id}>
-                        <Table.RowHeaderCell>
-                          <Strong>{data.id}</Strong>
-                        </Table.RowHeaderCell>
+                    <Table.Row key={data.id}>
+                      <Table.RowHeaderCell>
+                        <Strong>{data.id}</Strong>
+                      </Table.RowHeaderCell>
+                      <Table.Cell>
+                        <Avatar.Root className={styles.AvatarRoot}>
+                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                          <Avatar.Fallback className={styles.AvatarFallback}>{data.username.slice(0, 2).toUpperCase()}</Avatar.Fallback>
+                        </Avatar.Root>
+                      </Table.Cell>
+                      <Table.Cell>{data.username}</Table.Cell>
+                      <Table.Cell>{data.email}</Table.Cell>
+                      {data.role !== "admin" && (
                         <Table.Cell>
-                          <Avatar.Root className={styles.AvatarRoot}>
-                            <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
-                            <Avatar.Fallback className={styles.AvatarFallback}>A</Avatar.Fallback>
-                          </Avatar.Root>
+                          <Select.Root defaultValue={data.role} onValueChange={() => handleEditRole(data.id, data.role === "user" ? "moderator" : "user")}>
+                            <Select.Trigger />
+                            <Select.Content position="popper">
+                              <Select.Item value="user">User</Select.Item>
+                              <Select.Item value="moderator">Moderator</Select.Item>
+                            </Select.Content>
+                          </Select.Root>
                         </Table.Cell>
-                        <Table.Cell>{data.username}</Table.Cell>
-                        <Table.Cell>{data.email}</Table.Cell>
+                      )}
+                      {data.role === "admin" && <Table.Cell>Admin</Table.Cell>}
+                      <Table.Cell>
                         {data.role !== "admin" && (
-                          <Table.Cell>
-                            <Select.Root defaultValue={data.role} onValueChange={() => handleEditRole(data.id, data.role === "user" ? "moderator" : "user")}>
-                              <Select.Trigger />
-                              <Select.Content position="popper">
-                                <Select.Item value="user">User</Select.Item>
-                                <Select.Item value="moderator">Moderator</Select.Item>
-                              </Select.Content>
-                            </Select.Root>
-                          </Table.Cell>
+                          <Button
+                            variant="soft"
+                            color="red"
+                            className="btn btn-outline-danger"
+                            onClick={() => {
+                              toggleRemoveUserModal(data.id)
+                            }}
+                          >
+                            <i className="bi bi-trash3-fill"></i>
+                          </Button>
                         )}
-                        {data.role === "admin" && <Table.Cell>Admin</Table.Cell>}
-                        <Table.Cell>
-                          {data.role !== "admin" && (
-                            <Button
-                              variant="soft"
-                              color="red"
-                              className="btn btn-outline-danger"
-                              onClick={() => {
-                                toggleRemoveUserModal(data.id)
-                              }}
-                            >
-                              <i className="bi bi-trash3-fill"></i>
-                            </Button>
-                          )}
-                        </Table.Cell>
-                      </Table.Row>
-                    )
+                      </Table.Cell>
+                    </Table.Row>
                   )
                 })}
             </Table.Body>

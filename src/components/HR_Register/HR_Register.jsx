@@ -18,6 +18,7 @@ import { UploadIcon } from "@radix-ui/react-icons"
 import PhoneInput from "react-phone-input-2"
 import InternalError from "../Modals/InternalError"
 import "react-phone-input-2/lib/style.css"
+import { Spinner } from "../../lottie/illustrations"
 
 function HR_Register() {
   const navigate = useNavigate()
@@ -257,7 +258,7 @@ function HR_Register() {
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp popupInfo={popupInfo} setIsOpen={setIsOpen} errorOccured={errorOccured} />}
       {emptyFields && <PopUp popupInfo={"Make Sure You Filled All Fields!"} setIsOpen={setEmptyFields} errorOccured={true} />}
-      {isPending && <div className="loaderr"></div>}
+      {isPending && <Spinner />}
       <h1 className="text-center display-3 mb-4">HR Register Title</h1>
       {!isPending && (
         <div
@@ -282,7 +283,9 @@ function HR_Register() {
                 Addess
                 <TextField.Input type="text" variant="surface" placeholder="Manhattan, New York" value={candidateAddress} onChange={(e) => setCandidateAddress(e.target.value)} />
               </Text>
-              <Text as="div">
+              <Text as="div" style={{
+                gap: '8px'
+              }}>
                 <Text as="label">
                   Phone Number
                   <PhoneInput

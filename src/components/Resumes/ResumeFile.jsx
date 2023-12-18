@@ -8,16 +8,12 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.j
 
 function ResumeFile({ resume, setOpenResume }) {
   const [numPages, setNumPages] = useState(null)
-  const [pageNumber, setPageNumber] = useState(1)
-  const [error, setError] = useState(null)
   const [resumeHeight, setResumeHeight] = useState(600)
 
   const [showDocument, setShowDocument] = useState(true)
   function onPassword(callback, reason) {
     function callbackProxy(pswrd) {
-      // Cancel button handler
       if (pswrd === null) {
-        // password will be null if user clicks on cancel, you should unmount the Document and show custom message, eg:  failed to load  PDF and button with try again
         setShowDocument(false)
       }
 
@@ -54,15 +50,11 @@ function ResumeFile({ resume, setOpenResume }) {
     setNumPages(numPages)
   }
 
-  // function onError(error) {
-  //   setError('Failed to load the PDF. Please try again.');
-  // };
-
   function handleDownloadFile() {
     const link = document.createElement("a")
     link.href = resume
     link.target = "_blank"
-    link.download = resume
+    link.download = localStorage.getItem("userResumeName") + '__resume'
     link.click()
   }
 
@@ -82,7 +74,6 @@ function ResumeFile({ resume, setOpenResume }) {
               file={resume}
               onLoadSuccess={onDocumentLoadSuccess}
               onPassword={onPassword}
-              // onError={onError}
             >
               <Page height={resumeHeight} pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} />
               <Button onClick={handleDownloadFile}>
@@ -100,15 +91,3 @@ function ResumeFile({ resume, setOpenResume }) {
 }
 
 export default ResumeFile
-{
-  /* {Array.apply(null, Array(numPages))
-            .map((x, i) => i + 1)
-            .map((page) => {
-              return <Page
-                height={600}
-                key={page}
-                pageNumber={page}
-                renderTextLayer={false}
-                renderAnnotationLayer={false} />
-            })} */
-}

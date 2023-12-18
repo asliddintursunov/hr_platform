@@ -29,10 +29,10 @@ function Admin() {
       <nav className={`container ${styles.adminNav}`}>
         <NavLink
           style={location.pathname === defaultPath + 'accepted' ? navbarColor : null}
-          to='admin/accepted'>Accepted Users</NavLink>
+          to='accepted'>Accepted Users</NavLink>
         <NavLink
           style={location.pathname === defaultPath + 'waitingusers' ? navbarColor : null}
-          to='admin/waitingusers'>Waiting Users</NavLink>
+          to='waitingusers'>Waiting Users</NavLink>
         <br />
       </nav>
       <Outlet />
