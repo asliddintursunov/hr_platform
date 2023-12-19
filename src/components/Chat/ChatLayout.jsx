@@ -11,6 +11,8 @@ import { connect } from "../../redux/features/socketConnectionSlice"
 import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
 import InternalError from "../Modals/InternalError"
+import { SelectChat } from "../../lottie/illustrations"
+
 function ChatLayout() {
   const navigate = useNavigate()
 
@@ -129,14 +131,18 @@ function ChatLayout() {
 
   return (
     <>
-      {/* {isPending && <div className="loaderr"></div>} */}
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.chatPlace}>
           {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} />}
-          {!chatSelected && <h1 className="display-2 text-center">Select A Chat to have a conversation!</h1>}
+          {!chatSelected && (
+            <>
+              <SelectChat />
+              <h1 className="display-3 text-center">Select a chat to have a conversation!</h1>
+            </>
+          )}
         </div>
         <div className={styles.usersSidebar}>
           <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} setCloseInternalErrorModal={setCloseInternalErrorModal} />

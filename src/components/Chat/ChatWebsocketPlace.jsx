@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react"
 import styles from "../../styles/Chat.module.css"
 import { useSelector } from "react-redux"
 import { Avatar } from "@radix-ui/themes"
+import { EmptyMsgPlace } from "../../lottie/illustrations"
+
 function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const conversationPathRef = useRef(null)
@@ -12,19 +14,18 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
   const senderId = localStorage.getItem("userId")
   const receiverId = localStorage.getItem("receiverId")
   const [imgFallback, setImgFallback] = useState("")
-  
+
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollIntoView({ behavior: "smooth" })
     }
   }
-  
+
   useEffect(() => {
     if (oneUserData.profile_photo === null) {
       setImgFallback(oneUserData.username.slice(0, 2).toUpperCase())
     }
   }, [oneUserData.username])
-  
 
   useEffect(() => {
     socketInstance.on("new_message", (data) => {
@@ -74,13 +75,14 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
   const readMsg = (id) => {
     if (senderText === "" && Number(senderId) === Number(localStorage.getItem("userId"))) {
       messages.map((message) => {
-        if (message.is_read === false && message.receiver_id === Number(senderId)) {
+        if (~~id === message.msg_id && message.is_read === false && message.receiver_id === ~~senderId) {
           const data = {
             msg_id: id,
             sender_id: receiverId,
             receiver_id: senderId
           }
-
+          console.log(data);
+        
           socketInstance.emit("see_message", data)
           handleSeeMessage()
 
@@ -96,8 +98,8 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const attributeValue = entry.target.getAttribute("value")
-
+          const attributeValue = entry.target.getAttribute("value")   
+       
           if (attributeValue === "false") {
             readMsg(entry.target.id)
           }
@@ -131,8 +133,17 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
         <span>{oneUserData.username}</span>
         <Avatar src={oneUserData.profile_photo} radius="full" fallback={imgFallback} />
       </div>
-      <div className={styles.conversationPath} ref={conversationPathRef}>
-        {messages &&
+      <div
+        className={styles.conversationPath}
+        ref={conversationPathRef}
+        style={{
+          height: 'calc(100vh - 15rem)',
+          overflowY: "scroll",
+          overflowX: "hidden",
+          background: "var(--accent-6)",
+        }}
+      >
+        {messages.length > 0 ? (
           messages.map((message, index) => (
             <div
               key={index}
@@ -152,16 +163,23 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
                 </div>
               ) : message.sender_id === Number(receiverId) ? (
                 <div style={receivingStyle}>
+                  
                   <p style={{ ...messageStyle, backgroundColor: "darkgray" }}>{message.message}</p>
                   <i style={timeStyle}>{message.timestamp}</i>
                 </div>
               ) : null}
             </div>
-          ))}
+          ))
+        ) : (
+          <div>
+            <EmptyMsgPlace />
+            <h1 className="text-center display-3">Write Something</h1>
+          </div>
+        )}
         {scrollBottom && <div ref={chatContainerRef}></div>}
       </div>
 
-      <form className={styles.chatInputPart} onSubmit={(e) => e.preventDefault()} style={showUsers ? { right: "11.9rem" } : null}>
+      <form className={styles.chatInputPart} onSubmit={(e) => e.preventDefault()}>
         <input type="text" className="form-control" onChange={(e) => setSenderText(e.target.value)} value={senderText} />
         <button
           type="submit"

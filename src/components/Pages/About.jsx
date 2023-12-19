@@ -74,7 +74,7 @@ function About() {
 
       <div className={`text-center ${styles.aboutPage} pageAnimation`}>
         <div style={{ gap: "2rem" }}>
-          {!closeNav && waitingUsers !== undefined && waitingUsers !== 0 && (
+          {waitingUsers !== 0 && memberRole === 'admin' && (
             <div className={styles.registeredUsersContiner}>
               <div className={styles.waitingUsersNav}>
                 <Blockquote>

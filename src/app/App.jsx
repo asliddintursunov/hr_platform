@@ -48,8 +48,8 @@ function App() {
         <Route path="/signin" element={<SignInLayout />} />
         {isAuthenticated ? (
           <Route path="/landing" element={<LandingPage />}>
-            <Route index element={<Home />} />
-            {(userRole === "admin") || (userRole === "moderator") ? <Route path="dashboard" element={<About />} /> : null}
+            {userRole === "user" && <Route index element={<Home />} />}
+            {userRole === "admin" || userRole === "moderator" ? <Route index element={<About />} /> : null}
             <Route element={<UpdateProfile />} />
 
             <Route path="profile" element={<UpdateProfile />} />
@@ -70,7 +70,7 @@ function App() {
               </>
             )}
             <Route path="chat" element={<ChatLayout />} />
-            {userRole === 'admin' && <Route path="hr_register" element={<HR_Register />} />}
+            {userRole === "admin" && <Route path="hr_register" element={<HR_Register />} />}
           </Route>
         ) : (
           <Route path="/signin" element={<SignInLayout />} />

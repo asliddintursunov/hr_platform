@@ -24,7 +24,6 @@ function Moderator() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { defaultImage } = useURL()
   const [datas, setDatas] = useState("")
   const [isPending, setIsPending] = useState(false)
 
@@ -180,7 +179,7 @@ function Moderator() {
                             <Table.Cell>
                               <Avatar.Root className={styles.AvatarRoot}>
                                 <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} alt="Colm Tuite" />
-                                <Avatar.Fallback className={styles.AvatarFallback} delayMs={600}>
+                                <Avatar.Fallback className={styles.AvatarFallback} delayMs={100}>
                                   {data.username.slice(0, 2).toUpperCase()}
                                 </Avatar.Fallback>
                               </Avatar.Root>

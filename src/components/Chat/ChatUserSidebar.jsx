@@ -64,44 +64,43 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
 
   useEffect(() => {
     if (isConnected) {
+      console.log(isConnected)
       socketInstance.on("count", (data) => {
         setUserData(data)
-        const unreadMsgCount = data.map((msg) => msg.unread_msg).reduce((a, b) => a + b, 0 )
+        const unreadMsgCount = data.map((msg) => msg.unread_msg).reduce((a, b) => a + b, 0)
         dispatch(setCount(unreadMsgCount))
       })
     }
-  }, [isConnected, socketInstance])
+  }, [socketInstance])
 
   useEffect(() => {
     if (userid) {
-      setTimeout(() => {
-        axios
-          .get(`${baseUrl}/chat/${userid}`, {
-            headers: {
-              "X-UserRole": localStorage.getItem("userRole"),
-              "X-UserId": localStorage.getItem("userId")
-            }
-          })
-          .then((res) => {
-            setUserImage(res.data)
-          })
-          .catch((err) => {
-						if (err.request.status === 500 || err.request.status === 0) {
-							setCloseInternalErrorModal(true)
-							return
-						}
-            setIsOpen(true)
-            if (err.response.data.msg) {
-              tokenExpired(err.response.data.msg)
-            } else if (err.response.status === 401) {
-              setWrongUser(true)
-              setWrongUserData(err.response.data)
-              dispatch(logoutUser())
-            }
-          })
-      }, 100)
+      axios
+        .get(`${baseUrl}/chat/${userid}`, {
+          headers: {
+            "X-UserRole": localStorage.getItem("userRole"),
+            "X-UserId": localStorage.getItem("userId")
+          }
+        })
+        .then((res) => {
+          setUserImage(res.data)
+        })
+        .catch((err) => {
+          if (err.request.status === 500 || err.request.status === 0) {
+            setCloseInternalErrorModal(true)
+            return
+          }
+          setIsOpen(true)
+          if (err.response.data.msg) {
+            tokenExpired(err.response.data.msg)
+          } else if (err.response.status === 401) {
+            setWrongUser(true)
+            setWrongUserData(err.response.data)
+            dispatch(logoutUser())
+          }
+        })
     }
-  }, [userid, head])
+  }, [])
 
   return (
     <>
@@ -117,8 +116,8 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
                 return (
                   <Card key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
                     <Flex gap="3" align="center">
-                      <Avatar src={userInfo.profile_photo} radius="full" fallback={userImage[index].username.slice(0,2).toUpperCase()} />
-                      {user.id === userInfo.id && user.unread_msg !== 0 && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>} 
+                      <Avatar src={userInfo.profile_photo} radius="full" fallback={userImage[index].username.slice(0, 2).toUpperCase()} />
+                      {user.id === userInfo.id && user.unread_msg !== 0 && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>}
                       <Text as="div" size="2" weight="bold">
                         {userInfo.username}
                       </Text>
@@ -126,7 +125,6 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
                   </Card>
                 )
               }
-              return null
             })}
       </div>
     </>

@@ -7,11 +7,6 @@ import { useEffect } from "react"
 function _LandingPage() {
   const userRole = localStorage.getItem("userRole")
   const count = useSelector((state) => state.chatMsgCount.count)
-  useEffect(
-    () => {
-      console.log(count);
-    }, [count]
-  )
 
   const location = useLocation()
   const defaultPath = "/" + location.pathname.split("/")[1] + "/"
@@ -25,9 +20,11 @@ function _LandingPage() {
         <aside className={styles.sidebar}>
           <nav>
             <div className={styles.navbarOptions}>
-              <div style={{
-                width: '100%'
-              }}>
+              <div
+                style={{
+                  width: "100%"
+                }}
+              >
                 <img
                   src="/src/img/hr-platform-high-resolution-logo-transparent.svg"
                   alt="Description of the SVG"
@@ -39,12 +36,14 @@ function _LandingPage() {
                   }}
                 />
               </div>
-              <NavLink to="/" style={location.pathname + "/" === defaultPath ? navbarColor : null}>
-                <i className="bi bi-house-door-fill"></i>
-                &#160; Home
-              </NavLink>
+              {userRole === "user" && (
+                <NavLink to="." style={location.pathname + "/" === defaultPath ? navbarColor : null}>
+                  <i className="bi bi-house-door-fill"></i>
+                  &#160; Home
+                </NavLink>
+              )}
               {userRole === "admin" || userRole === "moderator" ? (
-                <NavLink to="dashboard" style={location.pathname === defaultPath + "dashboard" ? navbarColor : null}>
+                <NavLink to="." style={location.pathname + "/" === defaultPath ? navbarColor : null}>
                   <i className="bi bi-pie-chart-fill"></i>
                   &#160; Dashboard
                 </NavLink>
@@ -58,7 +57,7 @@ function _LandingPage() {
               )}
 
               {userRole === "admin" && (
-                <NavLink style={location.pathname.startsWith(defaultPath + "admin") ? navbarColor : null} to="admin">
+                <NavLink style={location.pathname.startsWith(defaultPath + "admin") ? navbarColor : null} to="admin/accepted">
                   <i className="bi bi-shield-shaded"></i>
                   &#160; Admin Page
                 </NavLink>
@@ -78,12 +77,19 @@ function _LandingPage() {
 
               <NavLink style={location.pathname === defaultPath + "chat" ? navbarColor : null} to="chat" className={styles.chatSidebar}>
                 <i className="bi bi-chat-dots-fill"></i>
-                &#160; Chat {count > 0 && <span style={{
-                  position: 'absolute',
-                  right: '2rem',
-                  fontWeight: 'bold',
-                  textDecoration: 'underline'
-                }}>{count}</span>}
+                &#160; Chat{" "}
+                {count > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      right: "2rem",
+                      fontWeight: "bold",
+                      textDecoration: "underline"
+                    }}
+                  >
+                    {count}
+                  </span>
+                )}
               </NavLink>
 
               {userRole === "admin" && (
