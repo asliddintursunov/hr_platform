@@ -8,7 +8,7 @@ import AnotherUser from "../Modals/AnotherUser"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
 import { Avatar, Card, Code, Flex, Text } from "@radix-ui/themes"
-import { setCount } from "../../redux/features/chatMsgCountSlice"
+// import { setCount } from "../../redux/features/chatMsgCountSlice"
 
 function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
   const userid = localStorage.getItem("userId")
@@ -17,7 +17,7 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
   const dispatch = useDispatch()
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
-  const head = useSelector((state) => state.headers)
+  // const head = useSelector((state) => state.headers)
 
   const [userData, setUserData] = useState([])
   const [userImage, setUserImage] = useState([])
@@ -64,11 +64,10 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
 
   useEffect(() => {
     if (isConnected) {
-      console.log(isConnected)
       socketInstance.on("count", (data) => {
         setUserData(data)
-        const unreadMsgCount = data.map((msg) => msg.unread_msg).reduce((a, b) => a + b, 0)
-        dispatch(setCount(unreadMsgCount))
+        // const unreadMsgCount = data.map((msg) => msg.unread_msg).reduce((a, b) => a + b, 0)
+        // dispatch(setCount(unreadMsgCount))
       })
     }
   }, [socketInstance])

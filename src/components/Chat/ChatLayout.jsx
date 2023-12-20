@@ -28,6 +28,7 @@ function ChatLayout() {
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
   const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
+  const [firstUnreadMsgId, setFirstUnreadMsgId] = useState("")
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
@@ -35,7 +36,7 @@ function ChatLayout() {
 
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(sendHeaders())
+    // dispatch(sendHeaders())
     dispatch(connect())
   }, [])
 
@@ -112,6 +113,13 @@ function ChatLayout() {
       .then((res) => {
         // setIsPending(false)
         setMessages(res.data)
+
+        const firstUnread = res.data.findIndex((msg) => msg.is_read === false)
+        if (firstUnread !== -1) {
+          setFirstUnreadMsgId(firstUnread)
+        } else {
+          setFirstUnreadMsgId(res.data.length - 1)
+        }
       })
       .catch((err) => {
         // setIsPending(false)
@@ -128,7 +136,7 @@ function ChatLayout() {
         }
       })
   }
-
+  
   return (
     <>
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
@@ -136,7 +144,7 @@ function ChatLayout() {
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.chatPlace}>
-          {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} />}
+          {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} firstUnreadMsgId={firstUnreadMsgId} />}
           {!chatSelected && (
             <>
               <SelectChat />

@@ -2,7 +2,6 @@ import { NavLink, Outlet, useLocation } from "react-router-dom"
 import styles from "../../styles/Landing.module.css"
 import LogOut from "../UserProfile/part/LogOut"
 import { useSelector } from "react-redux"
-import { useEffect } from "react"
 
 function _LandingPage() {
   const userRole = localStorage.getItem("userRole")

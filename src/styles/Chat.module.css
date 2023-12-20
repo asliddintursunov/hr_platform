@@ -34,20 +34,10 @@
 }
 
 .usersListContainer {
-	display: flex;
+	/* display: flex; */
 	flex-direction: column;
 	justify-content: center;
 	gap: 1rem;
-
-}
-
-.usersShowHide {
-	position: absolute;
-	color: orangered;
-	cursor: pointer;
-	font-size: 4rem;
-	top: -1.4rem;
-	z-index: 2;
 }
 
 .userCard {
@@ -55,6 +45,7 @@
 	display: flex;
 	cursor: pointer;
 	transition: all 0.2s;
+	margin-top: 0.5rem;
 }
 
 .userCard:hover {
@@ -137,4 +128,22 @@
 .chatInputPart>button {
 	padding: 0.7rem;
 	border: none;
+}
+.unreadMessageLine{
+	position: relative;
+	height: 2px;
+	border: 10px;
+	width: 100%;
+	background-color: royalblue;
+	margin: 1rem auto;
+}
+.unreadMessageLine > p{
+	position: absolute;
+	top: -0.7rem;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #fff;
+	padding: 0 0.5rem;
+	border-radius: 5px;
+	font-size: 1.2rem;
 }

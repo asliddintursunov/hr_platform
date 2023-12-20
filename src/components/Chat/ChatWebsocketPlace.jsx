@@ -1,12 +1,13 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import styles from "../../styles/Chat.module.css"
 import { useSelector } from "react-redux"
 import { Avatar } from "@radix-ui/themes"
 import { EmptyMsgPlace } from "../../lottie/illustrations"
 
-function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) {
+function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMsgId }) {
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const conversationPathRef = useRef(null)
+  // console.log(firstUnreadMsgId); // 107
 
   const [senderText, setSenderText] = useState("")
   const [scrollBottom, setScrollBottom] = useState(false)
@@ -14,6 +15,14 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
   const senderId = localStorage.getItem("userId")
   const receiverId = localStorage.getItem("receiverId")
   const [imgFallback, setImgFallback] = useState("")
+  const scrollToUnreadElement = useRef(null)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    if (scrollToUnreadElement.current) {
+      scrollToUnreadElement.current.scrollIntoView({ behavior: "smooth", block: "end" })
+    }
+  }, [firstUnreadMsgId])
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -81,8 +90,9 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
             sender_id: receiverId,
             receiver_id: senderId
           }
-          console.log(data);
-        
+          if (scrolled === false) {
+            setScrolled(true)
+          }
           socketInstance.emit("see_message", data)
           handleSeeMessage()
 
@@ -98,8 +108,8 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const attributeValue = entry.target.getAttribute("value")   
-       
+          const attributeValue = entry.target.getAttribute("value")
+
           if (attributeValue === "false") {
             readMsg(entry.target.id)
           }
@@ -111,6 +121,9 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
       threshold: 1
     }
   )
+  useEffect(() => {
+    console.log(observer);
+  }, [])
 
   useEffect(() => {
     const getElements = async () => {
@@ -137,16 +150,17 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
         className={styles.conversationPath}
         ref={conversationPathRef}
         style={{
-          height: 'calc(100vh - 15rem)',
+          height: "calc(100vh - 15rem)",
           overflowY: "scroll",
           overflowX: "hidden",
-          background: "var(--accent-6)",
+          background: "var(--accent-6)"
         }}
       >
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <div
               key={index}
+              ref={index === firstUnreadMsgId ? scrollToUnreadElement : null}
               id={message.msg_id}
               value={message.is_read}
               style={{
@@ -162,11 +176,15 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, showUsers }) 
                   {!message.is_read ? <i className="bi bi-check2" style={tickStyle}></i> : <i className="bi bi-check2-all" style={tickStyle}></i>}
                 </div>
               ) : message.sender_id === Number(receiverId) ? (
-                <div style={receivingStyle}>
-                  
-                  <p style={{ ...messageStyle, backgroundColor: "darkgray" }}>{message.message}</p>
-                  <i style={timeStyle}>{message.timestamp}</i>
-                </div>
+                <>
+                  {index === firstUnreadMsgId && scrolled && <div className={styles.unreadMessageLine}>
+                    <p>New messages</p>
+                  </div>}
+                  <div style={receivingStyle}>
+                    <p style={{ ...messageStyle, backgroundColor: "darkgray" }}>{message.message}</p>
+                    <i style={timeStyle}>{message.timestamp}</i>
+                  </div>
+                </>
               ) : null}
             </div>
           ))
