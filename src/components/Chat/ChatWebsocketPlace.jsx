@@ -1,11 +1,9 @@
-import { useEffect, useState, useRef, useCallback } from "react"
+import { useEffect, useState, useRef } from "react"
 import styles from "../../styles/Chat.module.css"
-import { useSelector } from "react-redux"
 import { Avatar } from "@radix-ui/themes"
 import { EmptyMsgPlace } from "../../lottie/illustrations"
 
-function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMsgId }) {
-  const socketInstance = useSelector((state) => state.connection.socketInstance)
+function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMsgId, socketInstance }) {
   const conversationPathRef = useRef(null)
   // console.log(firstUnreadMsgId); // 107
 
@@ -121,9 +119,6 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
       threshold: 1
     }
   )
-  useEffect(() => {
-    console.log(observer);
-  }, [])
 
   useEffect(() => {
     const getElements = async () => {

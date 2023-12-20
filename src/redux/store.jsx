@@ -1,18 +1,18 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userConnectionSlice from "./features/socketConnectionSlice";
-import chartsSlice from "./features/chartsSlice";
-import userDataSlice from "./features/userDataSlice";
-import chatMsgCountSlice from "./features/chatMsgCountSlice";
+import { configureStore } from "@reduxjs/toolkit"
+import userConnectionSlice from "./features/socketConnectionSlice"
+import chartsSlice from "./features/chartsSlice"
+import chatMsgCountSlice from "./features/chatMsgCountSlice"
+import resumeUsernameSlice from "./features/resumeUsernameSlice"
 
 export const store = configureStore({
   reducer: {
     connection: userConnectionSlice,
     charts: chartsSlice,
-    headers: userDataSlice,
-    chatMsgCount: chatMsgCountSlice
+    chatMsgCount: chatMsgCountSlice,
+    resumeUsername: resumeUsernameSlice,
   },
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+      serializableCheck: false
+    })
 })

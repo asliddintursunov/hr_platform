@@ -4,10 +4,9 @@ import styles from "../../styles/Moderator.module.css"
 import { useCallback, useEffect, useState } from "react"
 import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
-import useURL from "../../hooks/useURL"
 import { baseUrl } from "../../utils/api"
-import { useDispatch, useSelector } from "react-redux"
-import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
+import { useDispatch } from "react-redux"
+import { logoutUser } from "../../redux/features/logoutUser"
 import ConfirmModal from "../Modals/ConfirmModal"
 import AnotherUser from "../Modals/AnotherUser"
 
@@ -36,19 +35,6 @@ function Moderator() {
   const [wrongUserData, setWrongUserData] = useState("")
 
   const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
-
-  const socketInstance = useSelector((state) => state.connection.socketInstance)
-  const isConnected = useSelector((state) => state.connection.isConnected)
-
-  useEffect(() => {
-    if (isConnected) {
-      socketInstance.disconnect()
-    }
-  }, [])
-
-  useEffect(() => {
-    dispatch(sendHeaders())
-  }, [])
 
   // Token Expired Validation
   const tokenExpired = useCallback(

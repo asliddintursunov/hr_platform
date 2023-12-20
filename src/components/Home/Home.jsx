@@ -8,7 +8,7 @@ import AnotherUser from "../Modals/AnotherUser"
 import { useNavigate } from "react-router-dom"
 
 import { useDispatch } from "react-redux"
-import { logoutUser } from "../../redux/features/userDataSlice"
+import { logoutUser } from "../../redux/features/logoutUser"
 import { Spinner } from "../../lottie/illustrations"
 import UserInfo from "./UserInfo"
 import Statistics from "./Statistics"

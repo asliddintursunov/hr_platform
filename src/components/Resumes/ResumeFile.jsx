@@ -3,10 +3,12 @@ import styles from "../../styles/ResumeDetails.module.css"
 import { Cross1Icon, DownloadIcon } from "@radix-ui/react-icons"
 import { Document, pdfjs, Page } from "react-pdf"
 import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.js", import.meta.url).toString()
 
 function ResumeFile({ resume, setOpenResume }) {
+  const resumeUsername = useSelector((state) => state.resumeUsername.resumeUsername)
   const [numPages, setNumPages] = useState(null)
   const [resumeHeight, setResumeHeight] = useState(600)
 
@@ -54,7 +56,7 @@ function ResumeFile({ resume, setOpenResume }) {
     const link = document.createElement("a")
     link.href = resume
     link.target = "_blank"
-    link.download = localStorage.getItem("userResumeName") + '__resume'
+    link.download = resumeUsername + "__resume"
     link.click()
   }
 
@@ -70,11 +72,7 @@ function ResumeFile({ resume, setOpenResume }) {
           </>
         ) : (
           <>
-            <Document
-              file={resume}
-              onLoadSuccess={onDocumentLoadSuccess}
-              onPassword={onPassword}
-            >
+            <Document file={resume} onLoadSuccess={onDocumentLoadSuccess} onPassword={onPassword}>
               <Page height={resumeHeight} pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} />
               <Button onClick={handleDownloadFile}>
                 Download <DownloadIcon />

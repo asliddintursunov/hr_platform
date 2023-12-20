@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "axios"
 import styles from "../../styles/EditProfile.module.css"
-import { logoutUser } from "../../redux/features/userDataSlice"
+import { logoutUser } from "../../redux/features/logoutUser"
 import { Tabs, Box, Heading, Text, Code, Avatar } from "@radix-ui/themes"
 
 // Custon Hooks

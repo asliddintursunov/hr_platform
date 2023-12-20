@@ -5,19 +5,19 @@ import ChatWebsocketPlace from "./ChatWebsocketPlace"
 import styles from "../../styles/Chat.module.css"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
-import { useDispatch, useSelector } from "react-redux"
-import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
-import { connect } from "../../redux/features/socketConnectionSlice"
+import { useDispatch } from "react-redux"
+import { logoutUser } from "../../redux/features/logoutUser"
 import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
 import InternalError from "../Modals/InternalError"
 import { SelectChat } from "../../lottie/illustrations"
+import { io } from "socket.io-client"
 
 function ChatLayout() {
   const navigate = useNavigate()
-
-  const socketInstance = useSelector((state) => state.connection.socketInstance)
-  const isConnected = useSelector((state) => state.connection.isConnected)
+  const dispatch = useDispatch()
+  const [socketInstance, setSocketInstance] = useState(null)
+  const [isConnected, setIsConnected] = useState(false)
 
   const [chatSelected, setChatSelected] = useState(false)
   const [oneUserData, setOneUserData] = useState({})
@@ -34,10 +34,17 @@ function ChatLayout() {
   const [wrongUserData, setWrongUserData] = useState("")
   const userID = localStorage.getItem("userId")
 
-  const dispatch = useDispatch()
   useEffect(() => {
-    // dispatch(sendHeaders())
-    dispatch(connect())
+    const socket = io(baseUrl)
+    socket.on("connect", () => {
+      setSocketInstance(socket)
+      setIsConnected(true)
+    })
+    return () => {
+      if (socket) {
+        socket.disconnect()
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -83,7 +90,6 @@ function ChatLayout() {
         }
       )
       .then((res) => {
-        // setIsPending(false)
         setOneUserData(res.data)
       })
       .catch((err) => {
@@ -91,7 +97,6 @@ function ChatLayout() {
           setCloseInternalErrorModal(true)
           return
         }
-        // setIsPending(false)
         if (err.response.data.msg) {
           tokenExpired(err.response.data.msg)
         } else if (err.response.status === 401) {
@@ -104,14 +109,12 @@ function ChatLayout() {
     await axios
       .get(`${baseUrl}/chat/room`, {
         params: { user_id1: senderId, user_id2: id },
-        // headers: head
         headers: {
           "X-UserRole": localStorage.getItem("userRole"),
           "X-UserId": localStorage.getItem("userId")
         }
       })
       .then((res) => {
-        // setIsPending(false)
         setMessages(res.data)
 
         const firstUnread = res.data.findIndex((msg) => msg.is_read === false)
@@ -122,7 +125,6 @@ function ChatLayout() {
         }
       })
       .catch((err) => {
-        // setIsPending(false)
         if (err.request.status === 500 || err.request.status === 0) {
           setCloseInternalErrorModal(true)
           return
@@ -136,7 +138,7 @@ function ChatLayout() {
         }
       })
   }
-  
+
   return (
     <>
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
@@ -144,7 +146,9 @@ function ChatLayout() {
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.chatPlace}>
-          {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} firstUnreadMsgId={firstUnreadMsgId} />}
+          {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} firstUnreadMsgId={firstUnreadMsgId} 
+            socketInstance={socketInstance} isConnected={isConnected}
+          />}
           {!chatSelected && (
             <>
               <SelectChat />
@@ -153,7 +157,7 @@ function ChatLayout() {
           )}
         </div>
         <div className={styles.usersSidebar}>
-          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} setCloseInternalErrorModal={setCloseInternalErrorModal} />
+          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} setCloseInternalErrorModal={setCloseInternalErrorModal} socketInstance={socketInstance} isConnected={isConnected} />
         </div>
       </div>
     </>

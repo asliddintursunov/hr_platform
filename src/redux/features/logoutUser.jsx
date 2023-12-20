@@ -1,22 +1,13 @@
 import { googleLogout } from "@react-oauth/google";
 import { createSlice } from "@reduxjs/toolkit";
 
-const userRole = localStorage.getItem("userRole")
-const userId = localStorage.getItem("userId")
+const initialState = {
 
-const headers = {
-  'X-UserRole': userRole,
-  'X-UserId': userId
 }
-
 export const userDataSlice = createSlice({
-  initialState: headers,
-  name: 'headers',
+  initialState,
+  name: 'logoutUser',
   reducers: {
-    sendHeaders: (state) => {
-      state["X-UserId"] = localStorage.getItem("userId")
-      state["X-UserRole"] = localStorage.getItem("userRole")
-    },
     logoutUser: () => {
 
       googleLogout()
@@ -31,5 +22,5 @@ export const userDataSlice = createSlice({
   }
 })
 
-export const { sendHeaders, logoutUser } = userDataSlice.actions
+export const { logoutUser } = userDataSlice.actions
 export default userDataSlice.reducer

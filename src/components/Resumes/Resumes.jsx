@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import styles from "../../styles/Resumes.module.css"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
-import { logoutUser } from "../../redux/features/userDataSlice"
+import { logoutUser } from "../../redux/features/logoutUser"
 import { useDispatch, useSelector } from "react-redux"
 import AnotherUser from "../Modals/AnotherUser"
 import PopUp from "../Modals/PopUp"
@@ -15,6 +15,7 @@ import ResumeList from "./ResumeList"
 import Pagination from "./Pagination"
 import InternalError from "../Modals/InternalError"
 import { Spinner } from "../../lottie/illustrations"
+import { resumeId, resumeUsername } from "../../redux/features/resumeUsernameSlice"
 
 function Resumes() {
   const dispatch = useDispatch()
@@ -224,8 +225,8 @@ function Resumes() {
   }
 
   const seeResumeDetail = (userID, userName) => {
-    localStorage.setItem("userResumeID", userID)
-    localStorage.setItem("userResumeName", userName)
+    dispatch(resumeUsername(userName))
+    dispatch(resumeId(userID))
     navigate("./userResume")
   }
 

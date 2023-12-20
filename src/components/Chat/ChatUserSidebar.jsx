@@ -3,21 +3,17 @@ import styles from "../../styles/Chat.module.css"
 import { useSelector, useDispatch } from "react-redux"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
-import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
+import { logoutUser } from "../../redux/features/logoutUser"
 import AnotherUser from "../Modals/AnotherUser"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
 import { Avatar, Card, Code, Flex, Text } from "@radix-ui/themes"
 // import { setCount } from "../../redux/features/chatMsgCountSlice"
 
-function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
+function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isConnected, socketInstance }) {
   const userid = localStorage.getItem("userId")
   const navigate = useNavigate()
-
   const dispatch = useDispatch()
-  const socketInstance = useSelector((state) => state.connection.socketInstance)
-  const isConnected = useSelector((state) => state.connection.isConnected)
-  // const head = useSelector((state) => state.headers)
 
   const [userData, setUserData] = useState([])
   const [userImage, setUserImage] = useState([])
@@ -29,10 +25,6 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal }) {
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
-
-  useEffect(() => {
-    dispatch(sendHeaders())
-  }, [])
 
   // Token Expired Validation
   const tokenExpired = useCallback(

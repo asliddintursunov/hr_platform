@@ -3,7 +3,7 @@ import styles from "../../styles/ResumeDetails.module.css"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
 import { useDispatch, useSelector } from "react-redux"
-import { logoutUser, sendHeaders } from "../../redux/features/userDataSlice"
+import { logoutUser } from "../../redux/features/logoutUser"
 import AnotherUser from "../Modals/AnotherUser"
 import { useLocation, useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
@@ -14,12 +14,13 @@ import InternalError from "../Modals/InternalError"
 
 function _ResumeDetails() {
   const [userResumeData, setUserResumeData] = useState([])
-  const head = useSelector((state) => state.headers)
+  const userRole = localStorage.getItem("userRole")
+  const userId = localStorage.getItem("userId")
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const prevPage = location.pathname.split("/").splice(0, 3).join("/")
-  const userID = localStorage.getItem("userResumeID")
+  const resumeUserId = useSelector((state) => state.resumeUsername.resumeId)
 
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
@@ -29,9 +30,6 @@ function _ResumeDetails() {
   const [errorOccured, setErrorOccured] = useState("")
   const [openResume, setOpenResume] = useState(false)
   const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
-  useEffect(() => {
-    dispatch(sendHeaders())
-  }, [])
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -49,8 +47,11 @@ function _ResumeDetails() {
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}` + "/search/" + userID, {
-        headers: head
+      .get(`${baseUrl}` + "/search/" + resumeUserId, {
+        headers: {
+          "X-UserRole": userRole,
+          "X-UserId": userId
+        }
       })
       .then((res) => {
         setUserResumeData(res.data[0])
@@ -68,7 +69,7 @@ function _ResumeDetails() {
           dispatch(logoutUser())
         }
       })
-  }, [userID, tokenExpired])
+  }, [resumeUserId, tokenExpired])
   return (
     <>
       {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
@@ -127,7 +128,7 @@ function _ResumeDetails() {
               </div>
             ) : (
               <div className={styles.userPhoneNumber}>
-                Phone Numbers: 
+                Phone Numbers:
                 <Code>
                   <a href={`tel:+${userResumeData.phone_number}`} className="text-decoration-none">
                     {userResumeData.phone_number}
