@@ -32,12 +32,8 @@
 	position: sticky;
 	top: 1rem;
 }
-
-.usersListContainer {
-	/* display: flex; */
-	flex-direction: column;
-	justify-content: center;
-	gap: 1rem;
+.usersListContainer > div {
+	margin-top: 0.5rem;
 }
 
 .userCard {
@@ -45,7 +41,6 @@
 	display: flex;
 	cursor: pointer;
 	transition: all 0.2s;
-	margin-top: 0.5rem;
 }
 
 .userCard:hover {

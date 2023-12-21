@@ -1,4 +1,3 @@
-// import '../../app/App.css'
 import { useCallback, useEffect, useState } from "react"
 import ChatUserSidebar from "./ChatUserSidebar"
 import ChatWebsocketPlace from "./ChatWebsocketPlace"
@@ -33,6 +32,10 @@ function ChatLayout() {
   const [wrongUser, setWrongUser] = useState(false)
   const [wrongUserData, setWrongUserData] = useState("")
   const userID = localStorage.getItem("userId")
+  const [sidebarHeight, setSidebarHeight] = useState(null)
+
+  const senderId = localStorage.getItem("userId")
+  const userRole = localStorage.getItem("userRole")
 
   useEffect(() => {
     const socket = io(baseUrl)
@@ -71,8 +74,6 @@ function ChatLayout() {
 
   const GetReceiverUsername = async (id, username) => {
     localStorage.setItem("receiverId", id)
-    const senderId = localStorage.getItem("userId")
-
     localStorage.setItem("receiverUsername", username)
 
     setChatSelected(true)
@@ -110,8 +111,8 @@ function ChatLayout() {
       .get(`${baseUrl}/chat/room`, {
         params: { user_id1: senderId, user_id2: id },
         headers: {
-          "X-UserRole": localStorage.getItem("userRole"),
-          "X-UserId": localStorage.getItem("userId")
+          "X-UserRole": userRole,
+          "X-UserId": senderId
         }
       })
       .then((res) => {
@@ -141,14 +142,24 @@ function ChatLayout() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className={`${styles.chatLayoutContainer} pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.chatPlace}>
-          {chatSelected && <ChatWebsocketPlace oneUserData={oneUserData} messages={messages} setMessages={setMessages} firstUnreadMsgId={firstUnreadMsgId} 
-            socketInstance={socketInstance} isConnected={isConnected}
-          />}
+          {chatSelected && (
+            <ChatWebsocketPlace
+              oneUserData={oneUserData}
+              messages={messages}
+              setMessages={setMessages}
+              firstUnreadMsgId={firstUnreadMsgId}
+              socketInstance={socketInstance}
+              isConnected={isConnected}
+              setFirstUnreadMsgId={setFirstUnreadMsgId}
+              setSidebarHeight={setSidebarHeight}
+              sidebarHeight={sidebarHeight}
+            />
+          )}
           {!chatSelected && (
             <>
               <SelectChat />
@@ -157,7 +168,7 @@ function ChatLayout() {
           )}
         </div>
         <div className={styles.usersSidebar}>
-          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} setCloseInternalErrorModal={setCloseInternalErrorModal} socketInstance={socketInstance} isConnected={isConnected} />
+          <ChatUserSidebar GetReceiverUsername={GetReceiverUsername} socketInstance={socketInstance} isConnected={isConnected} sidebarHeight={sidebarHeight} />
         </div>
       </div>
     </>

@@ -91,7 +91,7 @@ function _ConfirmationCode({
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className="popupContainer open">
         {confirmCodeOpen && (
@@ -101,7 +101,9 @@ function _ConfirmationCode({
             </label>
             <br />
             {remindEmailCode && <h3>Emailingizga kelgan 6 ta raqamdan iborat sonni kiriting!</h3>}
-            <InputNumber useGrouping={false} id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
+            <InputNumber 
+            autoFocus
+            placeholder="ex: 123456" useGrouping={false} id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
             <button
               type="submit"
               className="btn btn-primary sendBtn"

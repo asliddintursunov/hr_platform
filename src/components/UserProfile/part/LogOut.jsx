@@ -80,7 +80,7 @@ function LogOut() {
   return (
     <>
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {showModal && <LogOutModal toggleModal={toggleModal} logOut={logOut} />}
       <Button color="red" onClick={() => toggleModal()} style={{

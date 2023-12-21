@@ -1,8 +1,9 @@
 import Lottie from "lottie-react"
 import SpinnerData from "../json/loader.json"
 import PageNotFoundData from "../json/404NotFound.json"
-import EmptyMsgPlaceData from '../json/EmptyMsgPlace.json'
-import SelectChatData from '../json/SelectChat.json'
+import EmptyMsgPlaceData from "../json/EmptyMsgPlace.json"
+import SelectChatData from "../json/SelectChat.json"
+import ChatUserSidebarLoaderData from "../json/ChatUserSidebarLoader.json"
 
 export const Spinner = () => {
   return <Lottie loop autoPlay style={{ height: 200 }} animationData={SpinnerData} />
@@ -17,5 +18,9 @@ export const EmptyMsgPlace = () => {
 }
 
 export const SelectChat = () => {
-  return <Lottie loop autoPlay style={{ height: 400 }} animationData={SelectChatData} />
+  return <Lottie loop={false} autoPlay style={{ height: 400 }} animationData={SelectChatData} />
+}
+
+export const ChatUserSidebarLoader = () => {
+  return <Lottie loop autoPlay style={{ height: 400 }} animationData={ChatUserSidebarLoaderData} />
 }

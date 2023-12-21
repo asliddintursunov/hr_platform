@@ -3,7 +3,7 @@ import styles from "../../styles/Chat.module.css"
 import { Avatar } from "@radix-ui/themes"
 import { EmptyMsgPlace } from "../../lottie/illustrations"
 
-function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMsgId, socketInstance }) {
+function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMsgId, socketInstance, setFirstUnreadMsgId, setSidebarHeight, sidebarHeight }) {
   const conversationPathRef = useRef(null)
   // console.log(firstUnreadMsgId); // 107
 
@@ -14,7 +14,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
   const receiverId = localStorage.getItem("receiverId")
   const [imgFallback, setImgFallback] = useState("")
   const scrollToUnreadElement = useRef(null)
-  const [scrolled, setScrolled] = useState(false)
+  const [showNewMsgLine, setShowNewMsgLine] = useState(false)
 
   useEffect(() => {
     if (scrollToUnreadElement.current) {
@@ -50,6 +50,8 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
 
   const textSend = async () => {
     if (senderText.trim() !== "") {
+      setFirstUnreadMsgId(-1)
+      setShowNewMsgLine(false)
       setScrollBottom(true)
       const data = {
         message: senderText,
@@ -88,8 +90,8 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
             sender_id: receiverId,
             receiver_id: senderId
           }
-          if (scrolled === false) {
-            setScrolled(true)
+          if (showNewMsgLine === false) {
+            setShowNewMsgLine(true)
           }
           socketInstance.emit("see_message", data)
           handleSeeMessage()
@@ -119,6 +121,12 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
       threshold: 1
     }
   )
+
+  useEffect(() => {
+    onresize = () => {
+      setSidebarHeight(conversationPathRef.current.offsetHeight)
+    }
+  }, [])
 
   useEffect(() => {
     const getElements = async () => {
@@ -172,9 +180,11 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
                 </div>
               ) : message.sender_id === Number(receiverId) ? (
                 <>
-                  {index === firstUnreadMsgId && scrolled && <div className={styles.unreadMessageLine}>
-                    <p>New messages</p>
-                  </div>}
+                  {index === firstUnreadMsgId && showNewMsgLine && (
+                    <div className={styles.unreadMessageLine}>
+                      <p>New messages</p>
+                    </div>
+                  )}
                   <div style={receivingStyle}>
                     <p style={{ ...messageStyle, backgroundColor: "darkgray" }}>{message.message}</p>
                     <i style={timeStyle}>{message.timestamp}</i>

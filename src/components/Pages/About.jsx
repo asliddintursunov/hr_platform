@@ -7,7 +7,7 @@ import { useLineGraph } from "../../hooks/charts/useLineGraph"
 import { usePieChart } from "../../hooks/charts/usePieChart"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchMajors } from "../../redux/features/chartsSlice"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useBarChart } from "../../hooks/charts/useBarChart"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
@@ -21,6 +21,8 @@ function About() {
 
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
+  localStorage.removeItem("receiverId")
+  localStorage.removeItem("receiverUsername")
 
   const socketInstance = useSelector((state) => state.connection.socketInstance)
   const isConnected = useSelector((state) => state.connection.isConnected)
@@ -70,11 +72,10 @@ function About() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
-
+      {closeInternalErrorModal && <InternalError />}
       <div className={`text-center ${styles.aboutPage} pageAnimation`}>
         <div style={{ gap: "2rem" }}>
-          {waitingUsers !== 0 && memberRole === 'admin' && (
+          {waitingUsers !== 0 && memberRole === "admin" && (
             <div className={styles.registeredUsersContiner}>
               <div className={styles.waitingUsersNav}>
                 <Blockquote>

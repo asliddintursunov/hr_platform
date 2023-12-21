@@ -17,11 +17,20 @@ function _LandingPage() {
     <div className={styles.landingContainer}>
       <div className={styles.sidebarContainer}>
         <aside className={styles.sidebar}>
-          <nav>
-            <div className={styles.navbarOptions}>
+          <nav
+            style={{
+              width: "21.5rem"
+            }}
+          >
+            <div
+              className={styles.navbarOptions}
+              style={{
+                width: "21.5rem"
+              }}
+            >
               <div
                 style={{
-                  width: "100%"
+                  width: "21.5rem"
                 }}
               >
                 <img
@@ -57,8 +66,8 @@ function _LandingPage() {
 
               {userRole === "admin" && (
                 <NavLink style={location.pathname.startsWith(defaultPath + "admin") ? navbarColor : null} to="admin/accepted">
-                  <i className="bi bi-shield-shaded"></i>
-                  &#160; Admin Page
+                  <i className="bi bi-people-fill"></i>
+                  &#160; Users
                 </NavLink>
               )}
 

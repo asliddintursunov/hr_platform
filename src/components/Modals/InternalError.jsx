@@ -1,5 +1,5 @@
 import "../../styles/PopUp.css"
-function InternalError({ setCloseInternalErrorModal }) {
+function InternalError() {
   return (
     <div>
       <div className="popupContainer open">
@@ -17,16 +17,6 @@ function InternalError({ setCloseInternalErrorModal }) {
             <br />
             Something went wrong in the server, please try again!
           </h2>
-          <button
-            className="sendBtn"
-            type="submit"
-            onClick={() => {
-              // window.location.reload()
-              setCloseInternalErrorModal(false)
-            }}
-          >
-            OK
-          </button>
         </form>
       </div>
     </div>

@@ -62,7 +62,11 @@ function NotAcceptedUsers() {
         }
       })
       .then((req) => {
-        setDatas(req.data)
+        // setDatas(req.data)
+        const data = req.data.filter((user) => {
+          return !user.accepted && user.approved
+        })
+        setDatas(data)
         setIsPending(false)
       })
       .catch((err) => {
@@ -174,7 +178,7 @@ function NotAcceptedUsers() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {showAcceptModal && <AcceptUserModal toggleAcceptModal={toggleAcceptModal} AddUser={AddUser} />}
       {showRejectModal && <RejectUserModal toggleRejectModal={toggleRejectModal} RejectUser={RejectUser} />}
@@ -185,54 +189,63 @@ function NotAcceptedUsers() {
         {!isPending && (
           <Table.Root variant="surface">
             <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Accept</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
-              </Table.Row>
+              {datas.length > 0 ? (
+                <Table.Row>
+                  <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>User</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Username</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Accept</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Delete</Table.ColumnHeaderCell>
+                </Table.Row>
+              ) : (
+                <Table.Row>
+                  <Table.ColumnHeaderCell>Info</Table.ColumnHeaderCell>
+                </Table.Row>
+              )}
             </Table.Header>
 
             <Table.Body>
-              {datas &&
+              {datas.length > 0 ? (
                 datas.map((data) => {
                   return (
-                    !data.accepted &&
-                    data.approved && (
-                      <Table.Row key={data.id}>
-                        <Table.RowHeaderCell>
-                          <Strong>{data.id}</Strong>
-                        </Table.RowHeaderCell>
-                        <Table.Cell>
-                          <Avatar.Root className={styles.AvatarRoot}>
-                            <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
-                            <Avatar.Fallback className={styles.AvatarFallback}>
-                              {data.username.charAt(0).toUpperCase()}
-                            </Avatar.Fallback>
-                          </Avatar.Root>
-                        </Table.Cell>
-                        <Table.Cell>{data.username}</Table.Cell>
-                        <Table.Cell>{data.email}</Table.Cell>
-                        <Table.Cell>
-                          {!data.accepted && (
-                            <Button color="grass" variant="soft" className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
-                              <i className="bi bi-check-square-fill"></i>
-                            </Button>
-                          )}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {!data.accepted && (
-                            <Button color="red" variant="soft" className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
-                              <i className="bi bi-trash3-fill"></i>
-                            </Button>
-                          )}
-                        </Table.Cell>
-                      </Table.Row>
-                    )
+                    <Table.Row key={data.id}>
+                      <Table.RowHeaderCell>
+                        <Strong>{data.id}</Strong>
+                      </Table.RowHeaderCell>
+                      <Table.Cell>
+                        <Avatar.Root className={styles.AvatarRoot}>
+                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                          <Avatar.Fallback className={styles.AvatarFallback}>{data.username.charAt(0).toUpperCase()}</Avatar.Fallback>
+                        </Avatar.Root>
+                      </Table.Cell>
+                      <Table.Cell>{data.username}</Table.Cell>
+                      <Table.Cell>{data.email}</Table.Cell>
+                      <Table.Cell>
+                        <Button color="grass" variant="soft" className="btn btn-outline-success" onClick={() => toggleAcceptModal(data.id)}>
+                          <i className="bi bi-check-square-fill"></i>
+                        </Button>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Button color="red" variant="soft" className="btn btn-outline-danger" onClick={() => toggleRejectModal(data.id)}>
+                          <i className="bi bi-trash3-fill"></i>
+                        </Button>
+                      </Table.Cell>
+                    </Table.Row>
                   )
-                })}
+                })
+              ) : (
+                <Table.Row
+                  style={{
+                    display: "grid",
+                    placeItems: "center",
+                    fontSize: "3rem",
+                    letterSpacing: "1rem"
+                  }}
+                >
+                  <Table.Cell>No waiting users for now!</Table.Cell>
+                </Table.Row>
+              )}
             </Table.Body>
           </Table.Root>
         )}

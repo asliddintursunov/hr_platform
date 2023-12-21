@@ -164,7 +164,7 @@ function AcceptedUsers() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {showRemoveModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}

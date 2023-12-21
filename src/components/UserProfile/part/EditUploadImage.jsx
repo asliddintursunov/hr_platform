@@ -1,10 +1,10 @@
-import { Fragment, useCallback, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 // import '../User_Profile.css'
 import styles from "../../../styles/EditProfile.module.css"
 import { Button } from "@radix-ui/themes"
 import { CameraIcon } from "@radix-ui/react-icons"
 
-function UploadImage({ handleImageChange, changeProfile }) {
+function UploadImage({ handleImageChange, changeProfile, setOpenDeleteImageModal }) {
   const [percentage, setPercentage] = useState(0)
   const full = useRef(null)
   const value = useRef(0)
@@ -24,8 +24,7 @@ function UploadImage({ handleImageChange, changeProfile }) {
         clearInterval(progress)
         setIsDone(true)
         setTimeout(() => {
-          setIsDone(false),
-            setIsOnProgress(false)
+          setIsDone(false), setIsOnProgress(false)
         }, 1500)
         console.log("Progress Done!")
       } else {
@@ -40,10 +39,10 @@ function UploadImage({ handleImageChange, changeProfile }) {
       }
     }
   }, [])
+
   return (
     <div className={styles.uploadImageComponent}>
       <input
-        style={{ width: '14rem' }}
         type="file"
         accept="image/*"
         onChange={(file) => {
@@ -58,15 +57,29 @@ function UploadImage({ handleImageChange, changeProfile }) {
         }}
         disabled={!changeProfile}
       />
-      <Button type="button" disabled={!changeProfile}><CameraIcon />Change Photo</Button>
+      <div>
+        <Button type="button" disabled={!changeProfile}>
+          <CameraIcon />
+          Change Photo
+        </Button>
+        <Button
+          disabled={!changeProfile}
+          onClick={() => setOpenDeleteImageModal(true)}
+          variant="outline"
+          color="red"
+          style={{
+            marginLeft: "1rem"
+          }}
+        >
+          Remove Photo
+        </Button>
+      </div>
       {isOnProgress && (
         <div className="p-bar-container">
           <div className="p-bar" style={{ width: percentage + "%" }}></div>
         </div>
       )}
-      {isDone && (
-        <span>Done😀</span>
-      )}
+      {isDone && <span>Done😀</span>}
     </div>
   )
 }

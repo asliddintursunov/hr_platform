@@ -100,7 +100,7 @@ function SignUpForm() {
 
   return (
     <>
-    {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+    {closeInternalErrorModal && <InternalError />}
       {isPending && <div className={styles.Loader}>
         <div></div>
       </div>}

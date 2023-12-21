@@ -20,15 +20,8 @@ import { resumeId, resumeUsername } from "../../redux/features/resumeUsernameSli
 function Resumes() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  const socketInstance = useSelector((state) => state.connection.socketInstance)
-  const isConnected = useSelector((state) => state.connection.isConnected)
-
-  useEffect(() => {
-    if (isConnected) {
-      socketInstance.disconnect()
-    }
-  }, [])
+  localStorage.removeItem("receiverId")
+  localStorage.removeItem("receiverUsername")
 
   const [skills, setSkills] = useState([])
   const [experience, setExperience] = useState("")
@@ -246,7 +239,7 @@ function Resumes() {
   return (
     <>
       {isPending && <Spinner />}
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {!isPending && (
@@ -385,7 +378,7 @@ function Resumes() {
                   }}
                 >
                   <h3 className="mb-4">Languages / Technologies</h3>
-                  <div className={styles.technalogyContainer}>
+                  <div className={styles.TechnologyContainer}>
                     {DefaultSkills &&
                       DefaultSkills.map((type) => {
                         return (
@@ -416,7 +409,7 @@ function Resumes() {
                     </Dialog.Trigger>
 
                     <Dialog.Content style={{ maxWidth: 450 }}>
-                      <Dialog.Title>More technalogy</Dialog.Title>
+                      <Dialog.Title>More Technology</Dialog.Title>
                       <Dialog.Description size="2" mb="4">
                         Find more skilled users/candidates.
                       </Dialog.Description>
@@ -426,7 +419,7 @@ function Resumes() {
                           <Text as="div" size="2" mb="1" weight="bold">
                             More Tech
                           </Text>
-                          <TextField.Input value={customTech} onChange={(e) => setCustomTech(e.target.value.toLowerCase())} placeholder="Enter one technalogy name" />
+                          <TextField.Input value={customTech} onChange={(e) => setCustomTech(e.target.value.toLowerCase())} placeholder="Enter one Technology name" />
                         </label>
                       </Flex>
 

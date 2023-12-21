@@ -72,7 +72,7 @@ function _ResumeDetails() {
   }, [resumeUserId, tokenExpired])
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {openResume && <ResumeFile setOpenResume={setOpenResume} resume={userResumeData.resume} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}

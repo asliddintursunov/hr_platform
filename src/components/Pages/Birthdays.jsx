@@ -16,6 +16,8 @@ import { Spinner } from "../../lottie/illustrations"
 function _Birthdays() {
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
+  localStorage.removeItem("receiverId")
+  localStorage.removeItem("receiverUsername")
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -168,7 +170,7 @@ function _Birthdays() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       <div className={`pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)", width: '80%' ,margin: '0px auto' }}>

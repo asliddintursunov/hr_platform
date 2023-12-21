@@ -17,6 +17,9 @@ import FizmasoftInfo from "./FizmasoftInfo"
 function Home() {
   const memberId = localStorage.getItem("userId")
   const memberRole = localStorage.getItem("userRole")
+  localStorage.removeItem("receiverId")
+  localStorage.removeItem("receiverUsername")
+  
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -73,7 +76,7 @@ function Home() {
   return (
     <>
       {isPending && <Spinner />}
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       <div className="pageAnimation HomePage container">
         <div className="userInfo__FizmasoftInfo">

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useCallback, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import axios from "axios"
 import styles from "../../styles/EditProfile.module.css"
 import { logoutUser } from "../../redux/features/logoutUser"
@@ -31,6 +31,7 @@ import EditUniversity from "./part/EditUniversity"
 import UpdatePassword from "./part/UpdatePassword"
 import InternalError from "../Modals/InternalError"
 import { Spinner } from "../../lottie/illustrations"
+import DeleteProfileImageModal from "../Modals/DeleteProfileImageModal"
 
 const ButtonFunction = (props) => {
   return (
@@ -48,6 +49,10 @@ const ButtonFunction = (props) => {
               props.setChangeProfile(false)
               props.saveEdition()
             }}
+            style={{
+              backgroundColor: props.usernameValue === "" || props.usernameValue.length < 3 || props.usernameValue.length > 20 ? "gray" : "#199d19"
+            }}
+            disabled={props.usernameValue === "" || props.usernameValue.length < 3 || props.usernameValue.length > 20}
           >
             Save Changes
           </button>
@@ -79,9 +84,8 @@ const ButtonFunction = (props) => {
 function UpdateProfile() {
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
-
-  const socketInstance = useSelector((state) => state.connection.socketInstance)
-  const isConnected = useSelector((state) => state.connection.isConnected)
+  localStorage.removeItem("receiverId")
+  localStorage.removeItem("receiverUsername")
 
   // Redirect user to another page
   const navigate = useNavigate()
@@ -116,7 +120,7 @@ function UpdateProfile() {
   const [major, setMajor] = useState("")
   const [experience, setExperience] = useState("")
 
-  // =========== Custom Technalogies ==========
+  // =========== Custom Technologies ==========
   const [customTechList, setCustomTechList] = useState([])
   const [skills, setSkills] = useState([])
   const [customTech, setCustomTech] = useState("Pascal")
@@ -164,12 +168,7 @@ function UpdateProfile() {
   const [openToast, setOpenToast] = useState(false)
   const [toastInfo, setToastInfo] = useState("")
   const [imgFallback, setImgFallback] = useState("")
-
-  useEffect(() => {
-    if (isConnected) {
-      socketInstance.disconnect()
-    }
-  }, [])
+  const [openDeleteImageModal, setOpenDeleteImageModal] = useState(false)
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -305,6 +304,7 @@ function UpdateProfile() {
           address: data.address !== address ? address : undefined,
           date_birth: data.date_birth !== dateOfBirth ? dateOfBirth : undefined,
           phone_number: data.phone_number !== numbers ? numbers : undefined,
+          // profile_photo: data.profile_photo !== selectedImage ? selectedImage : selectedImage === null ? null : undefined,
           profile_photo: data.profile_photo !== selectedImage ? selectedImage : undefined,
           resume: data.resume !== userResume ? userResume : undefined,
           major: data.major !== major ? major : undefined,
@@ -327,6 +327,7 @@ function UpdateProfile() {
         setErrorOccured(false)
       })
       .catch((err) => {
+        setUsernameValue(data.username)
         setNewNumber("998")
         if (err.request.status === 500 || err.request.status === 0) {
           setCloseInternalErrorModal(true)
@@ -365,7 +366,16 @@ function UpdateProfile() {
   // ###########################################################
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {openDeleteImageModal && (
+        <DeleteProfileImageModal
+          setOpenDeleteImageModal={setOpenDeleteImageModal}
+          setImgFallback={setImgFallback}
+          setSelectedImage={setSelectedImage}
+          usernameValue={usernameValue}
+          openDeleteImageModal={openDeleteImageModal}
+        />
+      )}
+      {closeInternalErrorModal && <InternalError />}
       {isPending && <Spinner />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
@@ -379,6 +389,7 @@ function UpdateProfile() {
             CancleEdition={CancleEdition}
             changePassword={changePassword}
             setChangePassword={setChangePassword}
+            usernameValue={usernameValue}
           />
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
@@ -406,7 +417,13 @@ function UpdateProfile() {
                   <Text size="3" style={{ color: "gray" }}>
                     @{usernameValue}
                   </Text>
-                  <EditUploadImage handleImageChange={handleImageChange} changeProfile={changeProfile} />
+                  <EditUploadImage
+                    handleImageChange={handleImageChange}
+                    changeProfile={changeProfile}
+                    setSelectedImage={setSelectedImage}
+                    setImgFallback={setImgFallback}
+                    setOpenDeleteImageModal={setOpenDeleteImageModal}
+                  />
                 </div>
                 <div className={styles.mainTopRight}>
                   <Code size="4">{memberRole}</Code>
@@ -419,7 +436,7 @@ function UpdateProfile() {
                 <Tabs.Root defaultValue="basic">
                   <Tabs.List>
                     <Tabs.Trigger value="basic">Basic</Tabs.Trigger>
-                    <Tabs.Trigger value="technalogies">Technalogies</Tabs.Trigger>
+                    <Tabs.Trigger value="Technologies">Technologies</Tabs.Trigger>
                     <Tabs.Trigger value="additional">Additional</Tabs.Trigger>
                   </Tabs.List>
 
@@ -453,8 +470,8 @@ function UpdateProfile() {
                         <EditDateOfBirth changeProfile={changeProfile} dateOfBirth={dateOfBirth} setDateOfBirth={setDateOfBirth} />
                       </div>
                     </Tabs.Content>
-                    <Tabs.Content value="technalogies">
-                      <div className={styles.MajorExperienceTechnalogiesContainer}>
+                    <Tabs.Content value="Technologies">
+                      <div className={styles.MajorExperienceTechnologiesContainer}>
                         <EditMajor major={major} seeMajor={seeMajor} changeProfile={changeProfile} />
                         <EditExperience experience={experience} seeExperience={seeExperience} changeProfile={changeProfile} />
                         <EditSkills

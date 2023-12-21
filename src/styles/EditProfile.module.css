@@ -119,7 +119,7 @@
 .profileImgContainer img {
   width: 15rem;
   height: 15rem;
-  object-fit: fill;
+  object-fit: inherit;
   object-position: center;
   border-radius: 8px;
 }
@@ -132,6 +132,7 @@
   position: absolute;
   width: 14rem;
   opacity: 0;
+  left: 5px;
   z-index: 2;
 }
 
@@ -373,7 +374,7 @@
   color: red;
 }
 
-.MajorExperienceTechnalogiesContainer {
+.MajorExperienceTechnologiesContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -382,7 +383,7 @@
   margin-bottom: 2rem;
 }
 
-.MajorExperienceTechnalogiesContainer > div {
+.MajorExperienceTechnologiesContainer > div {
   padding: 1.5rem 2rem;
   width: 100%;
   box-shadow: 0 0 3px gray;
@@ -681,4 +682,7 @@
   background-color: transparent;
   border: 1px solid royalblue;
   color: royalblue;
+}
+.usernameInputContainer{
+  position: relative;
 }

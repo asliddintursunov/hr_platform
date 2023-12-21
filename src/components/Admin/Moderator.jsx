@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react"
 import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
 import { baseUrl } from "../../utils/api"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { logoutUser } from "../../redux/features/logoutUser"
 import ConfirmModal from "../Modals/ConfirmModal"
 import AnotherUser from "../Modals/AnotherUser"
@@ -19,6 +19,8 @@ import { Spinner } from "../../lottie/illustrations"
 function Moderator() {
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
+  localStorage.removeItem("receiverId")
+  localStorage.removeItem("receiverUsername")
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -131,7 +133,7 @@ function Moderator() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {showModal && <ConfirmModal toggleRemoveUserModal={toggleRemoveUserModal} handleDelete={handleDelete} />}

@@ -33,18 +33,11 @@ function Sign_In_Form() {
         password: passwordValue
       })
       .then((res) => {
-        setIsOpen(true)
         localStorage.setItem("token", res.data.token)
         localStorage.setItem("userId", res.data.id)
         localStorage.setItem("userRole", res.data.role)
 
-        setPopupInfo(res.data.message)
-        setErrorOccured(false)
-
-        setTimeout(() => {
-          // Redirecting uset to another page
-          location.assign("/landing")
-        }, 1500)
+        location.assign("/landing")
       })
       .catch((err) => {
         if (err.request.status === 500 || err.request.status === 0) {
@@ -65,7 +58,7 @@ function Sign_In_Form() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       <div className="sign-in-form-container">
         {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
         {

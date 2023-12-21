@@ -26,6 +26,8 @@ function HR_Register() {
 
   const memberRole = localStorage.getItem("userRole")
   const memberId = localStorage.getItem("userId")
+  localStorage.removeItem("receiverId")
+  localStorage.removeItem("receiverUsername")
 
   const [candidateFullName, setCandidateFullName] = useState("")
   const [candidateEmail, setCandidateEmail] = useState("")
@@ -254,7 +256,7 @@ function HR_Register() {
 
   return (
     <>
-      {closeInternalErrorModal && <InternalError setCloseInternalErrorModal={setCloseInternalErrorModal} />}
+      {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp popupInfo={popupInfo} setIsOpen={setIsOpen} errorOccured={errorOccured} />}
       {emptyFields && <PopUp popupInfo={"Make Sure You Filled All Fields!"} setIsOpen={setEmptyFields} errorOccured={true} />}

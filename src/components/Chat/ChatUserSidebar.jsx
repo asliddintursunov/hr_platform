@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import styles from "../../styles/Chat.module.css"
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
 import { logoutUser } from "../../redux/features/logoutUser"
@@ -8,9 +8,10 @@ import AnotherUser from "../Modals/AnotherUser"
 import { useNavigate } from "react-router-dom"
 import PopUp from "../Modals/PopUp"
 import { Avatar, Card, Code, Flex, Text } from "@radix-ui/themes"
+import { ChatUserSidebarLoader } from "../../lottie/illustrations"
 // import { setCount } from "../../redux/features/chatMsgCountSlice"
 
-function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isConnected, socketInstance }) {
+function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isConnected, socketInstance, sidebarHeight }) {
   const userid = localStorage.getItem("userId")
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -25,6 +26,7 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isCo
   const [isOpen, setIsOpen] = useState(false)
   const [popupInfo, setPopupInfo] = useState("")
   const [errorOccured, setErrorOccured] = useState("")
+  const [loadingUserSidebar, setLoadingUserSidebar] = useState(false)
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -57,6 +59,7 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isCo
   useEffect(() => {
     if (isConnected) {
       socketInstance.on("count", (data) => {
+        setLoadingUserSidebar(false)
         setUserData(data)
         // const unreadMsgCount = data.map((msg) => msg.unread_msg).reduce((a, b) => a + b, 0)
         // dispatch(setCount(unreadMsgCount))
@@ -65,6 +68,7 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isCo
   }, [socketInstance])
 
   useEffect(() => {
+    setLoadingUserSidebar(true)
     if (userid) {
       axios
         .get(`${baseUrl}/chat/${userid}`, {
@@ -92,34 +96,49 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isCo
         })
     }
   }, [])
-
+  const receiverId = localStorage.getItem("receiverId")
   return (
     <>
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
-      <div className={styles.usersListContainer} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
-        <h2 className="text-center">Users List</h2>
-        {userData.length === 0 && userImage.length === 0
-          ? null
-          : userData.map((user, index) => {
-              const userInfo = userImage[index]
-              if (userInfo) {
-                return (
-                  <Card key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}>
-                    <Flex gap="3" align="center">
-                      <Avatar src={userInfo.profile_photo} radius="full" fallback={userImage[index].username.slice(0, 2).toUpperCase()} />
-                      {user.id === userInfo.id && user.unread_msg !== 0 && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>}
-                      <Text as="div" size="2" weight="bold">
-                        {userInfo.username}
-                      </Text>
-                    </Flex>
-                  </Card>
-                )
-              }
-            })}
-      </div>
+      <h2
+        className="text-center"
+        style={{
+          borderBottom: "1px solid #e2e2e2"
+        }}
+      >
+        Users List
+      </h2>
+      {!loadingUserSidebar && (
+        <div
+          className={styles.usersListContainer}
+          style={{ filter: wrongUser ? "blur(4px)" : "blur(0)", height: sidebarHeight ? `calc(${sidebarHeight + 50}px)` : "calc(100vh - 12rem)", overflowY: "scroll" }}
+        >
+          {userData.length === 0 && userImage.length === 0
+            ? null
+            : userData.map((user, index) => {
+                const userInfo = userImage[index]
+                if (userInfo) {
+                  return (
+                    <Card key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)} style={{
+                      backgroundColor: ~~receiverId === ~~userInfo.id && "#333",
+                      color: ~~receiverId === ~~userInfo.id && "#fff"
+                    }}>
+                      <Flex gap="3" align="center">
+                        <Avatar src={userInfo.profile_photo} radius="full" fallback={userImage[index].username.slice(0, 2).toUpperCase()} />
+                        {user.id === userInfo.id && user.unread_msg !== 0 && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>}
+                        <Text as="div" size="2" weight="bold">
+                          {userInfo.username}
+                        </Text>
+                      </Flex>
+                    </Card>
+                  )
+                }
+              })}
+        </div>
+      )}
+      {loadingUserSidebar && <ChatUserSidebarLoader />}
     </>
   )
 }
-
 export default ChatUserSidebar

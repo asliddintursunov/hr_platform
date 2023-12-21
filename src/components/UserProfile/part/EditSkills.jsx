@@ -10,6 +10,7 @@ import { useState } from "react"
 function EditSkills({ changeProfile, customTechList, setCustomTechList, skills, setSkills, customTech, setCustomTech, UserSkills }) {
   const [openToast, setOpenToast] = useState(false)
   const [toastInfo, setToastInfo] = useState("")
+  const [skillLimit, setSkillLimit] = useState(24)
 
   const seeSkills = (value) => {
     if (skills.includes(value)) {
@@ -24,6 +25,7 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills, 
       setCustomTechList((prev) => [...prev, customTech])
       setSkills((prev) => [...new Set([...prev, customTech])])
       setCustomTech("")
+      setSkillLimit(30)
     } else {
       setOpenToast(false)
       setTimeout(() => {
@@ -51,7 +53,7 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills, 
       <div className={additional.skillsContainier}>
         <div className={styles.CustomTechContainer}>
           <Text as="label" style={{ fontSize: "1.8rem" }}>
-            Custom Technalogies
+            Custom Technologies
           </Text>
           <Flex direction="row" align="center" gap="4" wrap="wrap">
             {UserSkills.map((skill) => {
@@ -78,7 +80,7 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills, 
             </Dialog.Trigger>
 
             <Dialog.Content style={{ maxWidth: 450 }}>
-              <Dialog.Title>More technalogy</Dialog.Title>
+              <Dialog.Title>More Technology</Dialog.Title>
               <Dialog.Description size="2" mb="4">
                 Make additional changes to the your skills.
               </Dialog.Description>
@@ -88,7 +90,13 @@ function EditSkills({ changeProfile, customTechList, setCustomTechList, skills, 
                   <Text as="div" size="2" mb="1" weight="bold">
                     Custom Tech
                   </Text>
-                  <TextField.Input value={customTech} onChange={(e) => setCustomTech(e.target.value)} placeholder="Enter one technalogy name" />
+                  <TextField.Input value={customTech} onChange={(e) => {
+                    if (e.target.value.length <= 30) {
+                      setCustomTech(e.target.value)
+                      setSkillLimit(30 - e.target.value.length)
+                    }
+                  }} placeholder="Enter one Technology name" />
+                  <span>{skillLimit}/30</span>
                 </label>
               </Flex>
 
