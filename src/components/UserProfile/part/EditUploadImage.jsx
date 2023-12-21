@@ -63,6 +63,7 @@ function UploadImage({ handleImageChange, changeProfile, setOpenDeleteImageModal
           Change Photo
         </Button>
         <Button
+          type="button"
           disabled={!changeProfile}
           onClick={() => setOpenDeleteImageModal(true)}
           variant="outline"

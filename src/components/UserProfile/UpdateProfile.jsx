@@ -93,7 +93,7 @@ function UpdateProfile() {
   const dispatch = useDispatch()
 
   // Custom useUsername Hook
-  const { usernameValue, setUsernameValue, validUsernameChecker, usernameFocus, setUsernameFocus, usernameTrue, setUsernameTrue, usernameChecker, usernameInputStyle } = useUsername()
+  const { usernameValue, setUsernameValue, validUsernameChecker, usernameInputStyle } = useUsername()
   // Custom usePassword Hook
   const { passwordValue, setPasswordValue, validPasswordChecker, passwordTrue, setPasswordTrue, passwordType, setPasswordType, passwordChecker, passwordInputStyle } = usePassword()
   // Custom Email Hook
