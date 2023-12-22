@@ -14,31 +14,28 @@ function EditUniversity({ education, setEducation, changeProfile }) {
   const [universityName, setUniversityName] = useState("")
   const [universityLocation, setUniversityLocation] = useState("")
   const [isFilled, setIsFilled] = useState(false)
-  
-  useEffect(
-    () => {
-      if (degree !== '' && universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
-        setIsFilled(true)
-      }
-      else {
-        setIsFilled(false)
-      }
-    }, [
-    degree, universityMajor, fromYear, toYear, universityName, universityLocation
-  ]
-  )
+
+  useEffect(() => {
+    if (degree !== "" && universityMajor !== "" && fromYear !== 0 && toYear !== 0 && universityName !== "" && universityLocation !== "") {
+      setIsFilled(true)
+    } else {
+      setIsFilled(false)
+    }
+  }, [degree, universityMajor, fromYear, toYear, universityName, universityLocation])
 
   const addEducation = () => {
-    if (universityMajor !== '' && fromYear !== 0 && toYear !== 0 && universityName !== '' && universityLocation !== '') {
-      setEducation((prev) => [...prev,
-      {
-        degree,
-        universityMajor,
-        fromYear,
-        toYear,
-        universityName,
-        universityLocation
-      }])
+    if (universityMajor !== "" && fromYear !== 0 && toYear !== 0 && universityName !== "" && universityLocation !== "") {
+      setEducation((prev) => [
+        ...prev,
+        {
+          degree,
+          universityMajor,
+          fromYear,
+          toYear,
+          universityName,
+          universityLocation
+        }
+      ])
       setDegree("bacheloer")
       setUniversityMajor("")
       setFromYear(0)
@@ -58,10 +55,7 @@ function EditUniversity({ education, setEducation, changeProfile }) {
       <div className={styles.AddUniversityContainer}>
         <div className={styles.UniversityDegreeYearContainer}>
           <div className={styles.SelectDegree}>
-            <Select.Root
-              defaultValue={degree}
-              onValueChange={(e) => setDegree(e)}
-              disabled={!changeProfile}>
+            <Select.Root defaultValue={degree} onValueChange={(e) => setDegree(e)} disabled={!changeProfile}>
               <Text as="label">Degree</Text>
               <Select.Trigger />
               <Select.Content position="popper">
@@ -78,7 +72,11 @@ function EditUniversity({ education, setEducation, changeProfile }) {
             <TextField.Input
               id="university-major"
               placeholder="Computer Science"
-              onChange={(e) => setUniversityMajor(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 20) {
+                  setUniversityMajor(e.target.value)
+                }
+              }}
               value={universityMajor}
               disabled={!changeProfile}
             />
@@ -89,7 +87,11 @@ function EditUniversity({ education, setEducation, changeProfile }) {
               <TextField.Input
                 type="number"
                 placeholder="2017"
-                onChange={(e) => setFromYear(Number(e.target.value))}
+                onChange={(e) => {
+                  if (Number(e.target.value) <= new Date().getFullYear()) {
+                    setFromYear(Number(e.target.value))
+                  }
+                }}
                 value={fromYear <= 0 ? "" : fromYear}
                 disabled={!changeProfile}
               />
@@ -100,7 +102,11 @@ function EditUniversity({ education, setEducation, changeProfile }) {
                 type={stillStudying ? "text" : "number"}
                 placeholder="2021"
                 disabled={stillStudying ? true : !changeProfile}
-                onChange={(e) => setToYear(Number(e.target.value))}
+                onChange={(e) => {
+                  if (Number(e.target.value) <= new Date().getFullYear() + 10) {
+                    setToYear(Number(e.target.value))
+                  }
+                }}
                 value={stillStudying ? "still studying" : toYear <= 0 ? "" : toYear}
               />
               <Text as="label" size="2">
@@ -125,7 +131,11 @@ function EditUniversity({ education, setEducation, changeProfile }) {
             University Name
             <TextField.Input
               placeholder="Inha University in Tashkent"
-              onChange={(e) => setUniversityName(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 30) {
+                  setUniversityName(e.target.value)
+                }
+              }}
               value={universityName}
               disabled={!changeProfile}
             />
@@ -134,18 +144,18 @@ function EditUniversity({ education, setEducation, changeProfile }) {
             University Location
             <TextField.Input
               placeholder="Tashkent, Uzbekistan"
-              onChange={(e) => setUniversityLocation(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 30) {
+                  setUniversityLocation(e.target.value)
+                }
+              }}
               value={universityLocation}
               disabled={!changeProfile}
             />
           </Text>
         </div>
         <hr />
-        <Button
-          className={styles.AddEducationButton}
-          onClick={addEducation}
-          disabled={!isFilled}
-        >
+        <Button className={styles.AddEducationButton} onClick={addEducation} disabled={!isFilled}>
           <PlusIcon />
         </Button>
       </div>
@@ -173,9 +183,13 @@ function EditUniversity({ education, setEducation, changeProfile }) {
                 </Table.Cell>
                 <Table.Cell>{edu.universityName}</Table.Cell>
                 <Table.Cell>{edu.universityLocation}</Table.Cell>
-                {changeProfile && <Table.Cell>
-                  <Button color="red" variant="soft" onClick={() => handleEducationDelete(index)}><TrashIcon/></Button>
-                </Table.Cell>}
+                {changeProfile && (
+                  <Table.Cell>
+                    <Button color="red" variant="soft" onClick={() => handleEducationDelete(index)}>
+                      <TrashIcon />
+                    </Button>
+                  </Table.Cell>
+                )}
               </Table.Row>
             ))}
           </Table.Body>

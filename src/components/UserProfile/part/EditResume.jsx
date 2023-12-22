@@ -39,9 +39,9 @@ function EditResume({ handleResumeChange, changeProfile }) {
     }
   }, [])
 
-  const fileName = localStorage.getItem("fileName")
   return (
-    <div className={styles.EditImgComponentContainer}>
+    <>
+      {/* <div className={styles.EditImgComponentContainer}> */}
       <div className={styles.uploadResumeComponent}>
         <input
           type="file"
@@ -91,7 +91,8 @@ function EditResume({ handleResumeChange, changeProfile }) {
         )}
         {isDone && <span>Done😀</span>}
       </div>
-    </div>
+      {/* </div> */}
+    </>
   )
 }
 

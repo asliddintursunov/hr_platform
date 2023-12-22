@@ -17,6 +17,7 @@
 	height: calc(100vh - 5rem);
 	box-shadow: 0 0 2px darkgray;
 	background-color: var(--accent-4);
+	border-radius: 8px;
 }
 
 
@@ -85,8 +86,9 @@
 	align-items: center;
 	justify-content: start;
 	gap: 0.7rem;
-	background-color: lightgray;
+	background-color: darkgray;
 	z-index: 2;
+	border-radius: 8px 8px 0 0;
 }
 
 .receiverHeader img {

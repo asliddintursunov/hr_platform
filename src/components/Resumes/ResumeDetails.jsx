@@ -30,6 +30,7 @@ function _ResumeDetails() {
   const [errorOccured, setErrorOccured] = useState("")
   const [openResume, setOpenResume] = useState(false)
   const [closeInternalErrorModal, setCloseInternalErrorModal] = useState(false)
+  const [longAbout, setLongAbout] = useState("")
 
   // Token Expired Validation
   const tokenExpired = useCallback(
@@ -55,6 +56,19 @@ function _ResumeDetails() {
       })
       .then((res) => {
         setUserResumeData(res.data[0])
+        if (res.data[0].about.length > 80) {
+          for (let i = 0; i < Math.ceil(res.data[0].about.length / 80); i++) {
+            setLongAbout(
+              (prev) =>
+                prev +
+                res.data[0].about
+                  .split("")
+                  .splice(i * 80, 80)
+                  .join("") +
+                "\n"
+            )
+          }
+        }
       })
       .catch((err) => {
         if (err.request.status === 500 || err.request.status === 0) {
@@ -76,7 +90,7 @@ function _ResumeDetails() {
       {openResume && <ResumeFile setOpenResume={setOpenResume} resume={userResumeData.resume} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
-      <div className={styles.resumeDetailsContainer} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
+      <div className={`${styles.resumeDetailsContainer}`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)" }}>
         <div className={styles.resumeDetailsWrapper}>
           <h1 className="display-3">Resume Details</h1>
           <div className={styles.userGeneralData}>
@@ -136,11 +150,7 @@ function _ResumeDetails() {
                 </Code>
               </div>
             )}
-            {userResumeData.about && (
-              <div className="text-start">
-                About: <Code>{userResumeData.about}</Code>
-              </div>
-            )}
+            {userResumeData.about && <div className="text-start">About: {userResumeData.about.length > 80 ? <Code>{longAbout}</Code> : <Code>{userResumeData.about}</Code>}</div>}
             {userResumeData.degree_general && (
               <Table.Root
                 variant="surface"

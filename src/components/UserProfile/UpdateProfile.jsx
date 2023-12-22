@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import axios from "axios"
 import styles from "../../styles/EditProfile.module.css"
 import { logoutUser } from "../../redux/features/logoutUser"
-import { Tabs, Box, Heading, Text, Code, Avatar } from "@radix-ui/themes"
+import { Tabs, Box, Heading, Text, Code, Avatar, Button } from "@radix-ui/themes"
 
 // Custon Hooks
 import { useUsername } from "../../hooks/useUsername"
@@ -32,6 +32,7 @@ import UpdatePassword from "./part/UpdatePassword"
 import InternalError from "../Modals/InternalError"
 import { Spinner } from "../../lottie/illustrations"
 import DeleteProfileImageModal from "../Modals/DeleteProfileImageModal"
+import ResumeFile from "../Resumes/ResumeFile"
 
 const ButtonFunction = (props) => {
   return (
@@ -50,9 +51,10 @@ const ButtonFunction = (props) => {
               props.saveEdition()
             }}
             style={{
-              backgroundColor: props.usernameValue === "" || props.usernameValue.length < 3 || props.usernameValue.length > 20 ? "gray" : "#199d19"
+              backgroundColor: props.usernameValue === "" || props.usernameValue.length < 3 || props.usernameValue.length >= 30 || props.fullName?.length === 30 ? "gray" : "#199d19",
+              color: props.usernameValue === "" || props.usernameValue.length < 3 || props.usernameValue.length >= 30 || props.fullName?.length === 30 ? "white" : "white"
             }}
-            disabled={props.usernameValue === "" || props.usernameValue.length < 3 || props.usernameValue.length > 20}
+            disabled={props.usernameValue === "" || props.usernameValue.length < 3 || props.usernameValue.length >= 30 || props.fullName?.length === 30}
           >
             Save Changes
           </button>
@@ -151,6 +153,7 @@ function UpdateProfile() {
   ]
 
   const [userResume, setUserResume] = useState(null)
+  const [openResume, setOpenResume] = useState(false)
   const [education, setEducation] = useState([])
 
   // Loader
@@ -366,6 +369,7 @@ function UpdateProfile() {
   // ###########################################################
   return (
     <>
+      {openResume && <ResumeFile resume={userResume} setOpenResume={setOpenResume} />}
       {openDeleteImageModal && (
         <DeleteProfileImageModal
           setOpenDeleteImageModal={setOpenDeleteImageModal}
@@ -390,6 +394,7 @@ function UpdateProfile() {
             changePassword={changePassword}
             setChangePassword={setChangePassword}
             usernameValue={usernameValue}
+            fullName={fullName}
           />
 
           <div style={{ filter: showModal || wrongUser ? "blur(4px)" : "blur(0)" }} className={styles.left}>
@@ -423,6 +428,7 @@ function UpdateProfile() {
                     setSelectedImage={setSelectedImage}
                     setImgFallback={setImgFallback}
                     setOpenDeleteImageModal={setOpenDeleteImageModal}
+                    selectedImage={selectedImage}
                   />
                 </div>
                 <div className={styles.mainTopRight}>
@@ -502,7 +508,17 @@ function UpdateProfile() {
                           handleDelete={handleDelete}
                           changeProfile={changeProfile}
                         />
-                        <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} />
+                        <div
+                          className={styles.EditImgComponentContainer}
+    
+                        >
+                          <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} userResume={userResume} />
+                          {userResume !== null && (
+                            <Button variant="outline" color="orange" disabled={!changeProfile} type="button" onClick={() => setOpenResume(true)}>
+                              View Resume
+                            </Button>
+                          )}
+                        </div>
                         <EditUniversity education={education} setEducation={setEducation} changeProfile={changeProfile} />
                       </div>
                     </Tabs.Content>

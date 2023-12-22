@@ -21,7 +21,7 @@ function EditUserName({ usernameValue, setUsernameValue, changeProfile }) {
   }, [usernameValidation])
 
   const usernameChecker = () => {
-    !/^[0-9]/.test(usernameValue.split("")[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1
+    !/^[0-9]/.test(usernameValue.split("")[0]) && new Set(emptyCharacter).size === 0 && usernameValue.length >= 1 && usernameValue.length <= 30
       ? setValidUsernameChecker("Valid Username")
       : setValidUsernameChecker("Birinchi belgi harfdan iborat bo'lishi va faqat harf va raqamlar qatnashishi kerak")
   }
@@ -45,17 +45,34 @@ function EditUserName({ usernameValue, setUsernameValue, changeProfile }) {
           value={usernameValue}
           type="text"
           placeholder="User123"
-          onChange={(e) => setUsernameValue(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length <= 30) {
+              setUsernameValue(e.target.value)
+            }
+          }}
           id="username"
           name="username"
           required
           onKeyUp={() => {
-            usernameChecker()
+            if (usernameValue.length >= 30) {
+              setValidUsernameChecker("Username 30 ta belgidan oshmasligi kerak")
+            } else {
+              usernameChecker()
+            }
           }}
         />
-        {(usernameValue === "" || usernameValue.includes("")) && validUsernameChecker !== "Valid Username" && (
+        {(usernameValue === "" || usernameValue.includes(" ")) && validUsernameChecker !== "Valid Username" && (
           <i style={{ color: "red", fontSize: "1rem", position: "absolute", bottom: "-1.5rem" }}>{validUsernameChecker}</i>
         )}
+        {/* <span
+          style={{
+            position: "absolute",
+            right: "0",
+            bottom: "4px"
+          }}
+        >
+          {30 - usernameValue.length} / 30
+        </span> */}
       </div>
     </>
   )

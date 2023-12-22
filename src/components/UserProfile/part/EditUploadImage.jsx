@@ -4,7 +4,7 @@ import styles from "../../../styles/EditProfile.module.css"
 import { Button } from "@radix-ui/themes"
 import { CameraIcon } from "@radix-ui/react-icons"
 
-function UploadImage({ handleImageChange, changeProfile, setOpenDeleteImageModal }) {
+function UploadImage({ handleImageChange, changeProfile, setOpenDeleteImageModal, selectedImage }) {
   const [percentage, setPercentage] = useState(0)
   const full = useRef(null)
   const value = useRef(0)
@@ -62,18 +62,20 @@ function UploadImage({ handleImageChange, changeProfile, setOpenDeleteImageModal
           <CameraIcon />
           Change Photo
         </Button>
-        <Button
-          type="button"
-          disabled={!changeProfile}
-          onClick={() => setOpenDeleteImageModal(true)}
-          variant="outline"
-          color="red"
-          style={{
-            marginLeft: "1rem"
-          }}
-        >
-          Remove Photo
-        </Button>
+        {selectedImage && (
+          <Button
+            type="button"
+            disabled={!changeProfile}
+            onClick={() => setOpenDeleteImageModal(true)}
+            variant="outline"
+            color="red"
+            style={{
+              marginLeft: "1rem"
+            }}
+          >
+            Remove Photo
+          </Button>
+        )}
       </div>
       {isOnProgress && (
         <div className="p-bar-container">
