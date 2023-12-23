@@ -135,7 +135,8 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isCo
                           radius="full"
                           fallback={userImage[index].username.slice(0, 2).toUpperCase()}
                           style={{
-                            aspectRatio: "3/4"
+                            aspectRatio: "3/4",
+                            backgroundColor: "#ccc"
                           }}
                         />
                         {user.id === userInfo.id && user.unread_msg !== 0 && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>}

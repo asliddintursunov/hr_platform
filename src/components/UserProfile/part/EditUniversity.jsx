@@ -59,6 +59,7 @@ function EditUniversity({ education, setEducation, changeProfile }) {
               <Text as="label">Degree</Text>
               <Select.Trigger />
               <Select.Content position="popper">
+                <Select.Item value="highschool">No degree</Select.Item>
                 <Select.Item value="bacheloer">Bacheloer</Select.Item>
                 <Select.Item value="master">Master</Select.Item>
                 <Select.Item value="phd">PhD</Select.Item>

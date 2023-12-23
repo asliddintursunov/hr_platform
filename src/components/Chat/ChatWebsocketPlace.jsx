@@ -148,7 +148,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
       <div className={styles.receiverHeader}>
         <span>{oneUserData.username}</span>
         <Avatar src={oneUserData.profile_photo} radius="full" fallback={imgFallback} style={{
-          backgroundColor: "#eee",
+          backgroundColor: "#ccc",
         }} />
       </div>
       <div
@@ -177,7 +177,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
             >
               {message.sender_id === Number(senderId) && message.receiver_id === Number(receiverId) ? (
                 <div style={sendingStyle}>
-                  <p style={{ ...messageStyle, backgroundColor: "#4CAF50", border: "1px solid #4CAF50 " }}>{message.message}</p>
+                  <p style={{ ...messageStyle, backgroundColor: "#2196F3", border: "1px solid #2196F3 " }}>{message.message}</p>
                   <i style={{...timeStyle, color: '#fff'}}>{message.timestamp}</i>
                   {!message.is_read ? <i className="bi bi-check2" style={tickStyle}></i> : <i className="bi bi-check2-all" style={tickStyle}></i>}
                 </div>

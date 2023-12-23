@@ -33,6 +33,7 @@ import InternalError from "../Modals/InternalError"
 import { Spinner } from "../../lottie/illustrations"
 import DeleteProfileImageModal from "../Modals/DeleteProfileImageModal"
 import ResumeFile from "../Resumes/ResumeFile"
+import DownloadResume from "./part/DownloadResume"
 
 const ButtonFunction = (props) => {
   return (
@@ -444,6 +445,7 @@ function UpdateProfile() {
                   <Text size="3" color="gray">
                     Joined {joined}
                   </Text>
+                  <DownloadResume />
                 </div>
               </div>
               <div>
