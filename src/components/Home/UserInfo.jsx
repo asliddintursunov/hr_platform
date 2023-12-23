@@ -4,7 +4,9 @@ function UserInfo({ userData }) {
   return (
     <div style={{ display: "flex", gap: 20 }}>
       <Avatar.Root className="AvatarRoot">
-        <Avatar.Image className="AvatarImage" src={userData.profile_photo} alt="Pedro Duarte" />
+        <Avatar.Image className="AvatarImage" src={userData.profile_photo} alt="Pedro Duarte" style={{
+          aspectRatio: "3/4",
+        }} />
         <Avatar.Fallback className="AvatarFallback" delayMs={100}>
           Dev
         </Avatar.Fallback>

@@ -415,7 +415,15 @@ function UpdateProfile() {
             <form action="/update_profile/" method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()} className={`${styles.updateProfileForm}`}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: "2rem" }}>
                 <div className={styles.profileImgContainer}>
-                  <Avatar size="9" src={selectedImage} alt="Selected" fallback={imgFallback} />
+                  <Avatar
+                    size="9"
+                    src={selectedImage}
+                    alt="Selected"
+                    fallback={imgFallback}
+                    style={{
+                      aspectRatio: "3/4"
+                    }}
+                  />
                 </div>
                 <div className={styles.mainTopLeft}>
                   <Heading size="6">{fullName}</Heading>
@@ -508,10 +516,7 @@ function UpdateProfile() {
                           handleDelete={handleDelete}
                           changeProfile={changeProfile}
                         />
-                        <div
-                          className={styles.EditImgComponentContainer}
-    
-                        >
+                        <div className={styles.EditImgComponentContainer}>
                           <EditResume handleResumeChange={handleResumeChange} changeProfile={changeProfile} userResume={userResume} />
                           {userResume !== null && (
                             <Button variant="outline" color="orange" disabled={!changeProfile} type="button" onClick={() => setOpenResume(true)}>

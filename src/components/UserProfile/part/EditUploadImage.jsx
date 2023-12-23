@@ -60,7 +60,7 @@ function UploadImage({ handleImageChange, changeProfile, setOpenDeleteImageModal
       <div>
         <Button type="button" disabled={!changeProfile}>
           <CameraIcon />
-          Change Photo
+          {selectedImage ? "Change Photo" : "Upload Photo"}
         </Button>
         {selectedImage && (
           <Button

@@ -90,15 +90,15 @@ function About() {
           )}
           <div className={styles.basicStatsContainer}>
             <div className={styles.lineGraphContainer}>
-              <HighchartsReact highcharts={Highcharts} options={lineGraph} />
+              <HighchartsReact highcharts={Highcharts} options={lineGraph} containerProps={{ style: { height: "400px" } }} />
             </div>
             <div className={styles.pieChartGraphContainer}>
-              <HighchartsReact highcharts={Highcharts} options={pieChartSecond} />
+              <HighchartsReact highcharts={Highcharts} options={pieChartSecond} containerProps={{ style: { height: "400px" } }} />
             </div>
           </div>
           <div className={styles.detailsContainer}>
             <div className={styles.barChartDetailsContainer}>
-              <HighchartsReact highcharts={Highcharts} options={barChart} />
+              <HighchartsReact highcharts={Highcharts} options={barChart} containerProps={{ style: { height: "580px" } }} />
             </div>
           </div>
         </div>

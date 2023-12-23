@@ -81,7 +81,7 @@ function _Birthdays() {
         setUsersLength(res.data.length)
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err)
         if (err.request.status === 500 || err.request.status === 0) {
           setCloseInternalErrorModal(true)
           return
@@ -173,7 +173,7 @@ function _Birthdays() {
       {closeInternalErrorModal && <InternalError />}
       {wrongUser && <AnotherUser wrongUserData={wrongUserData} />}
       {isOpen && <PopUp errorOccured={errorOccured} popupInfo={popupInfo} setIsOpen={setIsOpen} />}
-      <div className={`pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)", width: '80%' ,margin: '0px auto' }}>
+      <div className={`pageAnimation`} style={{ filter: wrongUser ? "blur(4px)" : "blur(0)", width: "80%", margin: "0px auto" }}>
         <h1 className="display-3 text-center">Birthdays</h1>
         <br />
         <br />
@@ -204,29 +204,45 @@ function _Birthdays() {
                       user.accepted &&
                       leftDays[index] <= 15 &&
                       leftDays[index] >= 0 && (
-                        <Table.Row key={user.id} style={leftDays[index] == 0 ? greenBackground : null}>
+                        <Table.Row key={index} style={leftDays[index] == 0 ? greenBackground : null}>
                           <Table.Cell>
                             <Avatar.Root className={styles.AvatarRoot}>
-                              <Avatar.Image className={styles.AvatarImage} src={user.profile_photo} />
-                              <Avatar.Fallback className={styles.AvatarFallback}>
-                                {user.username[0].toUpperCase()}
-                              </Avatar.Fallback>
+                              <Avatar.Image
+                                className={styles.AvatarImage}
+                                src={user.profile_photo}
+                                style={{
+                                  aspectRatio: "3/4"
+                                }}
+                              />
+                              <Avatar.Fallback className={styles.AvatarFallback}>{user.username[0].toUpperCase()}</Avatar.Fallback>
                             </Avatar.Root>
                           </Table.Cell>
-                          <Table.Cell style={{
-                            fontWeight: 600,
-                            color: '#222',
-                            fontSize: '1.8rem'
-                          }}>{user.username}</Table.Cell>
-                          <Table.Cell style={{
-                            fontWeight: 600,
-                            color: '#222',
-                            fontSize: '1.8rem'
-                          }}>{user.date_birth}</Table.Cell>
+                          <Table.Cell
+                            style={{
+                              fontWeight: 600,
+                              color: "#222",
+                              fontSize: "1.8rem"
+                            }}
+                          >
+                            {user.username}
+                          </Table.Cell>
+                          <Table.Cell
+                            style={{
+                              fontWeight: 600,
+                              color: "#222",
+                              fontSize: "1.8rem"
+                            }}
+                          >
+                            {user.date_birth}
+                          </Table.Cell>
                           <Table.Cell>
-                            <Code style={{
-                              fontSize: '1.8rem',
-                            }}>Birthday!</Code>
+                            <Code
+                              style={{
+                                fontSize: "1.8rem"
+                              }}
+                            >
+                              Birthday!
+                            </Code>
                             {leftDays[index] <= 15 && leftDays[index] >= 1 ? (
                               <h5 className="text-info">{leftDays[index]} left</h5>
                             ) : leftDays[index] == 0 ? (

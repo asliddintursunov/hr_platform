@@ -120,12 +120,24 @@ function ChatUserSidebar({ GetReceiverUsername, setCloseInternalErrorModal, isCo
                 const userInfo = userImage[index]
                 if (userInfo) {
                   return (
-                    <Card key={user.id} className={styles.userCard} onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)} style={{
-                      backgroundColor: ~~receiverId === ~~userInfo.id && "#333",
-                      color: ~~receiverId === ~~userInfo.id && "#fff"
-                    }}>
+                    <Card
+                      key={user.id}
+                      className={styles.userCard}
+                      onClick={() => GetReceiverUsername(userInfo.id, userInfo.username)}
+                      style={{
+                        backgroundColor: ~~receiverId === ~~userInfo.id && "#333",
+                        color: ~~receiverId === ~~userInfo.id && "#fff"
+                      }}
+                    >
                       <Flex gap="3" align="center">
-                        <Avatar src={userInfo.profile_photo} radius="full" fallback={userImage[index].username.slice(0, 2).toUpperCase()} />
+                        <Avatar
+                          src={userInfo.profile_photo}
+                          radius="full"
+                          fallback={userImage[index].username.slice(0, 2).toUpperCase()}
+                          style={{
+                            aspectRatio: "3/4"
+                          }}
+                        />
                         {user.id === userInfo.id && user.unread_msg !== 0 && <Code className={styles.unreadMsg}>{user.unread_msg}</Code>}
                         <Text as="div" size="2" weight="bold">
                           {userInfo.username}

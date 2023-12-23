@@ -113,9 +113,12 @@
 .aboutPage>div {
   display: flex;
   flex-direction: column;
+  margin: 0 2rem;
+  overflow: hidden;
 }
 
 .basicStatsContainer {
+  padding: 1rem;
   width: 100%;
   display: flex;
   flex-direction: row-reverse;
@@ -142,6 +145,7 @@
 }
 
 .detailsContainer {
+  padding: 1rem;
   width: 100%;
 }
 

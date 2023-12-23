@@ -75,26 +75,26 @@
 
 .resumeCard {
   padding: 1.5rem 2rem;
+  font-size: 2rem;
+  font-weight: 500;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 0.6rem;
   border-radius: 8px;
+  background-color: #f6f6f6;
+  border: 2px solid #eaeaea;
+  cursor: pointer;
   transition: all 0.2s;
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  -ms-transition: all 0.2s;
-  -o-transition: all 0.2s;
-  background-color: #eaeaea;
 }
 
 .resumeCard:hover {
-  background-color: #e3e3e3;
-  box-shadow: 0 2px 8px var(--evenUserGray);
-  animation: cardScale 0.5s 1 normal both;
+  background-color: #eaeaea;
+  box-shadow: 0 4px 18px var(--evenUserGray);
+  /* animation: cardScale 0.5s 1 normal both; */
 }
 
-@keyframes cardScale {
+/* @keyframes cardScale {
   from {
     transform: scale(1);
     -webkit-transform: scale(1);
@@ -110,7 +110,7 @@
     -ms-transform: scale(1.04);
     -o-transform: scale(1.04);
   }
-}
+} */
 
 .resumeCardMajor {
   text-align: start;
@@ -126,7 +126,9 @@
 .resumeCardSkills > code {
   padding: 0.3rem 1rem;
   background-color: lightgray;
-  color: var(--white);
+  /* color: var(--white); */
+  color: #333;
+  font-weight: bold;
   font-size: 1.8rem;
   border-radius: 10rem;
   -webkit-border-radius: 10rem;
@@ -197,6 +199,7 @@
   gap: 1rem;
   border-radius: 8px;
   box-shadow: 0 0 8px var(--evenUserGray);
+  text-transform: uppercase;
 }
 
 /** ================== Search Bar ================== */

@@ -6,6 +6,8 @@ import "../../styles/PopUp.css"
 import { baseUrl } from "../../utils/api"
 import AnotherUser from "../Modals/AnotherUser"
 import InternalError from "../Modals/InternalError"
+import { Button } from "@radix-ui/themes"
+import { Cross1Icon } from "@radix-ui/react-icons"
 
 function _ConfirmationCode({
   confirmCodeOpen,
@@ -101,9 +103,7 @@ function _ConfirmationCode({
             </label>
             <br />
             {remindEmailCode && <h3>Emailingizga kelgan 6 ta raqamdan iborat sonni kiriting!</h3>}
-            <InputNumber 
-            autoFocus
-            placeholder="ex: 123456" useGrouping={false} id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
+            <InputNumber autoFocus placeholder="ex: 123456" useGrouping={false} id="number-input" value={confirmEmailCode} onValueChange={(e) => setConfirmEmailCode(e.target.value)} />
             <button
               type="submit"
               className="btn btn-primary sendBtn"
@@ -113,6 +113,20 @@ function _ConfirmationCode({
             >
               Send
             </button>
+            <Button
+              style={{
+                position: "absolute",
+                top: "0",
+                right: "0"
+              }}
+              color="red"
+              onClick={() => {
+                setConfirmCodeOpen(false)
+                setConfirmEmailCode("")
+              }}
+            >
+              <Cross1Icon />
+            </Button>
           </form>
         )}
       </div>

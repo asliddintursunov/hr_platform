@@ -215,7 +215,13 @@ function NotAcceptedUsers() {
                       </Table.RowHeaderCell>
                       <Table.Cell>
                         <Avatar.Root className={styles.AvatarRoot}>
-                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                          <Avatar.Image
+                            className={styles.AvatarImage}
+                            src={data.profile_photo}
+                            style={{
+                              aspectRatio: "3/4"
+                            }}
+                          />
                           <Avatar.Fallback className={styles.AvatarFallback}>{data.username.charAt(0).toUpperCase()}</Avatar.Fallback>
                         </Avatar.Root>
                       </Table.Cell>

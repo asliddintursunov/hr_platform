@@ -58,7 +58,6 @@ function AcceptedUsers() {
         }
       })
       .then((req) => {
-        console.log(req)
         setIsPending(false)
         setDatas(req.data)
       })
@@ -194,7 +193,13 @@ function AcceptedUsers() {
                       </Table.RowHeaderCell>
                       <Table.Cell>
                         <Avatar.Root className={styles.AvatarRoot}>
-                          <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} />
+                          <Avatar.Image
+                            className={styles.AvatarImage}
+                            src={data.profile_photo}
+                            style={{
+                              aspectRatio: "3/4"
+                            }}
+                          />
                           <Avatar.Fallback className={styles.AvatarFallback}>{data.username.slice(0, 2).toUpperCase()}</Avatar.Fallback>
                         </Avatar.Root>
                       </Table.Cell>
@@ -202,7 +207,16 @@ function AcceptedUsers() {
                       <Table.Cell>{data.email}</Table.Cell>
                       {data.role !== "admin" && (
                         <Table.Cell>
-                          <Select.Root defaultValue={data.role} onValueChange={() => handleEditRole(data.id, data.role === "user" ? "moderator" : "user")}>
+                          <Select.Root
+                            defaultValue={data.role}
+                            onValueChange={() => {
+                              // const cnfrm = confirm("Are you sure?")
+                              // console.log(cnfrm)
+                              // if (cnfrm) {
+                              handleEditRole(data.id, data.role === "user" ? "moderator" : "user")
+                              // }
+                            }}
+                          >
                             <Select.Trigger />
                             <Select.Content position="popper">
                               <Select.Item value="user">User</Select.Item>

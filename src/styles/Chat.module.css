@@ -16,7 +16,8 @@
 	align-items: center;
 	height: calc(100vh - 5rem);
 	box-shadow: 0 0 2px darkgray;
-	background-color: var(--accent-4);
+	/* background-color: var(--accent-4); */
+	background-color: #F5F5F5;
 	border-radius: 8px;
 }
 
@@ -50,6 +51,7 @@
 
 .userCard img {
 	object-fit: fill;
+	aspect-ratio: 3/4;
 }
 
 .unreadMsg {
@@ -86,9 +88,14 @@
 	align-items: center;
 	justify-content: start;
 	gap: 0.7rem;
-	background-color: darkgray;
+	/* background-color: #555; */
+	background-color: #2196F3;
+	
 	z-index: 2;
 	border-radius: 8px 8px 0 0;
+	box-shadow: 0 2px 4px lightgray;
+	color: #fff;
+	font-weight: 500;
 }
 
 .receiverHeader img {
@@ -96,10 +103,11 @@
 	height: 4rem;
 	border-radius: 50%;
 	object-fit: fill;
+	aspect-ratio: 3/4;
 }
 
 .receiverHeader>span {
-	font-size: 1.7rem;
+	font-size: 1.8rem;
 }
 
 .chatInputPart {

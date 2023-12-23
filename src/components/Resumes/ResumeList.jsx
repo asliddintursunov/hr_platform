@@ -9,7 +9,7 @@ function ResumeList({ resumeData, seeResumeDetail }) {
       {resumeData.length > 0 &&
         resumeData.map((resume, index) => {
           return (
-            <div key={index} className={styles.resumeCard}>
+            <div key={index} className={styles.resumeCard} onClick={() => seeResumeDetail(resume.id, resume.username)}>
               <div className={styles.resumeCardMajor}>
                 <h2>{resume.major ? resume.major : 'Not available'}</h2>
               </div>
@@ -23,10 +23,10 @@ function ResumeList({ resumeData, seeResumeDetail }) {
                   <span>Experience</span>
                   <h3>{resume.experience ? resume.experience : 'Not available'}</h3>
                 </div>
-                <div className={styles.resumeCVCard}>
+                {/* <div className={styles.resumeCVCard}>
                   <span>Full Resume</span>
                   <Button onClick={() => seeResumeDetail(resume.id, resume.username)} variant="surface">See</Button>
-                </div>
+                </div> */}
               </div>
             </div>
           )

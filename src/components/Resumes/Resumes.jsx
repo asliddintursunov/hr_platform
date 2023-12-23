@@ -5,7 +5,7 @@ import styles from "../../styles/Resumes.module.css"
 import axios from "axios"
 import { baseUrl } from "../../utils/api"
 import { logoutUser } from "../../redux/features/logoutUser"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import AnotherUser from "../Modals/AnotherUser"
 import PopUp from "../Modals/PopUp"
 import { Text, Flex, Button, TextField, Dialog } from "@radix-ui/themes"
@@ -87,7 +87,7 @@ function Resumes() {
   const [isPending, setIsPending] = useState(false)
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [postPerPage, setPostPerPage] = useState(7)
+  const [postPerPage, setPostPerPage] = useState(6)
   const lastPostIndex = currentPage * postPerPage
   const firstPostIndex = lastPostIndex - postPerPage
 
@@ -419,7 +419,16 @@ function Resumes() {
                           <Text as="div" size="2" mb="1" weight="bold">
                             More Tech
                           </Text>
-                          <TextField.Input value={customTech} onChange={(e) => setCustomTech(e.target.value.toLowerCase())} placeholder="Enter one Technology name" />
+                          <TextField.Input
+                            value={customTech}
+                            onChange={(e) => {
+                              if (e.target.value.length <= 30) {
+                                setCustomTech(e.target.value)
+                              }
+                            }}
+                            placeholder="Enter one Technology name"
+                          />
+                          <Text as="span">{30 - customTech.length} / 30</Text>
                         </label>
                       </Flex>
 

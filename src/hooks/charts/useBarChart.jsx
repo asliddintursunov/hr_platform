@@ -15,7 +15,7 @@ export function useBarChart() {
     QADev: allMajorsData.QADev,
     SecurityDev: allMajorsData.SecurityDev,
     InternDev: allMajorsData.InternDev,
-    OtherDev: allMajorsData.OtherDev,
+    OtherDev: allMajorsData.OtherDev
   }
 
   // Define the categories you want to process
@@ -55,6 +55,11 @@ export function useBarChart() {
     chart: {
       type: "bar",
       height: "600px",
+      zooming: {
+        mouseWheel: {
+          enabled: false
+        }
+      }
     },
     title: {
       text: "Developer experience by category",
@@ -75,9 +80,7 @@ export function useBarChart() {
     },
     xAxis: {
       categories: categories.map((category) => {
-        return (
-          category.charAt(0).toUpperCase() + category.slice(1)).replace(/([A-Z])/g, " $1"
-          ).trim()
+        return (category.charAt(0).toUpperCase() + category.slice(1)).replace(/([A-Z])/g, " $1").trim()
       }),
       title: {
         text: null
@@ -87,24 +90,24 @@ export function useBarChart() {
       labels: {
         style: {
           fontSize: "1.4rem",
-          color: "#888",
+          color: "#888"
         }
       }
     },
     yAxis: {
       min: 0,
       title: {
-        align: "high",
+        align: "high"
       },
       labels: {
         overflow: "justify",
         style: {
           fontSize: "1.2rem",
-          color: "#888",
-        },
+          color: "#888"
+        }
       },
       gridLineWidth: 0,
-      tickInterval: 1,
+      tickInterval: 1
     },
     tooltip: {
       valueSuffix: " ta",
@@ -143,13 +146,13 @@ export function useBarChart() {
       shadow: true,
       itemStyle: {
         fontSize: "1rem",
-        cursor: "pointer",
+        cursor: "pointer"
       }
     },
     credits: {
       enabled: false
     },
-    series: result,
+    series: result
   }
 
   return { barChart }

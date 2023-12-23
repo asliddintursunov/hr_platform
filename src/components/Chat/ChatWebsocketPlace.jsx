@@ -147,7 +147,9 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
     <>
       <div className={styles.receiverHeader}>
         <span>{oneUserData.username}</span>
-        <Avatar src={oneUserData.profile_photo} radius="full" fallback={imgFallback} />
+        <Avatar src={oneUserData.profile_photo} radius="full" fallback={imgFallback} style={{
+          backgroundColor: "#eee",
+        }} />
       </div>
       <div
         className={styles.conversationPath}
@@ -156,7 +158,8 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
           height: "calc(100vh - 15rem)",
           overflowY: "scroll",
           overflowX: "hidden",
-          background: "var(--accent-6)"
+          // background: "var(--accent-6)"
+          background: "#F5F5F5"
         }}
       >
         {messages.length > 0 ? (
@@ -174,8 +177,8 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
             >
               {message.sender_id === Number(senderId) && message.receiver_id === Number(receiverId) ? (
                 <div style={sendingStyle}>
-                  <p style={{ ...messageStyle, backgroundColor: "royalblue" }}>{message.message}</p>
-                  <i style={timeStyle}>{message.timestamp}</i>
+                  <p style={{ ...messageStyle, backgroundColor: "#4CAF50", border: "1px solid #4CAF50 " }}>{message.message}</p>
+                  <i style={{...timeStyle, color: '#fff'}}>{message.timestamp}</i>
                   {!message.is_read ? <i className="bi bi-check2" style={tickStyle}></i> : <i className="bi bi-check2-all" style={tickStyle}></i>}
                 </div>
               ) : message.sender_id === Number(receiverId) ? (
@@ -186,8 +189,8 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
                     </div>
                   )}
                   <div style={receivingStyle}>
-                    <p style={{ ...messageStyle, backgroundColor: "darkgray" }}>{message.message}</p>
-                    <i style={timeStyle}>{message.timestamp}</i>
+                    <p style={{ ...messageStyle, backgroundColor: "#E0E0E0 ", border: "1px solid #ccc " }}>{message.message}</p>
+                    <i style={{...timeStyle, color: '#333'}}>{message.timestamp}</i>
                   </div>
                 </>
               ) : null}
@@ -228,7 +231,7 @@ export default _ChatWebsocketPlace
 
 const sendingStyle = {
   padding: "0.3rem 1.6rem",
-  color: "#fff",
+  color: "#FFFFFF",
   fontWeight: "bold",
   textAlign: "right",
   display: "flex",
@@ -241,7 +244,7 @@ const sendingStyle = {
 
 const receivingStyle = {
   padding: "0.3rem 1.6rem",
-  color: "#fff",
+  color: "#000000 ",
   fontWeight: "bold",
   textAlign: "left",
   display: "flex",
@@ -263,13 +266,12 @@ const timeStyle = {
   position: "absolute",
   bottom: "2rem",
   fontSize: "1rem",
-  color: "lightgray",
+  // color: "lightgray",
   padding: "0.3rem 0.7rem",
   fontWeight: "bold"
 }
 
 const tickStyle = {
-  color: "lightgray",
   position: "absolute",
   bottom: ".7rem",
   marginRight: "0.3rem"
