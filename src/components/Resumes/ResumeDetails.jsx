@@ -227,13 +227,15 @@ function _ResumeDetails() {
               </div>
             </div>
           )}
-          <div className={styles.userResumeContainer}>
-            <h1>Resume</h1>
-            <Button color="gray" onClick={() => setOpenResume(true)}>
-              <EnvelopeOpenIcon />
-              Open Resume
-            </Button>
-          </div>
+          {userResumeData.resume && (
+            <div className={styles.userResumeContainer}>
+              <h1>Resume</h1>
+              <Button color="gray" onClick={() => setOpenResume(true)}>
+                <EnvelopeOpenIcon />
+                Open Resume
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>

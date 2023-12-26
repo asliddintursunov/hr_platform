@@ -1,0 +1,110 @@
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/colors/violet.css";
+.HoverImageCardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  position: absolute;
+  right: -320px;
+  top: -20px;
+  padding: 1.5rem;
+  width: 320px;
+  border: none;
+  background: linear-gradient(45deg, #fff, #333);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  transition-delay: 0.5s;
+  pointer-events: none;
+}
+.HoverLastThreeImageCardContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  position: absolute;
+  right: -320px;
+  top: -120px;
+  padding: 1.5rem;
+  width: 320px;
+  border: none;
+  background: linear-gradient(45deg, #fff, #333);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  transition-delay: 0.5s;
+  pointer-events: none;
+}
+.TableCell{
+  position: relative;
+  cursor: pointer;
+}
+.TableCell:hover .HoverImageCardContainer,
+.TableCell:hover .HoverLastThreeImageCardContainer{
+  pointer-events: all;
+  animation: slideRight 0.5s 0.2s forwards;
+  opacity: 1;
+}
+@keyframes slideRight {
+  0% {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.HoverAvatarRoot {
+ border-radius: 50%;
+}
+
+.HoverAvatarImage {
+  width: 65px;
+  height: 65px;
+  object-fit: fill;
+  object-position: center;
+  border-radius: inherit;
+  border: 2px solid var(--violet-11);
+}
+
+.HoverAvatarFallback {
+  border-radius: inherit;
+  border: 2px solid var(--violet-11);
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: var(--violet-11);
+  font-size: 20px;
+  font-weight: 500;
+}
+.HoverCardRole{
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+.HoverCardUsername{
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--gray-11);
+}
+.HoverCardEmail{
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+.HoverCardMajor{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--gray-6);
+}

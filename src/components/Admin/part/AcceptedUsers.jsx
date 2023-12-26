@@ -8,6 +8,8 @@ import { logoutUser } from "../../../redux/features/logoutUser"
 import ConfirmModal from "../../Modals/ConfirmModal"
 import AnotherUser from "../../Modals/AnotherUser"
 import InternalError from "../../Modals/InternalError"
+import HoverCard from "../../Pages/HoverCard.jsx"
+import HoverCardTableCellStyle from '../../../styles/HoverImage.module.css'
 
 import { Select, Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
@@ -22,6 +24,7 @@ function AcceptedUsers() {
   const [user_id, setUser_Id] = useState(null)
   const [datas, setDatas] = useState(null)
   const [isPending, setIsPending] = useState(false)
+  const [datasLength, setDatasLength] = useState(null)
 
   // Pop Up States
   const [isOpen, setIsOpen] = useState(false)
@@ -60,6 +63,7 @@ function AcceptedUsers() {
       .then((req) => {
         setIsPending(false)
         setDatas(req.data)
+        setDatasLength(req.data.length)
       })
       .catch((err) => {
         if (err.request.status === 500 || err.request.status === 0) {
@@ -185,13 +189,13 @@ function AcceptedUsers() {
 
             <Table.Body>
               {datas &&
-                datas.map((data) => {
+                datas.map((data, index) => {
                   return (
                     <Table.Row key={data.id}>
                       <Table.RowHeaderCell>
                         <Strong>{data.id}</Strong>
                       </Table.RowHeaderCell>
-                      <Table.Cell>
+                      <Table.Cell className={`${styles.TableCell} ${HoverCardTableCellStyle.TableCell}`}>
                         <Avatar.Root className={styles.AvatarRoot}>
                           <Avatar.Image
                             className={styles.AvatarImage}
@@ -202,6 +206,15 @@ function AcceptedUsers() {
                           />
                           <Avatar.Fallback className={styles.AvatarFallback}>{data.username.slice(0, 2).toUpperCase()}</Avatar.Fallback>
                         </Avatar.Root>
+                        <HoverCard
+                          datasLength={datasLength}
+                          index={index}
+                          profile_photo={data.profile_photo}
+                          role={data.role}
+                          username={data.username}
+                          email={data.email}
+                          major={data.major}
+                        />
                       </Table.Cell>
                       <Table.Cell>{data.username}</Table.Cell>
                       <Table.Cell>{data.email}</Table.Cell>

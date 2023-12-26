@@ -12,6 +12,8 @@ import "@radix-ui/themes/styles.css"
 import * as Avatar from "@radix-ui/react-avatar"
 import InternalError from "../Modals/InternalError"
 import { Spinner } from "../../lottie/illustrations"
+import HoverCard from "./HoverCard"
+import HoverCardTableCellStyle from "../../styles/HoverImage.module.css"
 
 function _Birthdays() {
   const memberRole = localStorage.getItem("userRole")
@@ -77,8 +79,9 @@ function _Birthdays() {
       })
       .then((res) => {
         setIsPending(false)
-        setUserBday(res.data)
-        setUsersLength(res.data.length)
+        const filteredData = res.data.filter((user) => user.accepted === true)
+        setUserBday(filteredData)
+        setUsersLength(filteredData.length)
       })
       .catch((err) => {
         console.log(err)
@@ -167,6 +170,18 @@ function _Birthdays() {
     background: "linear-Gradient(115deg, lightgreen, limegreen , limegreen, lightgreen)",
     color: "var(--white)"
   }
+  useEffect(() => {
+    const test = [];
+    console.log(userBday)
+    console.log(fiveteenDays)
+    userBday.map((user, index) => {
+      if (leftDays[index] <= 15 && leftDays[index] >= 0) {
+        console.log(user.username, `${leftDays[index]} left`, `index -> ${index}`)
+        test.push(user)
+      }
+    })
+    console.log(test)
+  }, [userBday, fiveteenDays])
 
   return (
     <>
@@ -201,7 +216,6 @@ function _Birthdays() {
                 {fiveteenDays.length >= 1 && userBday ? (
                   userBday.map((user, index) => {
                     return (
-                      user.accepted &&
                       leftDays[index] <= 15 &&
                       leftDays[index] >= 0 && (
                         <Table.Row key={index} style={leftDays[index] == 0 ? greenBackground : null}>

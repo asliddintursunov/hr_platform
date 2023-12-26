@@ -5,10 +5,12 @@ import { useCallback, useEffect, useState } from "react"
 import PopUp from "../Modals/PopUp"
 import { useNavigate } from "react-router-dom"
 import { baseUrl } from "../../utils/api"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { logoutUser } from "../../redux/features/logoutUser"
 import ConfirmModal from "../Modals/ConfirmModal"
 import AnotherUser from "../Modals/AnotherUser"
+import HoverCard from "../Pages/HoverCard"
+import HoverCardTableCellStyle from "../../styles/HoverImage.module.css"
 
 import { Table, Strong, Button } from "@radix-ui/themes"
 import "@radix-ui/themes/styles.css"
@@ -27,6 +29,7 @@ function Moderator() {
 
   const [datas, setDatas] = useState("")
   const [isPending, setIsPending] = useState(false)
+  const [datasLength, setDatasLength] = useState(null)
 
   // Pop Up States
   const [isOpen, setIsOpen] = useState(false)
@@ -65,7 +68,9 @@ function Moderator() {
       })
       .then((req) => {
         setIsPending(false)
-        setDatas(req.data)
+        const filteredData = req.data.filter((data) => data.accepted && data.approved)
+        setDatas(filteredData)
+        setDatasLength(filteredData.length)
       })
       .catch((err) => {
         if (err.request.status === 500 || err.request.status === 0) {
@@ -156,7 +161,7 @@ function Moderator() {
 
                 <Table.Body>
                   {datas &&
-                    datas.map((data) => {
+                    datas.map((data, index) => {
                       return (
                         data.accepted &&
                         data.approved && (
@@ -164,13 +169,14 @@ function Moderator() {
                             <Table.RowHeaderCell>
                               <Strong>{data.id}</Strong>
                             </Table.RowHeaderCell>
-                            <Table.Cell>
+                            <Table.Cell className={HoverCardTableCellStyle.TableCell}>
                               <Avatar.Root className={styles.AvatarRoot}>
                                 <Avatar.Image className={styles.AvatarImage} src={data.profile_photo} alt="Colm Tuite" />
                                 <Avatar.Fallback className={styles.AvatarFallback} delayMs={100}>
                                   {data.username.slice(0, 2).toUpperCase()}
                                 </Avatar.Fallback>
                               </Avatar.Root>
+                              <HoverCard datasLength={datasLength} index={index} profile_photo={data.profile_photo} username={data.username} role={data.role} email={data.email} major={data.major} />
                             </Table.Cell>
                             <Table.Cell>{data.username}</Table.Cell>
                             <Table.Cell>{data.email}</Table.Cell>

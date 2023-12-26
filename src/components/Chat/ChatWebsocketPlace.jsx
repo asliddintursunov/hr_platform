@@ -18,7 +18,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
 
   useEffect(() => {
     if (scrollToUnreadElement.current) {
-      scrollToUnreadElement.current.scrollIntoView({ behavior: "smooth", block: "end" })
+      scrollToUnreadElement.current.scrollIntoView({ block: "end" })
     }
   }, [firstUnreadMsgId])
 
@@ -82,6 +82,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
   }, [handleSeeMessage])
 
   const readMsg = (id) => {
+    console.log(id);
     if (senderText === "" && Number(senderId) === Number(localStorage.getItem("userId"))) {
       messages.map((message) => {
         if (~~id === message.msg_id && message.is_read === false && message.receiver_id === ~~senderId) {
@@ -118,7 +119,9 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
       })
     },
     {
-      threshold: 1
+      threshold: 1,
+      root: conversationPathRef.current,
+      rootMargin: "5px"
     }
   )
 
@@ -185,6 +188,7 @@ function _ChatWebsocketPlace({ oneUserData, messages, setMessages, firstUnreadMs
                 <>
                   {index === firstUnreadMsgId && showNewMsgLine && (
                     <div className={styles.unreadMessageLine}>
+                      {console.log(index, firstUnreadMsgId)}
                       <p>New messages</p>
                     </div>
                   )}
