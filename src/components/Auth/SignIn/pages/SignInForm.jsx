@@ -6,7 +6,6 @@ import axios from "axios"
 import Username from "../../../Pages/Username"
 import Password from "../../../Pages/Password"
 import PopUp from "../../../Modals/PopUp"
-import GoogleAUTH from "../../../../components/Auth/GoogleAuth/GoogleAUTH"
 
 // Custom Hooks
 import { useUsername } from "../../../../hooks/useUsername"
@@ -99,7 +98,6 @@ function Sign_In_Form() {
                   <span className="line">________________</span>
                 </div>
                 <br />
-                <GoogleAUTH page={"/landing"} number={2} />
                 <br />
                 <div className="no-account">
                   <span>No account yet?</span>

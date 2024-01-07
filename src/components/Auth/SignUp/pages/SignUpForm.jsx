@@ -8,7 +8,6 @@ import Email from "../../../Pages/Email"
 import ConfirmPassword from "../../../Pages/ConfirmPassword"
 import PopUp from "../../../Modals/PopUp"
 import ConfirmationCode from "../../../Pages/ConfirmationCode"
-import GoogleAUTH from "../../GoogleAuth/GoogleAUTH"
 import styles from '../../../../styles/Modal.module.css'
 
 // Custom Hooks
@@ -182,7 +181,6 @@ function SignUpForm() {
                 <span className="line">________________</span>
               </div>
               <br />
-              <GoogleAUTH page={"/signin"} number={1} />
             </div>
           </div>
           <br />
